@@ -20,7 +20,7 @@
 }
 
 /* ─── RESET / BASE ───────────────────────────────── */
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; cursor: none !important; }
 html { scroll-behavior: smooth; }
 body {
   background: var(--bg);
@@ -585,6 +585,7 @@ footer {
   }
   .nav-collapse.open { display: block; }
   .nav-links { flex-direction: column; gap: 1.25rem; }
+  .about-img-wrap { max-width: 320px; margin: 0 auto; }
   .about-img-badge { right: 0; }
   .hero-stats { flex-wrap: wrap; gap: 1.5rem; }
 }
