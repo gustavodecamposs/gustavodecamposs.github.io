@@ -1,93 +1,461 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gustavo de Campos</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="Gustavo de Campos — Desenvolvedor Front-End em formação, apaixonado por criar experiências digitais envolventes e funcionais." />
+  <title>Gustavo de Campos — Desenvolvedor Front-End</title>
 
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">    
-
-  <!-- Animate.css -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-
-  <!-- Meu CSS -->
-  <link rel="stylesheet" href="style.css">
-
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap"
+    rel="stylesheet" />
+  <!-- AOS Scroll Animations -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
   <!-- Favicon -->
-  <link rel="shortcut icon" href="./img/icone-portfolio.png" type="image/x-icon">
-
-  <style>
-    
-  </style>
+  <link rel="shortcut icon" href="./img/icone-portfolio.png" type="image/x-icon" />
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <div id="vanta-bg"></div>
 
-  <div class="main-content">
-    <header class="d-flex fixed-top shadow py-0">
-      <div class="container py-2">
-        <nav class="navbar navbar-expand-lg navbar-dark animate__animated animate__fadeInDown">
-          <i class="icon-header"><img src="./img/icons8-folhas-50.png" alt=""></i>
-          <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-          </div>
-          <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav me-auto">
-              <li class="nav-item px-2"><a class="nav-link active" href="html">Principal</a></li>
-              <li class="nav-item"><a class="nav-link" href="sobre.html">Sobre</a></li>
-              <li class="nav-item"><a class="nav-link" href="contato.html">Contato</a></li>
-              <li class="nav-item"><a class="nav-link" href="projetos.html">Projetos</a></li>
+<body>
+
+  <!-- Custom Cursor -->
+  <div id="cursor"></div>
+
+  <!-- ─── NAVBAR ──────────────────────────────────────── -->
+  <nav id="navbar">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <a href="#" class="nav-logo">Gustavo de Campos<span>.</span>dev</a>
+        <div class="d-flex align-items-center gap-4">
+          <div class="nav-collapse" id="navCollapse">
+            <ul class="nav-links">
+              <li><a href="#about">Sobre</a></li>
+              <li><a href="#projects">Projetos</a></li>
+              <li><a href="#contact">Contato</a></li>
             </ul>
           </div>
-        </nav>
+          <a href="https://www.linkedin.com/in/gustavodecamposs/" target="_blank"
+            class="btn-resume d-none d-lg-inline-block">LinkedIn ↗</a>
+          <button class="mobile-toggle d-lg-none"
+            onclick="document.getElementById('navCollapse').classList.toggle('open')">☰</button>
+        </div>
       </div>
-    </header>
+    </div>
+  </nav>
 
-    <main class="container pt-5 text-black pb-5">
-      <section class="pt-5 mt-5">
-        <div class="container animate__animated animate__fadeInDown">
-          <div class="row align-items-center">
-            <div class="col-md-6 text-left">
-              <p class="frase-ola">Olá, bem-vindo ao meu portfólio!</p>
-              <h1 class="display-5 frase-apresentacao fw-bold py-3 px-0 text-white">Gustavo de Campos</h1>
-              <a href="projetos.html" class="fs-5 btn px-4 py-2 mt-3 background-btn-purple shadow">
-                Acesse meus projetos
-              </a>
+  <!-- ─── HERO ─────────────────────────────────────────── -->
+  <section id="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-glow glow-1"></div>
+    <div class="hero-glow glow-2"></div>
+
+    <div class="container z-1">
+      <div class="row align-items-center g-5">
+        <div class="col-lg-7">
+          <div class="hero-tag" data-aos="fade-down" data-aos-duration="600">
+            <span class="status-dot"></span>
+            <span class="label">Aberto a oportunidades</span>
+          </div>
+
+          <h1 class="hero-heading" data-aos="fade-up" data-aos-delay="100" data-aos-duration="700">
+            Criando<br>
+            <span class="line-italic">experiências</span><br>
+            <span class="line-accent">digitais.</span>
+          </h1>
+
+          <p class="hero-desc" data-aos="fade-up" data-aos-delay="200">
+            Desenvolvedor front-end em formação, apaixonado por criar interfaces envolventes, responsivas e funcionais —
+            sempre buscando evoluir e aprender.
+          </p>
+
+          <div class="d-flex flex-wrap gap-3 mt-4" data-aos="fade-up" data-aos-delay="300">
+            <a href="#projects" class="btn-primary-custom">Ver Projetos →</a>
+            <a href="#contact" class="btn-ghost-custom">Vamos Conversar</a>
+          </div>
+
+          <div class="hero-stats" data-aos="fade-up" data-aos-delay="400">
+            <div>
+              <div class="stat-num">3<span>+</span></div>
+              <div class="stat-label">Projetos</div>
             </div>
-            <div class="col-md-6  text-center">
-              <img src="./img/circular-avatar.png" alt="Foto de perfil"
-                   class="img-fluid foto-perfil rounded-5 mx-auto d-block shadow animate__animated animate__fadeInDown">
+            <div>
+              <div class="stat-num">2<span>+</span></div>
+              <div class="stat-label">Anos estudando</div>
             </div>
-            <div class="text-center mt-4">
-              <p class="lead frase-apresentacao fs-4 pt-4">
-                <strong>Desenvolvedor</strong> em treinamento, entusiasta de tecnologia, apaixonado por criar experiências digitais envolventes e funcionais.
-              </p>
+            <div>
+              <div class="stat-num">5<span>+</span></div>
+              <div class="stat-label">Tecnologias</div>
             </div>
           </div>
         </div>
-      </section>
-    </main>
 
-    <footer class="link-footer bottom-0 end-0 m-3 p-1 rounded-top-start rounded-2">
-      <a class="text-footer text-decoration-none" href="https://www.linkedin.com/in/gustavodecamposs/" target="_blank">© 2025 Gustavo de Campos</a>
-    </footer>
+        <div class="col-lg-5" data-aos="fade-left" data-aos-delay="200">
+          <div class="hero-code-block">
+            <div class="code-dots">
+              <div class="code-dot dot-r"></div>
+              <div class="code-dot dot-y"></div>
+              <div class="code-dot dot-g"></div>
+            </div>
+            <div class="code-cm">// gustavo.profile.ts</div>
+            <br>
+            <span class="code-kw">const</span> <span class="code-fn">developer</span> = {<br>
+            &nbsp;&nbsp;name<span class="accent-dot">:</span> <span class="code-str">"Gustavo de Campos"</span>,<br>
+            &nbsp;&nbsp;role<span class="accent-dot">:</span> <span class="code-str">"Front-End Developer"</span>,<br>
+            &nbsp;&nbsp;stack<span class="accent-dot">:</span> [<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-str">"HTML5"</span>, <span class="code-str">"CSS3"</span>,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-str">"JavaScript"</span>, <span
+              class="code-str">"Bootstrap"</span>,<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-str">"Java"</span> <span class="code-cm">// learning</span><br>
+            &nbsp;&nbsp;],<br>
+            &nbsp;&nbsp;available<span class="accent-dot">:</span> <span class="code-val">true</span>,<br>
+            &nbsp;&nbsp;location<span class="accent-dot">:</span> <span class="code-str">"Brasil 🇧🇷"</span><br>
+            };<br><br>
+            <span class="code-cm">// Em construção</span><br>
+            <span class="code-kw">await</span> <span class="code-fn">build</span>(<span class="code-str">"próximo
+              projeto"</span>)<span class="blink">▌</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── ABOUT ─────────────────────────────────────────── -->
+  <section id="about">
+    <div class="container">
+      <div class="row g-5 align-items-center">
+        <div class="col-lg-5" data-aos="fade-right">
+          <div class="about-img-wrap">
+            <img src="./img/eu-avatar-roxo-lilas.png" alt="Gustavo de Campos" class="about-img" />
+            <div class="about-img-badge">
+              <div class="num">2+</div>
+              <div class="txt">Anos<br>estudando</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-7" data-aos="fade-left" data-aos-delay="100">
+          <div class="section-label">Sobre mim</div>
+          <h2 class="section-title">Desenvolvendo <span class="serif"
+              style="font-style:italic;color:var(--accent-2);">com propósito.</span></h2>
+          <div class="section-divider"></div>
+
+          <p class="about-desc">
+            Sou Gustavo de Campos, desenvolvedor front-end em formação, apaixonado por criar experiências digitais que
+            conectam pessoas e tecnologia de forma intuitiva e envolvente.
+          </p>
+          <p class="about-desc">
+            Motivado por desafios que exigem criatividade e atenção aos detalhes, meu objetivo é evoluir constantemente
+            como profissional — e em breve expandir minhas habilidades para o back-end com Java.
+          </p>
+
+          <div class="d-flex flex-wrap gap-2 mb-4">
+            <span class="skill-pill"><span class="dot" style="background:#e34c26"></span>HTML5</span>
+            <span class="skill-pill"><span class="dot" style="background:#264de4"></span>CSS3</span>
+            <span class="skill-pill"><span class="dot" style="background:#f7df1e"></span>JavaScript</span>
+            <span class="skill-pill"><span class="dot" style="background:#7952b3"></span>Bootstrap</span>
+            <span class="skill-pill"><span class="dot" style="background:#ed8b00"></span>Java</span>
+            <span class="skill-pill"><span class="dot" style="background:#181717"></span>Git</span>
+          </div>
+
+          <div class="row g-3 mt-2">
+            <div class="col-sm-6">
+              <div class="expertise-card">
+                <div class="expertise-icon">🎨</div>
+                <div class="expertise-title">Interfaces Responsivas</div>
+                <div class="expertise-desc">Criação de layouts adaptativos e fluidos que funcionam em qualquer
+                  dispositivo, com foco em UX.</div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="expertise-card">
+                <div class="expertise-icon">⚡</div>
+                <div class="expertise-title">Animações & Interações</div>
+                <div class="expertise-desc">Experiências dinâmicas e micro-animações CSS que tornam as interfaces mais
+                  envolventes.</div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="expertise-card">
+                <div class="expertise-icon">📱</div>
+                <div class="expertise-title">Mobile First</div>
+                <div class="expertise-desc">Design pensado primeiramente para dispositivos móveis, garantindo
+                  performance em qualquer tela.</div>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="expertise-card">
+                <div class="expertise-icon">🔧</div>
+                <div class="expertise-title">Back-End (em aprendizado)</div>
+                <div class="expertise-desc">Iniciando no mundo back-end com Java, banco de dados e APIs RESTful.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SKILLS STRIP ───────────────────────────────────── -->
+  <div id="skills-strip">
+    <div class="skills-marquee" id="marquee">
+      <span class="skills-marquee-item">HTML5 <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">CSS3 <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">JavaScript <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">Bootstrap <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">Git <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">Java <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">Responsividade <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">UI Design <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">Animações CSS <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">GitHub <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">Clean Code <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">UX <span class="sep">✦</span></span>
+      <!-- duplicate for seamless loop -->
+      <span class="skills-marquee-item">HTML5 <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">CSS3 <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">JavaScript <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">Bootstrap <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">Git <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">Java <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">Responsividade <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">UI Design <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">Animações CSS <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">GitHub <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">Clean Code <span class="sep">✦</span></span>
+      <span class="skills-marquee-item">UX <span class="sep">✦</span></span>
+    </div>
   </div>
 
-  <!-- three.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <!-- Vanta NET -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.net.min.js"></script>
+  <!-- ─── PROJECTS ──────────────────────────────────────── -->
+  <section id="projects">
+    <div class="container">
+      <div class="row justify-content-between align-items-end mb-5" data-aos="fade-up">
+        <div class="col-lg-5">
+          <div class="section-label">Portfólio</div>
+          <h2 class="section-title">Projetos<br><span class="serif" style="font-style:italic">Selecionados</span></h2>
+          <div class="section-divider"></div>
+        </div>
+        <div class="col-lg-5 d-none d-lg-block">
+          <p class="projects-intro-text">
+            Cada projeto reflete minha evolução como desenvolvedor — interfaces construídas com atenção aos detalhes e
+            foco na experiência do usuário.
+          </p>
+        </div>
+      </div>
 
+      <div class="row g-4">
+        <!-- Projeto 1 -->
+        <div class="col-lg-6" data-aos="fade-up" data-aos-delay="0">
+          <div class="project-card">
+            <div class="project-img-wrap">
+              <div class="project-thumb project-thumb-1">
+                <span>📋</span>
+              </div>
+              <div class="project-overlay project-overlay-dark">
+                <a href="https://gustavodecamposs.github.io/Projeto-tela-de-login-com-bootstrap/" target="_blank"
+                  class="project-link-btn">Demo ↗</a>
+                <a href="https://github.com/gustavodecamposs/Projeto-tela-de-login-com-bootstrap" target="_blank"
+                  class="project-link-btn btn-ghost-sm">Código</a>
+              </div>
+            </div>
+            <div class="project-body">
+              <div class="project-num">01 / 03</div>
+              <div class="project-tags">
+                <span class="tag">HTML</span>
+                <span class="tag">CSS</span>
+                <span class="tag">Bootstrap</span>
+                <span class="tag">JavaScript</span>
+              </div>
+              <div class="project-title">Formulário Responsivo</div>
+              <div class="project-desc">Um formulário de contato moderno e responsivo com validações em JavaScript,
+                estilizado com Bootstrap 5 e CSS personalizado.</div>
+              <div class="project-links">
+                <a href="https://gustavodecamposs.github.io/Projeto-tela-de-login-com-bootstrap/" target="_blank">Demo
+                  ao vivo ↗</a>
+                <span class="sep">·</span>
+                <a href="https://github.com/gustavodecamposs/Projeto-tela-de-login-com-bootstrap"
+                  target="_blank">GitHub</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Projeto 2 -->
+        <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+          <div class="project-card">
+            <div class="project-img-wrap">
+              <div class="project-thumb project-thumb-2">
+                <span>🌐</span>
+              </div>
+              <div class="project-overlay project-overlay-dark">
+                <a href="https://github.com/gustavodecamposs?tab=repositories" target="_blank"
+                  class="project-link-btn">Código ↗</a>
+              </div>
+            </div>
+            <div class="project-body">
+              <div class="project-num">02 / 03</div>
+              <div class="project-tags">
+                <span class="tag">HTML</span>
+                <span class="tag">CSS</span>
+                <span class="tag">JavaScript</span>
+              </div>
+              <div class="project-title">Portfólio HTML & CSS Puro</div>
+              <div class="project-desc">Meu primeiro portfólio, desenvolvido exclusivamente com HTML5 e CSS3, sem
+                frameworks. Um marco na minha jornada de aprendizado front-end.</div>
+              <div class="project-links">
+                <a href="https://github.com/gustavodecamposs?tab=repositories" target="_blank">GitHub ↗</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Projeto 3 -->
+        <div class="col-lg-6" data-aos="fade-up" data-aos-delay="0">
+          <div class="project-card">
+            <div class="project-img-wrap">
+              <div class="project-thumb project-thumb-3">
+                <span>🍕</span>
+              </div>
+              <div class="project-overlay project-overlay-dark">
+                <a href="https://github.com/gustavodecamposs/Pizzaria" target="_blank" class="project-link-btn">Código
+                  ↗</a>
+              </div>
+            </div>
+            <div class="project-body">
+              <div class="project-num">03 / 03</div>
+              <div class="project-tags">
+                <span class="tag">HTML</span>
+                <span class="tag">CSS</span>
+                <span class="tag">Bootstrap</span>
+                <span class="tag">JavaScript</span>
+              </div>
+              <div class="project-title">Site Pizzaria <span class="project-wip">(em andamento)</span></div>
+              <div class="project-desc">Site para uma pizzaria real, com foco em design responsivo, experiência do
+                usuário otimizada e seção de cardápio interativo.</div>
+              <div class="project-links">
+                <a href="https://github.com/gustavodecamposs/Pizzaria" target="_blank">GitHub ↗</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CTA card -->
+        <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
+          <div class="project-card project-cta-card">
+            <div class="project-cta-emoji">🚀</div>
+            <div class="section-label">Em breve</div>
+            <h3 class="project-cta-title">Mais projetos chegando</h3>
+            <p class="project-cta-desc">Estou constantemente aprendendo e construindo. Acompanhe meu GitHub para
+              novidades!</p>
+            <a href="https://github.com/gustavodecamposs" target="_blank" class="btn-ghost-custom btn-ghost-sm-text">Ver
+              GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CONTACT ───────────────────────────────────────── -->
+  <section id="contact">
+    <div class="container">
+      <div class="row g-5 align-items-start">
+        <div class="col-lg-5" data-aos="fade-right">
+          <div class="section-label">Contato</div>
+          <div class="contact-big-cta">
+            Vamos<br><span class="italic-accent">construir</span><br>juntos.
+          </div>
+          <p class="contact-intro">
+            Aberto a oportunidades, freelas e colaborações interessantes. Respondo em até 24h!
+          </p>
+
+          <a href="mailto:gustavoo.dcsilva@gmail.com" class="contact-info-item">
+            <div class="contact-icon">✉️</div>
+            <div>
+              <div class="contact-info-label">Email</div>
+              <div class="contact-info-val">gustavoo.dcsilva@gmail.com</div>
+            </div>
+          </a>
+          <a href="https://github.com/gustavodecamposs" target="_blank" class="contact-info-item">
+            <div class="contact-icon">⌨️</div>
+            <div>
+              <div class="contact-info-label">GitHub</div>
+              <div class="contact-info-val">github.com/gustavodecamposs</div>
+            </div>
+          </a>
+          <a href="https://www.linkedin.com/in/gustavodecamposs/" target="_blank" class="contact-info-item">
+            <div class="contact-icon">💼</div>
+            <div>
+              <div class="contact-info-label">LinkedIn</div>
+              <div class="contact-info-val">in/gustavodecamposs</div>
+            </div>
+          </a>
+          <a href="https://www.instagram.com/gustavoo.dcs/" target="_blank" class="contact-info-item">
+            <div class="contact-icon">📸</div>
+            <div>
+              <div class="contact-info-label">Instagram</div>
+              <div class="contact-info-val">@gustavoo.dcs</div>
+            </div>
+          </a>
+        </div>
+
+        <div class="col-lg-7" data-aos="fade-left" data-aos-delay="100">
+          <div class="contact-card">
+            <h3 class="contact-form-title">Envie uma mensagem</h3>
+            <div class="row g-3">
+              <div class="col-sm-6">
+                <label class="form-label-custom" for="nome">Nome</label>
+                <input type="text" id="nome" class="form-control-custom" placeholder="Seu nome" />
+              </div>
+              <div class="col-sm-6">
+                <label class="form-label-custom" for="email">Email</label>
+                <input type="email" id="email" class="form-control-custom" placeholder="seu@email.com" />
+              </div>
+              <div class="col-12">
+                <label class="form-label-custom" for="assunto">Assunto</label>
+                <input type="text" id="assunto" class="form-control-custom" placeholder="Proposta de projeto" />
+              </div>
+              <div class="col-12">
+                <label class="form-label-custom" for="mensagem">Mensagem</label>
+                <textarea id="mensagem" class="form-control-custom" rows="5"
+                  placeholder="Me conte sobre seu projeto, ideia ou oportunidade..."></textarea>
+              </div>
+              <div class="col-12">
+                <button class="btn-primary-custom btn-send" id="sendBtn">
+                  Enviar Mensagem →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ────────────────────────────────────────── -->
+  <footer>
+    <div class="container">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+        <a href="#" class="footer-logo">gustavo<span>.</span>dev</a>
+        <div class="footer-copy">© 2025 Gustavo de Campos — Desenvolvido com 💜</div>
+        <div class="footer-links">
+          <a href="https://github.com/gustavodecamposs" target="_blank">GitHub</a>
+          <a href="https://www.linkedin.com/in/gustavodecamposs/" target="_blank">LinkedIn</a>
+          <a href="https://www.instagram.com/gustavoo.dcs/" target="_blank">Instagram</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ─── SCRIPTS ───────────────────────────────────────── -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
   <script src="scripts.js"></script>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
