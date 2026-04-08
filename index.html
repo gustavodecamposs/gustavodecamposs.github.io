@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" data-theme="dark">
 
 <head>
   <meta charset="UTF-8" />
@@ -14,6 +14,17 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&family=Fraunces:ital,wght@0,300;0,400;1,300;1,400&display=swap"
     rel="stylesheet">
+
+  <!-- Anti-FOUC: aplica tema antes do CSS pintar -->
+  <script>
+    !function(){
+      try{
+        var s=localStorage.getItem('theme');
+        var d=window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', s||(d?'dark':'light'));
+      }catch(e){}
+    }();
+  </script>
 
   <!-- CSS -->
   <link rel="stylesheet" href="style.css" />
@@ -35,12 +46,40 @@
       </a>
       <div class="nav-links-wrap" id="navLinks">
         <a href="#sobre" class="nav-link"><span class="mono text-muted">01 //</span> sobre</a>
-        <a href="#projetos" class="nav-link"><span class="mono text-muted">02 //</span> projetos</a>
-        <a href="#contato" class="nav-link"><span class="mono text-muted">03 //</span> contato</a>
+        <a href="#experiencia" class="nav-link"><span class="mono text-muted">02 //</span> experiência</a>
+        <a href="#projetos" class="nav-link"><span class="mono text-muted">03 //</span> projetos</a>
+        <a href="#contato" class="nav-link"><span class="mono text-muted">04 //</span> contato</a>
       </div>
       <a href="https://www.linkedin.com/in/gustavodecamposs/" target="_blank" class="btn-hire">
         aberto a oportunidades ↗
       </a>
+      <!-- WhatsApp nav -->
+      <a href="https://wa.me/5524974051952?text=Ol%C3%A1%2C%20vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar!"
+         target="_blank" rel="noopener" class="btn-wa-nav" aria-label="Conversar no WhatsApp">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        Conversar
+      </a>
+      <!-- Toggle de tema -->
+      <button class="theme-toggle" id="themeToggle" aria-label="Alternar tema" title="Alternar tema">
+        <!-- Lua (dark mode) -->
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <!-- Sol (light mode) -->
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      </button>
       <button class="nav-toggle" id="navToggle" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
@@ -92,7 +131,41 @@
         <div class="stat-l">Tecnologias</div>
       </div>
     </div>
+
+    <!-- ─── TICKER / MENU ESTEIRA (dentro do hero) ─── -->
+    <div class="ticker-wrap" aria-hidden="true">
+      <div class="ticker-track">
+        <!-- Conjunto 1 -->
+        <span class="ticker-item">HTML5</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">CSS3</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">JavaScript</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">Bootstrap</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">Git &amp; GitHub</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">PHP</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">Laravel</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">C# / .NET</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">SQL</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">Figma</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">UX / UI</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">Responsividade</span><span class="ticker-sep">•</span>
+        <!-- Conjunto 2 (clone para loop contínuo) -->
+        <span class="ticker-item">HTML5</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">CSS3</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">JavaScript</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">Bootstrap</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">Git &amp; GitHub</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">PHP</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">Laravel</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">C# / .NET</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">SQL</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">Figma</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">UX / UI</span><span class="ticker-sep">•</span>
+        <span class="ticker-item">Responsividade</span><span class="ticker-sep">•</span>
+      </div>
+    </div>
   </section>
+
+
 
   <!-- ─── SOBRE ─────────────────────────────────────────── -->
   <section id="sobre">
@@ -158,100 +231,155 @@
     </div>
   </section>
 
+  <!-- ─── EXPERIÊNCIA ──────────────────────────────────── -->
+  <section id="experiencia">
+    <div class="section-inner">
+      <div class="section-label" data-aos="fade-right">
+        <span class="mono">03 // experiência</span>
+      </div>
+
+      <div class="exp-layout">
+
+        <!-- Coluna Esquerda: Título fixo -->
+        <div class="exp-left" data-aos="fade-up">
+          <h2 class="exp-big-title">Minha<br><em>Jornada.</em></h2>
+          <p class="exp-context">
+            Cada fase me ensinou algo diferente. É assim que me tornei quem sou hoje como desenvolvedor.
+          </p>
+        </div>
+
+        <!-- Coluna Direita: Itens de experiência -->
+        <div class="exp-right">
+
+          <div class="exp-item" data-aos="fade-up">
+            <div class="exp-item-top">
+              <div class="exp-role">Desenvolvedor Front-End Freelancer</div>
+              <div class="exp-period mono">2024 — presente</div>
+            </div>
+            <div class="exp-company">Projetos Independentes</div>
+            <p class="exp-desc">
+              Desenvolvo interfaces web sob demanda — desde landing pages a sistemas de formulário. Codifico com foco em responsividade, performance e atenção ao detalhe que o cliente não pediu, mas nota.
+            </p>
+            <div class="exp-tags">
+              <span>HTML</span><span>CSS</span><span>JavaScript</span><span>Bootstrap</span>
+            </div>
+          </div>
+
+          <div class="exp-item" data-aos="fade-up" data-aos-delay="100">
+            <div class="exp-item-top">
+              <div class="exp-role">Estudante de Desenvolvimento Web</div>
+              <div class="exp-period mono">2023 — presente</div>
+            </div>
+            <div class="exp-company">Autodidata + Cursos</div>
+            <p class="exp-desc">
+              Mergulhei de cabeça no front-end — estudando HTML, CSS, JavaScript e design de interfaces. Hoje estou expandindo para o back-end com C# .NET e PHP Laravel. Aprender é o que me motiva de manhã.
+            </p>
+            <div class="exp-tags">
+              <span>Front-End</span><span>C# / .NET</span><span>PHP / Laravel</span><span>Git</span>
+            </div>
+          </div>
+
+          <div class="exp-item" data-aos="fade-up" data-aos-delay="200">
+            <div class="exp-item-top">
+              <div class="exp-role">Aprendiz em TI</div>
+              <div class="exp-period mono">2023</div>
+            </div>
+            <div class="exp-company">Primeiro contato com o setor</div>
+            <p class="exp-desc">
+              Meu primeiro contato sério com o mundo da tecnologia. De lá pra cá, não parei mais. Entrei curioso e saí com um rumo claro: quero construir coisas que as pessoas usem.
+            </p>
+            <div class="exp-tags">
+              <span>Suporte</span><span>Redes</span><span>Fundamentos de TI</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ─── PROJETOS ──────────────────────────────────────── -->
   <section id="projetos">
     <div class="section-inner">
       <div class="section-label" data-aos="fade-right">
-        <span class="mono">02 // projetos</span>
+        <span class="mono">04 // projetos</span>
       </div>
 
-      <div class="projects-header" data-aos="fade-up">
-        <h2 class="section-title">O que eu<br><em>já construí.</em></h2>
-        <p class="section-desc">
-          Projetos reais, com problemas reais e muito aprendizado pelo caminho.
-          É assim que evoluo.
-        </p>
-      </div>
+      <div class="exp-layout">
 
-      <div class="projects-list">
-        <!-- Projeto 01 -->
-        <div class="project-item" data-aos="fade-up">
-          <div class="project-num mono">01</div>
-          <div class="project-content">
-            <div class="project-header">
-              <h3 class="project-title">Formulário Responsivo</h3>
-              <div class="project-links">
-                <a href="https://gustavodecamposs.github.io/Projeto-tela-de-login-com-bootstrap/" target="_blank"
-                  class="project-link">demo ↗</a>
-                <a href="https://github.com/gustavodecamposs/Projeto-tela-de-login-com-bootstrap" target="_blank"
-                  class="project-link">código ↗</a>
-              </div>
-            </div>
-            <p class="project-desc">
-              Formulário de contato responsivo com validações em JavaScript.
-              Meu primeiro projeto com Bootstrap 5 — onde aprendi que CSS puro e framework
-              se complementam quando usados com critério.
-            </p>
-            <div class="project-tags">
-              <span>HTML</span><span>CSS</span><span>Bootstrap</span><span>JavaScript</span>
-            </div>
-          </div>
-          <div class="project-thumb thumb-1">
-            <span>📋</span>
+        <!-- Coluna Esquerda: Título sticky -->
+        <div class="exp-left" data-aos="fade-up">
+          <h2 class="exp-big-title">O que eu<br><em>já construí.</em></h2>
+          <p class="exp-context">
+            Projetos reais, com problemas reais e muito aprendizado pelo caminho. É assim que evoluo.
+          </p>
+          <div style="margin-top: 2rem;">
+            <a href="https://github.com/gustavodecamposs" target="_blank" class="btn-ghost" style="font-size:0.8rem; padding: 0.65rem 1.4rem;">
+              ver no GitHub ↗
+            </a>
           </div>
         </div>
 
-        <!-- Projeto 02 -->
-        <div class="project-item" data-aos="fade-up" data-aos-delay="100">
-          <div class="project-num mono">02</div>
-          <div class="project-content">
-            <div class="project-header">
-              <h3 class="project-title">Portfólio HTML & CSS Puro</h3>
-              <div class="project-links">
-                <a href="https://github.com/gustavodecamposs?tab=repositories" target="_blank"
-                  class="project-link">código ↗</a>
-              </div>
+        <!-- Coluna Direita: Projetos -->
+        <div class="exp-right">
+
+          <div class="exp-item" data-aos="fade-up">
+            <div class="exp-item-top">
+              <div class="exp-role">Formulário Responsivo</div>
+              <div class="exp-period mono">2024</div>
             </div>
-            <p class="project-desc">
-              O primeiro portfólio que fiz — só com HTML e CSS, sem ajuda de framework.
-              Hoje olho e vejo o quanto evoluí. Deixei aqui por honestidade.
+            <div class="exp-company">Bootstrap 5 + JavaScript</div>
+            <p class="exp-desc">
+              Formulário de contato responsivo com validações em JavaScript. Meu primeiro projeto com Bootstrap 5 — onde aprendi que CSS puro e framework se complementam quando usados com critério.
             </p>
-            <div class="project-tags">
+            <div class="exp-tags">
+              <span>HTML</span><span>CSS</span><span>Bootstrap</span><span>JavaScript</span>
+            </div>
+            <div class="exp-proj-links">
+              <a href="https://gustavodecamposs.github.io/Projeto-tela-de-login-com-bootstrap/" target="_blank" class="project-link">demo ↗</a>
+              <a href="https://github.com/gustavodecamposs/Projeto-tela-de-login-com-bootstrap" target="_blank" class="project-link">código ↗</a>
+            </div>
+          </div>
+
+          <div class="exp-item" data-aos="fade-up" data-aos-delay="100">
+            <div class="exp-item-top">
+              <div class="exp-role">Portfólio HTML &amp; CSS Puro</div>
+              <div class="exp-period mono">2023</div>
+            </div>
+            <div class="exp-company">HTML + CSS sem framework</div>
+            <p class="exp-desc">
+              O primeiro portfólio que fiz — só com HTML e CSS, sem ajuda de framework. Hoje olho e vejo o quanto evoluí. Deixei aqui por honestidade.
+            </p>
+            <div class="exp-tags">
               <span>HTML</span><span>CSS</span><span>JavaScript</span>
             </div>
-          </div>
-          <div class="project-thumb thumb-2">
-            <span>🌐</span>
-          </div>
-        </div>
-
-        <!-- Projeto 03 -->
-        <div class="project-item" data-aos="fade-up" data-aos-delay="200">
-          <div class="project-num mono">03</div>
-          <div class="project-content">
-            <div class="project-header">
-              <h3 class="project-title">Site Pizzaria <span class="wip-badge mono">em andamento</span></h3>
-              <div class="project-links">
-                <a href="https://github.com/gustavodecamposs/Pizzaria" target="_blank" class="project-link">código ↗</a>
-              </div>
+            <div class="exp-proj-links">
+              <a href="https://github.com/gustavodecamposs?tab=repositories" target="_blank" class="project-link">código ↗</a>
             </div>
-            <p class="project-desc">
-              Site em andamento pra uma pizzaria real. Está sendo construído com foco em
-              design responsivo e uma experiência de pedido fluida.
+          </div>
+
+          <div class="exp-item" data-aos="fade-up" data-aos-delay="200">
+            <div class="exp-item-top">
+              <div class="exp-role">Site Pizzaria <span class="wip-badge mono">em andamento</span></div>
+              <div class="exp-period mono">2024</div>
+            </div>
+            <div class="exp-company">Bootstrap 5 + JavaScript</div>
+            <p class="exp-desc">
+              Site em andamento pra uma pizzaria real. Está sendo construído com foco em design responsivo e uma experiência de pedido fluida.
             </p>
-            <div class="project-tags">
+            <div class="exp-tags">
               <span>HTML</span><span>CSS</span><span>Bootstrap</span><span>JavaScript</span>
             </div>
+            <div class="exp-proj-links">
+              <a href="https://github.com/gustavodecamposs/Pizzaria" target="_blank" class="project-link">código ↗</a>
+            </div>
           </div>
-          <div class="project-thumb thumb-3">
-            <span>🍕</span>
-          </div>
-        </div>
-      </div>
 
-      <div class="projects-cta" data-aos="fade-up">
-        <p class="mono text-muted">mais projetos chegando — estou construindo agora 🚧</p>
-        <a href="https://github.com/gustavodecamposs" target="_blank" class="btn-ghost">ver no GitHub ↗</a>
+          <div class="exp-item exp-item--cta" data-aos="fade-up" data-aos-delay="300">
+            <p class="mono" style="color: var(--ink-3); font-size: 0.75rem;">mais projetos chegando — estou construindo agora 🚧</p>
+          </div>
+
+        </div>
       </div>
     </div>
   </section>
@@ -260,7 +388,7 @@
   <section id="contato">
     <div class="section-inner">
       <div class="section-label" data-aos="fade-right">
-        <span class="mono">03 // contato</span>
+        <span class="mono">05 // contato</span>
       </div>
 
       <div class="contact-grid">
@@ -351,6 +479,21 @@
       </div>
     </div>
   </footer>
+
+  <!-- ─── FABs FIXOS (WhatsApp + Topo) ──────────────────── -->
+  <div class="fab-wrap" id="fabWrap">
+    <a href="https://wa.me/5524974051952?text=Ol%C3%A1%2C%20vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar!"
+       target="_blank" rel="noopener" class="fab fab-wa" aria-label="WhatsApp" title="Conversar no WhatsApp">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+    </a>
+    <button class="fab fab-top" id="backToTop" aria-label="Voltar ao topo" title="Voltar ao topo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <polyline points="18 15 12 9 6 15"/>
+      </svg>
+    </button>
+  </div>
 
   <!-- ─── SCRIPTS ───────────────────────────────────────── -->
   <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">

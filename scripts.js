@@ -97,3 +97,50 @@ const sectionObserver = new IntersectionObserver(entries => {
 }, { threshold: 0.4 });
 
 sections.forEach(s => sectionObserver.observe(s));
+
+// ─── THEME TOGGLE ──────────────────────────────────────
+const themeToggle = document.getElementById('themeToggle');
+const html = document.documentElement;
+
+function getStoredTheme() { try { return localStorage.getItem('theme'); } catch(e) { return null; } }
+function getSystemTheme() { return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; }
+function getActiveTheme() { return getStoredTheme() || getSystemTheme(); }
+
+function applyTheme(theme) {
+  html.setAttribute('data-theme', theme);
+  try { localStorage.setItem('theme', theme); } catch(e) {}
+}
+
+function toggleTheme() {
+  const current = html.getAttribute('data-theme') || getSystemTheme();
+  applyTheme(current === 'dark' ? 'light' : 'dark');
+}
+
+// Aplica o tema correto ao carregar (o script anti-FOUC já fez, mas garante consistência)
+applyTheme(getActiveTheme());
+
+// Botão de toggle
+if (themeToggle) {
+  themeToggle.addEventListener('click', toggleTheme);
+}
+
+// Escuta mudanças de preferência do sistema (só aplica se não houver escolha manual)
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+  if (!getStoredTheme()) applyTheme(e.matches ? 'dark' : 'light');
+});
+
+// ─── BACK TO TOP ───────────────────────────────────────
+const backToTop = document.getElementById('backToTop');
+
+if (backToTop) {
+  // Mostra o botão ao passar de 400px de scroll
+  window.addEventListener('scroll', () => {
+    backToTop.classList.toggle('visible', window.scrollY > 400);
+  }, { passive: true });
+
+  // Clique: sobe suavemente ao topo
+  backToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
