@@ -15,7 +15,7 @@
   --ink-3: #525a63;
   --border: #1f2632;
   --accent: #e6edf3;
-  --accent-em: #7c6fff;
+  --accent-em: #d18d67;
   --warm: #e8a838;
 
   --hero-bg: #0d1117;
@@ -32,7 +32,7 @@
   --hero-tag-bg: rgba(255, 255, 255, 0.04);
   --hero-ghost-hover: rgba(255, 255, 255, 0.05);
   --glow-1: rgba(232, 168, 56, 0.12);
-  --glow-2: rgba(124, 111, 255, 0.08);
+  --glow-2: rgba(209, 141, 103, 0.08);
 
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
@@ -52,7 +52,7 @@
   --ink-3: #6e7781;
   --border: #cfd4db;
   --accent: #0d1117;
-  --accent-em: #5a4fcf;
+  --accent-em: #a66544;
   --warm: #a06010;
 
   --hero-bg: #f5f7fa;
@@ -68,7 +68,7 @@
   --hero-tag-bg: rgba(0, 0, 0, 0.04);
   --hero-ghost-hover: rgba(0, 0, 0, 0.05);
   --glow-1: rgba(160, 96, 16, 0.15);
-  --glow-2: rgba(90, 79, 207, 0.10);
+  --glow-2: rgba(166, 101, 68, 0.10);
 }
 
 /* ─── RESET ───────────────────────────────────────── */
@@ -402,7 +402,7 @@ body.cursor-hover #cursor-trail {
   background: var(--accent-em);
   border-color: var(--accent-em);
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(124, 111, 255, 0.25);
+  box-shadow: 0 10px 30px rgba(209, 141, 103, 0.25);
 }
 
 .btn-ghost {
@@ -507,8 +507,10 @@ body.cursor-hover #cursor-trail {
   gap: 0.6rem;
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  color: var(--hero-ink-2);
-  padding: 0.45rem 1rem;
+  color: var(--hero-ink);
+  padding: 0.5rem 1.2rem;
+  display: flex;
+  width: fit-content;
   border: 1px solid var(--hero-border);
   border-radius: 100px;
   margin-bottom: 2rem;
@@ -544,7 +546,10 @@ body.cursor-hover #cursor-trail {
   line-height: 1.1;
   letter-spacing: -0.04em;
   color: var(--hero-ink);
-  margin-bottom: 1.75rem;
+  margin-bottom: 2rem;
+  max-width: 15ch;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .hero-title strong {
@@ -816,7 +821,7 @@ body.cursor-hover #cursor-trail {
 .card-small:hover {
   border-color: var(--accent-em);
   transform: translateY(-3px);
-  box-shadow: 0 15px 35px rgba(124, 111, 255, 0.08);
+  box-shadow: 0 8px 20px rgba(209, 141, 103, 0.08);
 }
 
 .card-icon {
@@ -1229,7 +1234,7 @@ body.cursor-hover #cursor-trail {
   border-color: var(--accent-em);
   transform: translateX(5px);
   background: var(--bg-3);
-  box-shadow: 0 8px 20px rgba(124, 111, 255, 0.08);
+  box-shadow: 0 8px 20px rgba(209, 141, 103, 0.08);
 }
 
 .channel-icon {
@@ -1298,7 +1303,7 @@ body.cursor-hover #cursor-trail {
 .form-field input:focus,
 .form-field textarea:focus {
   border-color: var(--accent-em);
-  box-shadow: 0 0 0 3px rgba(124, 111, 255, 0.1);
+  box-shadow: 0 0 0 3px rgba(209, 141, 103, 0.1);
   background: var(--bg-2);
 }
 
@@ -1552,7 +1557,7 @@ footer {
 }
 
 .fab-top:hover {
-  background: #4f43c8;
+  background: #b57452;
 }
 
 /* Pulse sutil no WhatsApp FAB */
