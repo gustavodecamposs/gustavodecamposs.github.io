@@ -15,8 +15,9 @@
   --ink-3: #525a63;
   --border: #1f2632;
   --accent: #e6edf3;
-  --accent-em: #d18d67;
-  --warm: #e8a838;
+  --accent-em: #14B8A6;
+  --accent-rgb: 20, 184, 166;
+  --warm: #5EEAD4;
 
   --hero-bg: #0d1117;
   --hero-ink: #e6edf3;
@@ -31,8 +32,8 @@
   --hero-strong: #ffffff;
   --hero-tag-bg: rgba(255, 255, 255, 0.04);
   --hero-ghost-hover: rgba(255, 255, 255, 0.05);
-  --glow-1: rgba(232, 168, 56, 0.12);
-  --glow-2: rgba(209, 141, 103, 0.08);
+  --glow-1: rgba(94, 234, 212, 0.12);
+  --glow-2: rgba(20, 184, 166, 0.08);
 
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
@@ -52,8 +53,9 @@
   --ink-3: #6e7781;
   --border: #cfd4db;
   --accent: #0d1117;
-  --accent-em: #a66544;
-  --warm: #a06010;
+  --accent-em: #0F766E;
+  --accent-rgb: 15, 118, 110;
+  --warm: #0D514D;
 
   --hero-bg: #f5f7fa;
   --hero-ink: #0d1117;
@@ -67,8 +69,8 @@
   --hero-strong: #0d1117;
   --hero-tag-bg: rgba(0, 0, 0, 0.04);
   --hero-ghost-hover: rgba(0, 0, 0, 0.05);
-  --glow-1: rgba(160, 96, 16, 0.15);
-  --glow-2: rgba(166, 101, 68, 0.10);
+  --glow-1: rgba(13, 81, 77, 0.15);
+  --glow-2: rgba(15, 118, 110, 0.10);
 }
 
 /* ─── RESET ───────────────────────────────────────── */
@@ -125,52 +127,7 @@ button {
   color: var(--accent-em);
 }
 
-/* ─── CUSTOM CURSOR ───────────────────────────────── */
-#cursor {
-  width: 8px;
-  height: 8px;
-  background: var(--accent-em);
-  border-radius: 50%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: width 0.2s, height 0.2s, opacity 0.2s;
-  opacity: 0.8;
-}
 
-#cursor-trail {
-  width: 28px;
-  height: 28px;
-  border: 1.5px solid var(--accent-em);
-  border-radius: 50%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-  z-index: 9998;
-  transform: translate(-50%, -50%);
-  transition: transform 0.12s ease, width 0.25s, height 0.25s, opacity 0.25s;
-  opacity: 0.3;
-}
-
-body:not(:hover) #cursor {
-  opacity: 0;
-}
-
-body.cursor-hover #cursor {
-  width: 14px;
-  height: 14px;
-  opacity: 1;
-}
-
-body.cursor-hover #cursor-trail {
-  width: 40px;
-  height: 40px;
-  opacity: 0.15;
-}
 
 /* ─── NAVBAR ──────────────────────────────────────── */
 #navbar {
@@ -402,7 +359,7 @@ body.cursor-hover #cursor-trail {
   background: var(--accent-em);
   border-color: var(--accent-em);
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(209, 141, 103, 0.25);
+  box-shadow: 0 10px 30px rgba(var(--accent-rgb), 0.25);
 }
 
 .btn-ghost {
@@ -821,7 +778,7 @@ body.cursor-hover #cursor-trail {
 .card-small:hover {
   border-color: var(--accent-em);
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(209, 141, 103, 0.08);
+  box-shadow: 0 8px 20px rgba(var(--accent-rgb), 0.08);
 }
 
 .card-icon {
@@ -1234,7 +1191,7 @@ body.cursor-hover #cursor-trail {
   border-color: var(--accent-em);
   transform: translateX(5px);
   background: var(--bg-3);
-  box-shadow: 0 8px 20px rgba(209, 141, 103, 0.08);
+  box-shadow: 0 8px 20px rgba(20, 184, 166, 0.08);
 }
 
 .channel-icon {
@@ -1303,7 +1260,7 @@ body.cursor-hover #cursor-trail {
 .form-field input:focus,
 .form-field textarea:focus {
   border-color: var(--accent-em);
-  box-shadow: 0 0 0 3px rgba(209, 141, 103, 0.1);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.1);
   background: var(--bg-2);
 }
 
@@ -1557,7 +1514,7 @@ footer {
 }
 
 .fab-top:hover {
-  background: #b57452;
+  background: var(--warm);
 }
 
 /* Pulse sutil no WhatsApp FAB */

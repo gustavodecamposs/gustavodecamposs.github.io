@@ -35,33 +35,7 @@ if (navToggle && navLinks) {
   });
 }
 
-// ─── CUSTOM CURSOR ────────────────────────────────────
-const cursor = document.getElementById('cursor');
-const trail  = document.getElementById('cursor-trail');
 
-if (cursor && trail) {
-  let mx = 0, my = 0, tx = 0, ty = 0;
-
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    cursor.style.left = mx + 'px';
-    cursor.style.top  = my + 'px';
-  });
-
-  function animTrail() {
-    tx += (mx - tx) * 0.12;
-    ty += (my - ty) * 0.12;
-    trail.style.left = tx + 'px';
-    trail.style.top  = ty + 'px';
-    requestAnimationFrame(animTrail);
-  }
-  animTrail();
-
-  document.querySelectorAll('a, button, .card-small, .project-item, .channel-item').forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-  });
-}
 
 // ─── CONTACT FORM FEEDBACK ────────────────────────────
 const form    = document.getElementById('contactForm');
