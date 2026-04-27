@@ -31,7 +31,8 @@ const navToggle = document.getElementById('navToggle');
 const navLinks  = document.getElementById('navLinks');
 if (navToggle && navLinks) {
   navToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('open');
+    const isOpen = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', isOpen);
   });
 }
 
@@ -44,15 +45,35 @@ const sendBtn = document.getElementById('sendBtn');
 if (form && sendBtn) {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+
+    const nome     = document.getElementById('nome').value.trim();
+    const email    = document.getElementById('email').value.trim();
+    const assunto  = document.getElementById('assunto').value.trim();
+    const mensagem = document.getElementById('mensagem').value.trim();
+
     const orig = sendBtn.textContent;
-    sendBtn.textContent = 'mensagem enviada ✓';
-    sendBtn.style.background = '#22c55e';
-    sendBtn.style.borderColor = '#22c55e';
+    sendBtn.textContent = 'enviando...';
+    sendBtn.disabled = true;
+
+    const mailtoUrl = `mailto:gustavoo.dcsilva@gmail.com`
+      + `?subject=${encodeURIComponent(assunto || 'Contato pelo portfólio')}`
+      + `&body=${encodeURIComponent(`Nome: ${nome}\nEmail: ${email}\n\n${mensagem}`)}`;
+
     setTimeout(() => {
-      sendBtn.textContent = orig;
-      sendBtn.style.background = '';
-      sendBtn.style.borderColor = '';
-    }, 3000);
+      window.location.href = mailtoUrl;
+
+      sendBtn.textContent = 'recebido, obrigado! ✓';
+      sendBtn.style.background = '#22c55e';
+      sendBtn.style.borderColor = '#22c55e';
+      sendBtn.disabled = false;
+
+      setTimeout(() => {
+        sendBtn.textContent = orig;
+        sendBtn.style.background = '';
+        sendBtn.style.borderColor = '';
+        form.reset();
+      }, 4000);
+    }, 600);
   });
 }
 
