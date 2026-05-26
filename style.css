@@ -1014,6 +1014,26 @@ button {
   align-items: center;
   gap: 0.75rem;
   padding: 2rem 0 0.5rem;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.proj-category.proj-hidden {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+
+.proj-empty-state {
+  display: none;
+}
+
+.proj-empty-state.is-visible {
+  display: block;
+}
+
+.proj-empty-msg {
+  color: var(--ink-3);
+  font-size: 0.75rem;
 }
 
 .proj-cat-label {
@@ -1032,6 +1052,78 @@ button {
   background: var(--border);
 }
 
+
+/* ─── PROJECT FILTER TABS ────────────────────────── */
+.proj-filters {
+  display: flex;
+  align-items: center;
+  gap: 2.25rem;
+  flex-wrap: wrap;
+  margin-bottom: 4rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--border);
+  background: none;
+  border-radius: 0;
+  padding-left: 0;
+  padding-top: 0;
+}
+
+.proj-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color var(--transition);
+}
+
+.proj-filter-btn:hover {
+  color: var(--ink-2);
+}
+
+.proj-filter-btn.active {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.filter-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: opacity var(--transition), transform var(--transition);
+  opacity: 0.45;
+}
+
+.proj-filter-btn.active .filter-dot {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+[data-filter="todos"]     .filter-dot { background: var(--ink); }
+[data-filter="pessoal"]   .filter-dot { background: #d4a96a; }
+[data-filter="freelancer"].filter-dot { background: #6bbf7a; }
+[data-filter="angra"]     .filter-dot { background: #7baad4; }
+
+/* Fade dos itens ao filtrar */
+.exp-item[data-category],
+.proj-category[data-cat-for] {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.exp-item.proj-hidden {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
 
 /* ─── PROJETOS ────────────────────────────────────── */
 #projetos {

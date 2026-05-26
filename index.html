@@ -317,6 +317,21 @@
         <span class="mono">04 // projetos</span>
       </div>
 
+      <div class="proj-filters" data-aos="fade-up">
+        <button class="proj-filter-btn active" data-filter="todos">
+          <span class="filter-dot"></span>todos
+        </button>
+        <button class="proj-filter-btn" data-filter="pessoal">
+          <span class="filter-dot"></span>projetos pessoais
+        </button>
+        <button class="proj-filter-btn" data-filter="freelancer">
+          <span class="filter-dot"></span>freelancer
+        </button>
+        <button class="proj-filter-btn" data-filter="angra">
+          <span class="filter-dot"></span>prefeitura de angra
+        </button>
+      </div>
+
       <div class="exp-layout">
 
         <!-- Coluna Esquerda: Título sticky -->
@@ -338,11 +353,11 @@
 
 
           <!-- ── Categoria: Governo ─────────────────────── -->
-          <div class="proj-category" data-aos="fade-up">
+          <div class="proj-category" data-cat-for="angra" data-aos="fade-up">
             <span class="proj-cat-label mono">prefeitura de angra dos reis</span>
           </div>
 
-          <div class="exp-item" data-aos="fade-up">
+          <div class="exp-item" data-category="angra" data-aos="fade-up">
             <div class="exp-item-top">
               <div class="exp-role">SIGA Angra – Sistema de Informações Geográficas</div>
               <div class="exp-period mono">2024</div>
@@ -361,14 +376,14 @@
             </div>
           </div>
 
-          <div class="exp-item" data-aos="fade-up" data-aos-delay="100">
+          <div class="exp-item" data-category="angra" data-aos="fade-up" data-aos-delay="100">
             <div class="exp-item-top">
               <div class="exp-role">Banco de Talentos</div>
               <div class="exp-period mono">2025</div>
             </div>
             <div class="exp-company">Laravel + MySQL</div>
             <p class="exp-desc">
-              Desenvolvimento full-stack (Laravel + MySQL) da aplicação web, Banco de talentos da Prefeitura de Angra dos Reis.
+              Desenvolvimento full-stack (Laravel + MySQL) da aplicação web Banco de talentos da Prefeitura de Angra dos Reis.
             </p>
             <div class="exp-tags">
               <span>Laravel</span><span>MySQL</span><span>PHP</span>
@@ -379,11 +394,11 @@
           </div>
 
           <!-- ── Categoria: Projeto Pessoal ────────────── -->
-          <div class="proj-category" data-aos="fade-up">
+          <div class="proj-category" data-cat-for="pessoal" data-aos="fade-up">
             <span class="proj-cat-label mono">projeto pessoal</span>
           </div>
 
-          <div class="exp-item" data-aos="fade-up">
+          <div class="exp-item" data-category="pessoal" data-aos="fade-up">
             <div class="exp-item-top">
               <div class="exp-role">Formulário Responsivo</div>
               <div class="exp-period mono">2024</div>
@@ -404,14 +419,14 @@
             </div>
           </div>
 
-          <!-- ── Categoria: Freelancer ──────────────────── -->
-          <div class="proj-category" data-aos="fade-up">
-            <span class="proj-cat-label mono">freelancer</span>
-          </div>
-
-          <div class="exp-item exp-item--cta" data-aos="fade-up">
-            <p class="mono" style="color: var(--ink-3); font-size: 0.75rem;">projetos em andamento — em breve aqui 🚧
-            </p>
+          <!-- ── Categoria: Freelancer (empty state) ──── -->
+          <div id="proj-freelancer-empty" class="proj-empty-state">
+            <div class="proj-category">
+              <span class="proj-cat-label mono">freelancer</span>
+            </div>
+            <div class="exp-item exp-item--cta">
+              <p class="mono proj-empty-msg">em breve — projetos chegando por aqui 🚧</p>
+            </div>
           </div>
 
 

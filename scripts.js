@@ -154,6 +154,54 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e)
   if (!getStoredTheme()) applyTheme(e.matches ? 'dark' : 'light');
 });
 
+// ─── PROJECT FILTER ───────────────────────────────────
+const filterBtns      = document.querySelectorAll('.proj-filter-btn');
+const projItems       = document.querySelectorAll('.exp-item[data-category]');
+const catLabels       = document.querySelectorAll('.proj-category[data-cat-for]');
+const freelancerEmpty = document.getElementById('proj-freelancer-empty');
+
+function showItem(el) {
+  el.style.display = '';
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.remove('proj-hidden')));
+}
+
+function hideItem(el) {
+  el.classList.add('proj-hidden');
+  el.addEventListener('transitionend', () => {
+    if (el.classList.contains('proj-hidden')) el.style.display = 'none';
+  }, { once: true });
+}
+
+function applyProjectFilter(filter) {
+  const isFreelancer = filter === 'freelancer';
+  const isTodos      = filter === 'todos';
+
+  if (freelancerEmpty) {
+    freelancerEmpty.classList.toggle('is-visible', isFreelancer);
+  }
+
+  catLabels.forEach((label) => {
+    const match = isTodos || label.dataset.catFor === filter;
+    match ? showItem(label) : hideItem(label);
+  });
+
+  projItems.forEach((item) => {
+    const match = isTodos || item.dataset.category === filter;
+    match ? showItem(item) : hideItem(item);
+  });
+}
+
+filterBtns.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const filter = btn.dataset.filter;
+
+    filterBtns.forEach((b) => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    applyProjectFilter(filter);
+  });
+});
+
 // ─── BACK TO TOP ───────────────────────────────────────
 const backToTop = document.getElementById('backToTop');
 
