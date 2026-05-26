@@ -1,19 +1,49 @@
+// ─── INTRO OVERLAY ────────────────────────────────────
+(function () {
+  const overlay = document.getElementById('intro-overlay');
+  const textEl  = document.getElementById('introText');
+
+  function startAOS() {
+    if (typeof AOS !== 'undefined') {
+      AOS.init({ once: true, duration: 400, easing: 'ease-out-quad', offset: 50 });
+    }
+  }
+
+  if (!overlay || !textEl) { startAOS(); return; }
+
+  const full = 'Gustavo Campos';
+  let i = 0;
+
+  document.body.style.overflow = 'hidden';
+
+  function type() {
+    if (i <= full.length) {
+      textEl.textContent = full.slice(0, i++);
+      setTimeout(type, 46);
+    }
+  }
+
+  setTimeout(type, 100);
+
+  // Abre a cortina após o nome estar escrito
+  setTimeout(() => overlay.classList.add('open'), 1000);
+
+  // Remove overlay, libera scroll, inicia AOS
+  setTimeout(() => {
+    overlay.classList.add('done');
+    document.body.style.overflow = '';
+    startAOS();
+  }, 2000);
+})();
+
 // ─── SMOOTH SCROLL (Lenis) ────────────────────────────
 const lenis = new Lenis({
   duration: 0.6,
-  easing: (t) => 1 - Math.pow(1 - t, 4), // Easing quartic para ser mais "snappy"
+  easing: (t) => 1 - Math.pow(1 - t, 4),
   smoothWheel: true,
 });
 function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
 requestAnimationFrame(raf);
-
-// ─── AOS ──────────────────────────────────────────────
-AOS.init({
-  once: true,
-  duration: 400, // Menor duração para surgir mais rápido
-  easing: 'ease-out-quad', // Easing mais responsivo e rápido
-  offset: 50,
-});
 
 // ─── NAVBAR ── muda de estilo ao sair do hero ─────────
 const navbar = document.getElementById('navbar');

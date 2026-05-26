@@ -7,33 +7,33 @@
 /* ── DARK (padrão) ── */
 :root,
 [data-theme="dark"] {
-  --bg: #080b10;
-  --bg-2: #10151c;
-  --bg-3: #181e28;
-  --ink: #e6edf3;
-  --ink-2: #8b949e;
-  --ink-3: #525a63;
-  --border: #1f2632;
-  --accent: #e6edf3;
-  --accent-em: #14B8A6;
-  --accent-rgb: 20, 184, 166;
-  --warm: #5EEAD4;
+  --bg: #0c0c0c;
+  --bg-2: #131313;
+  --bg-3: #1a1a1a;
+  --ink: #edebe8;
+  --ink-2: #8a8784;
+  --ink-3: #515050;
+  --border: #252523;
+  --accent: #edebe8;
+  --accent-em: #c49a6c;
+  --accent-rgb: 196, 154, 108;
+  --warm: #d4b896;
 
-  --hero-bg: #0d1117;
-  --hero-ink: #e6edf3;
-  --hero-ink-2: #8b949e;
-  --hero-ink-3: #525a63;
-  --hero-border: #21262d;
+  --hero-bg: #0c0c0c;
+  --hero-ink: #edebe8;
+  --hero-ink-2: #8a8784;
+  --hero-ink-3: #515050;
+  --hero-border: #252523;
 
   /* Componentes com cores fixas → agora variáveis */
-  --navbar-bg: rgba(8, 11, 16, 0.94);
-  --ticker-bg: #07090e;
-  --stats-bg: rgba(13, 17, 23, 0.7);
+  --navbar-bg: rgba(12, 12, 12, 0.94);
+  --ticker-bg: #090909;
+  --stats-bg: rgba(12, 12, 12, 0.7);
   --hero-strong: #ffffff;
   --hero-tag-bg: rgba(255, 255, 255, 0.04);
-  --hero-ghost-hover: rgba(255, 255, 255, 0.05);
-  --glow-1: rgba(94, 234, 212, 0.12);
-  --glow-2: rgba(20, 184, 166, 0.08);
+  --hero-ghost-hover: rgba(255, 255, 255, 0.04);
+  --glow-1: rgba(196, 154, 108, 0.07);
+  --glow-2: rgba(196, 154, 108, 0.04);
 
   --font-sans: 'Inter', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
@@ -45,32 +45,32 @@
 
 /* ── LIGHT ── */
 [data-theme="light"] {
-  --bg: #f5f7fa;
-  --bg-2: #eaecf1;
-  --bg-3: #dde1e8;
-  --ink: #0d1117;
-  --ink-2: #424a53;
-  --ink-3: #6e7781;
-  --border: #cfd4db;
-  --accent: #0d1117;
-  --accent-em: #0F766E;
-  --accent-rgb: 15, 118, 110;
-  --warm: #0D514D;
+  --bg: #f7f6f3;
+  --bg-2: #efede9;
+  --bg-3: #e5e3de;
+  --ink: #1a1918;
+  --ink-2: #6b6a67;
+  --ink-3: #9a9895;
+  --border: #dddbd6;
+  --accent: #1a1918;
+  --accent-em: #b8844e;
+  --accent-rgb: 184, 132, 78;
+  --warm: #9e6e3a;
 
-  --hero-bg: #f5f7fa;
-  --hero-ink: #0d1117;
-  --hero-ink-2: #424a53;
-  --hero-ink-3: #6e7781;
-  --hero-border: #cfd4db;
+  --hero-bg: #f7f6f3;
+  --hero-ink: #1a1918;
+  --hero-ink-2: #6b6a67;
+  --hero-ink-3: #9a9895;
+  --hero-border: #dddbd6;
 
-  --navbar-bg: rgba(245, 247, 250, 0.94);
-  --ticker-bg: #e4e8ee;
-  --stats-bg: rgba(245, 247, 250, 0.85);
-  --hero-strong: #0d1117;
+  --navbar-bg: rgba(247, 246, 243, 0.94);
+  --ticker-bg: #eeece8;
+  --stats-bg: rgba(247, 246, 243, 0.85);
+  --hero-strong: #0c0c0c;
   --hero-tag-bg: rgba(0, 0, 0, 0.04);
-  --hero-ghost-hover: rgba(0, 0, 0, 0.05);
-  --glow-1: rgba(13, 81, 77, 0.15);
-  --glow-2: rgba(15, 118, 110, 0.10);
+  --hero-ghost-hover: rgba(0, 0, 0, 0.04);
+  --glow-1: rgba(184, 132, 78, 0.10);
+  --glow-2: rgba(184, 132, 78, 0.06);
 }
 
 /* ─── RESET ───────────────────────────────────────── */
@@ -337,6 +337,56 @@ button {
   opacity: 1;
   transform: rotate(0deg) scale(1);
 }
+
+/* ─── INTRO OVERLAY ────────────────────────────────── */
+#intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.intro-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50.5%;
+  background: var(--bg);
+  transition: transform 0.95s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.intro-left  { left: 0; }
+.intro-right { right: 0; }
+
+.intro-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.25s ease;
+}
+
+.intro-wordmark {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.intro-cur {
+  color: var(--accent-em);
+  margin-left: 1px;
+  animation: blink-cursor 1.1s step-end infinite;
+}
+
+#intro-overlay.open .intro-left  { transform: translateX(-101%); }
+#intro-overlay.open .intro-right { transform: translateX(101%); }
+#intro-overlay.open .intro-center { opacity: 0; }
+
+#intro-overlay.done { display: none; }
 
 /* ─── BUTTONS ─────────────────────────────────────── */
 .btn-primary {
