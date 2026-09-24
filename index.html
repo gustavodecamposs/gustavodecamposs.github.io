@@ -1,15 +1,21 @@
 <!DOCTYPE html>
-<html lang="pt-br" data-theme="dark">
+<html lang="en" data-theme="dark">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gustavo de Campos — Desenvolvedor Front-End</title>
-  <meta name="description"
-    content="Gustavo de Campos — desenvolvedor front-end em Angra dos Reis. Interfaces web responsivas, acessíveis e cuidadas nos detalhes." />
-  <meta property="og:title" content="Gustavo de Campos — Desenvolvedor Front-End" />
-  <meta property="og:description" content="Interfaces web responsivas, acessíveis e cuidadas nos detalhes." />
+  <!-- Textos em inglês (idioma padrão); i18n/*.js troca tudo que tem data-i18n* -->
+  <title data-i18n="meta.title">Gustavo de Campos — Front-End Developer</title>
+  <meta name="description" data-i18n-attr="content:meta.description"
+    content="Gustavo de Campos is a front-end developer in Angra dos Reis, Brazil, building responsive, accessible web interfaces with care for the details." />
+  <meta property="og:title" data-i18n-attr="content:meta.title" content="Gustavo de Campos — Front-End Developer" />
+  <meta property="og:description" data-i18n-attr="content:meta.ogDescription" content="Responsive, accessible web interfaces, built with care for the details." />
   <meta property="og:type" content="website" />
+  <meta property="og:locale" data-i18n-attr="content:meta.locale" content="en_US" />
+  <meta property="og:locale:alternate" content="pt_BR" />
+  <link rel="alternate" hreflang="en" href="https://gustavodecamposs.github.io/" />
+  <link rel="alternate" hreflang="pt-BR" href="https://gustavodecamposs.github.io/?lang=pt" />
+  <link rel="alternate" hreflang="x-default" href="https://gustavodecamposs.github.io/" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,13 +23,20 @@
     href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..400&family=Instrument+Sans:wght@400..600&family=DM+Mono:wght@400;500&display=swap"
     rel="stylesheet">
 
-  <!-- Tema e flags antes do CSS pintar -->
+  <!-- Tema, idioma e flags antes do CSS pintar -->
   <script>
     !function () {
       var d = document.documentElement;
       try {
         var s = localStorage.getItem('theme');
         d.setAttribute('data-theme', s || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'));
+        // Idioma: ?lang= na URL > escolha salva > inglês. Em PT, esconde a página até trocar os textos
+        var q = /[?&]lang=(en|pt)\b/.exec(location.search);
+        if ((q ? q[1] : localStorage.getItem('lang')) === 'pt') {
+          d.lang = 'pt-BR';
+          d.classList.add('i18n-pending');
+          setTimeout(function () { d.classList.remove('i18n-pending'); }, 2500);
+        }
       } catch (e) { }
       d.classList.add('js');
       if (!matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion');
@@ -35,27 +48,61 @@
 </head>
 
 <body>
-  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <a class="skip-link" href="#conteudo" data-i18n="skip">Skip to content</a>
+
+  <!-- Ícones de contato: traço fino, como os do tema. Usados com <use href="#i-..."> -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-github" viewBox="0 0 24 24">
+      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+      <path d="M9 18c-4.51 2-5-2-7-2" />
+    </symbol>
+    <symbol id="i-linkedin" viewBox="0 0 24 24">
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect x="2" y="9" width="4" height="12" />
+      <circle cx="4" cy="4" r="2" />
+    </symbol>
+    <symbol id="i-instagram" viewBox="0 0 24 24">
+      <rect x="2" y="2" width="20" height="20" rx="5" />
+      <circle cx="12" cy="12" r="4" />
+      <path d="M17.5 6.5h.01" />
+    </symbol>
+    <symbol id="i-whatsapp" viewBox="0 0 24 24">
+      <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z" />
+      <path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 .8a4 4 0 0 1-1.8-1.8l.8-1-1-2L9 9.5z" />
+    </symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24">
+      <rect x="2" y="4" width="20" height="16" rx="2" />
+      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+    </symbol>
+    <symbol id="i-up" viewBox="0 0 24 24">
+      <path d="M12 19V5M6 11l6-6 6 6" />
+    </symbol>
+  </svg>
 
   <!-- ─── HEADER ─────────────────────────────────────── -->
   <header class="site-header" id="siteHeader">
-    <span class="nav-cross" aria-hidden="true"></span>
-    <nav class="nav wrap" aria-label="Principal">
-      <a class="brand" href="#inicio" aria-label="Gustavo de Campos, início">
+    <nav class="nav wrap" aria-label="Main" data-i18n-attr="aria-label:nav.label">
+      <a class="brand" href="#inicio" aria-label="Gustavo de Campos, home" data-i18n-attr="aria-label:nav.home">
         <span class="brand-mark" aria-hidden="true">G<em>C</em></span>
         <span class="brand-name">Gustavo C.</span>
       </a>
 
       <ul class="nav-links">
-        <li><a href="#sobre" data-nav>Sobre</a></li>
-        <li><a href="#projetos" data-nav>Projetos</a></li>
-        <li><a href="#experiencia" data-nav>Experiência</a></li>
-        <li><a href="#contato" data-nav>Contato</a></li>
+        <li><a href="#sobre" data-nav data-i18n="nav.about">About</a></li>
+        <li><a href="#projetos" data-nav data-i18n="nav.projects">Projects</a></li>
+        <li><a href="#experiencia" data-nav data-i18n="nav.experience">Experience</a></li>
+        <li><a href="#contato" data-nav data-i18n="nav.contact">Contact</a></li>
       </ul>
 
       <div class="nav-tools">
-        <a class="nav-pill" href="#contato"><i aria-hidden="true"></i>Disponível para projetos</a>
-        <button class="theme-btn" id="themeToggle" type="button" aria-label="Mudar para tema claro">
+        <a class="nav-pill" href="#contato"><i aria-hidden="true"></i><span data-i18n="nav.available">Available for work</span></a>
+        <!-- Cada botão se anuncia no próprio idioma; aria-pressed marca o ativo -->
+        <div class="lang" role="group" aria-label="Language" data-i18n-attr="aria-label:lang.label">
+          <button class="lang-btn" type="button" data-lang="en" lang="en" aria-label="English" aria-pressed="true">EN</button>
+          <span aria-hidden="true">/</span>
+          <button class="lang-btn" type="button" data-lang="pt" lang="pt-BR" aria-label="Português" aria-pressed="false">PT</button>
+        </div>
+        <button class="theme-btn" id="themeToggle" type="button" aria-label="Switch to light theme">
           <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />
           </svg>
@@ -65,7 +112,7 @@
           </svg>
         </button>
         <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mobileMenu">
-          <span class="menu-btn-open">Menu</span><span class="menu-btn-close">Fechar</span>
+          <span class="menu-btn-open" data-i18n="menu.open">Menu</span><span class="menu-btn-close" data-i18n="menu.close">Close</span>
         </button>
       </div>
     </nav>
@@ -73,10 +120,10 @@
 
   <div class="mobile-menu" id="mobileMenu" hidden>
     <ol class="mobile-links">
-      <li><a href="#sobre"><span class="mono">01</span>Sobre</a></li>
-      <li><a href="#projetos"><span class="mono">02</span>Projetos</a></li>
-      <li><a href="#experiencia"><span class="mono">03</span>Experiência</a></li>
-      <li><a href="#contato"><span class="mono">04</span>Contato</a></li>
+      <li><a href="#sobre"><span class="mono">01</span><span data-i18n="nav.about">About</span></a></li>
+      <li><a href="#projetos"><span class="mono">02</span><span data-i18n="nav.projects">Projects</span></a></li>
+      <li><a href="#experiencia"><span class="mono">03</span><span data-i18n="nav.experience">Experience</span></a></li>
+      <li><a href="#contato"><span class="mono">04</span><span data-i18n="nav.contact">Contact</span></a></li>
     </ol>
     <div class="mobile-foot mono">
       <a href="mailto:gustavoo.dcsilva@gmail.com">gustavoo.dcsilva@gmail.com</a>
@@ -88,26 +135,28 @@
 
     <!-- ─── HERO ─────────────────────────────────────── -->
     <section class="hero" id="inicio" aria-labelledby="hero-title">
-      <div class="hero-bg" aria-hidden="true"><canvas id="topo"></canvas></div>
+      <!-- Fundo: estrelas na posição real do céu sobre Angra dos Reis neste momento -->
+      <!-- Tema claro: no lugar do céu, o relevo em curvas de nível (de dia, o mapa) -->
+      <div class="hero-bg" aria-hidden="true"><canvas id="stars"></canvas><canvas id="topo"></canvas></div>
 
       <div class="hero-stage wrap">
-        <p class="hero-marker" aria-hidden="true">01 // 05 — Role <span>↓</span></p>
+        <img class="hero-avatar" src="img/eu.webp" width="1024" height="1536" decoding="async" fetchpriority="high"
+          alt="Illustration of Gustavo de Campos smiling, on a teal background." data-i18n-attr="alt:hero.avatarAlt" />
 
-        <!-- Quebras e nota são visuais; o nome acessível vem do aria-label -->
-        <h1 class="hero-title" id="hero-title" aria-label="Gustavo de Campos, desenvolvedor front-end detalhista">
-          <span class="hl hl--1"><span class="hl-in" data-split>Desenvol-</span></span>
-          <span class="hl hl--2"><span class="hl-in" data-split>vedor<br class="br-m"> front-end</span></span>
-          <span class="hl hl--3">
-            <span class="hl-in" data-split>detalhista</span>
-            <span class="hero-note" aria-hidden="true">Passo horas num detalhe que 99% das pessoas não vão notar. Mas quem nota, não esquece.</span>
-          </span>
+        <h1 class="hero-title" id="hero-title">
+          <span class="hl-in" data-split>Gustavo de Campos</span>
         </h1>
-        <p class="sr-only">Passo horas num detalhe que 99% das pessoas não vão notar. Mas quem nota, não esquece.</p>
 
-        <a class="hero-down" href="#sobre" aria-label="Rolar até Sobre">
-          <svg class="hero-down-ring" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="31" /></svg>
-          <svg class="hero-down-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
-        </a>
+        <p class="hero-role" data-i18n-html="hero.role">A <em>detail-minded</em> front-end developer in Angra dos Reis, Brazil.</p>
+        <p class="hero-note" data-i18n="hero.note">I spend hours on details 99% of people will never notice. The ones who do, don’t forget.</p>
+
+        <ul class="hero-links mono">
+          <li><a href="https://github.com/gustavodecamposs" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-github" /></svg>GitHub</a></li>
+          <li><a href="https://www.linkedin.com/in/gustavodecamposs/" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-linkedin" /></svg>LinkedIn</a></li>
+          <li><a href="https://www.instagram.com/gustavoo.dcs/" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-instagram" /></svg>Instagram</a></li>
+          <li><a href="https://wa.me/5524974051952?text=Hi%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20talk!" target="_blank" rel="noopener" data-i18n-attr="href:contact.whatsapp"><svg class="ico" aria-hidden="true"><use href="#i-whatsapp" /></svg>WhatsApp</a></li>
+          <li><a href="mailto:gustavoo.dcsilva@gmail.com"><svg class="ico" aria-hidden="true"><use href="#i-mail" /></svg><span data-i18n="contact.email">Email</span></a></li>
+        </ul>
       </div>
     </section>
 
@@ -115,57 +164,58 @@
     <section class="sec" id="sobre" aria-labelledby="sobre-title">
       <div class="wrap">
         <header class="sec-head" data-reveal>
-          <p class="sec-index mono">01 — Sobre</p>
+          <p class="sec-index mono" data-i18n="about.index">01 — About</p>
           <h2 class="sec-title" id="sobre-title">
-            <span class="ln"><span>Código é só a ferramenta.</span></span>
-            <span class="ln"><span><em>Gente</em> é o que importa.</span></span>
+            <span class="ln"><span data-i18n="about.title1">Code is just the tool.</span></span>
+            <span class="ln"><span data-i18n-html="about.title2"><em>People</em> are what matter.</span></span>
           </h2>
         </header>
 
         <div class="about">
-          <figure class="about-fig">
+          <figure class="about-fig" data-reveal>
             <img src="img/eu.webp" width="1024" height="1536" loading="lazy" decoding="async"
-              alt="Ilustração de Gustavo de Campos: rapaz de cabelo curto escuro, barba rala e camiseta preta, sorrindo, sobre fundo verde-água." />
-            <figcaption class="mono">Fig. 01 — autor</figcaption>
+              alt="Illustration of Gustavo de Campos: a young man with short dark hair, a light beard and a black T-shirt, smiling on a teal background."
+              data-i18n-attr="alt:about.photoAlt" />
+            <figcaption class="mono" data-i18n="about.caption">Fig. 01 — the author</figcaption>
           </figure>
 
           <div class="about-text">
-            <p class="about-lead">
-              Sou Gustavo, desenvolvedor front-end em Angra dos Reis. Acredito que nenhuma interface é boa
-              se quem usa não sente isso na prática — e que cada detalhe numa tela precisa de um motivo.
+            <p class="about-lead" data-i18n="about.lead">
+              I’m Gustavo, a front-end developer in Angra dos Reis, Brazil. I believe no interface is good unless
+              the people using it can feel it — and that every detail on a screen needs a reason to be there.
             </p>
-            <p>
-              Tenho sistemas no ar para a Prefeitura de Angra dos Reis e faço projetos independentes. Estou
-              expandindo para o back-end com PHP/Laravel e C#/.NET para entregar soluções completas.
+            <p data-i18n="about.p1">
+              I have systems in production for the City of Angra dos Reis and take on independent projects. I’m
+              expanding into the back end with PHP/Laravel and C#/.NET so I can deliver complete solutions.
             </p>
-            <p>
-              Quando não estou codando, estou ouvindo música, procurando referências de design ou tentando
-              entender por que aquele CSS não funcionou do jeito que eu queria. Faz parte.
+            <p data-i18n="about.p2">
+              When I’m not coding, I’m listening to music, hunting for design references, or trying to figure out
+              why that CSS didn’t do what I wanted. Comes with the job.
             </p>
 
             <ol class="principles">
               <li>
-                <h3>Empatia primeiro</h3>
-                <p>Penso em quem vai usar antes de escrever a primeira linha.</p>
+                <h3 data-i18n="about.pr1.title">Empathy first</h3>
+                <p data-i18n="about.pr1.text">I think about who will use it before writing the first line.</p>
               </li>
               <li>
-                <h3>Detalhe importa</h3>
-                <p>Os milímetros e os milissegundos que fazem diferença.</p>
+                <h3 data-i18n="about.pr2.title">Details matter</h3>
+                <p data-i18n="about.pr2.text">The millimeters and milliseconds that make the difference.</p>
               </li>
               <li>
-                <h3>Mobile first</h3>
-                <p>Se não funciona no celular, não funciona.</p>
+                <h3 data-i18n="about.pr3.title">Mobile first</h3>
+                <p data-i18n="about.pr3.text">If it doesn’t work on a phone, it doesn’t work.</p>
               </li>
               <li>
-                <h3>Sempre estudando</h3>
-                <p>Back-end hoje, para entregar o produto inteiro amanhã.</p>
+                <h3 data-i18n="about.pr4.title">Always learning</h3>
+                <p data-i18n="about.pr4.text">Back end today, so I can ship the whole product tomorrow.</p>
               </li>
             </ol>
           </div>
         </div>
 
         <div class="stack">
-          <p class="stack-label mono">Ferramentas</p>
+          <p class="stack-label mono" data-i18n="stack.label">Tools</p>
           <ul class="stack-list">
             <li><i style="--i:url(img/stack/html5.svg)" aria-hidden="true"></i>HTML</li>
             <li><i style="--i:url(img/stack/css3.svg)" aria-hidden="true"></i>CSS</li>
@@ -173,9 +223,9 @@
             <li><i style="--i:url(img/stack/bootstrap.svg)" aria-hidden="true"></i>Bootstrap</li>
             <li><i style="--i:url(img/stack/git.svg)" aria-hidden="true"></i>Git &amp; GitHub</li>
             <li><i style="--i:url(img/stack/figma.svg)" aria-hidden="true"></i>Figma</li>
-            <li><i style="--i:url(img/stack/php.svg)" aria-hidden="true"></i>PHP / Laravel <em>aprendendo</em></li>
+            <li><i style="--i:url(img/stack/php.svg)" aria-hidden="true"></i>PHP / Laravel <em data-i18n="stack.learning">learning</em></li>
             <li><i style="--i:url(img/stack/sql.svg)" aria-hidden="true"></i>MySQL</li>
-            <li><i style="--i:url(img/stack/dotnet.svg)" aria-hidden="true"></i>C# / .NET <em>aprendendo</em></li>
+            <li><i style="--i:url(img/stack/dotnet.svg)" aria-hidden="true"></i>C# / .NET <em data-i18n="stack.learning">learning</em></li>
           </ul>
         </div>
       </div>
@@ -185,13 +235,13 @@
     <section class="sec" id="projetos" aria-labelledby="projetos-title">
       <div class="wrap">
         <header class="sec-head" data-reveal>
-          <p class="sec-index mono">02 — Projetos</p>
+          <p class="sec-index mono" data-i18n="projects.index">02 — Projects</p>
           <h2 class="sec-title" id="projetos-title">
-            <span class="ln"><span>O que eu</span></span>
-            <span class="ln"><span><em>já construí.</em></span></span>
+            <span class="ln"><span data-i18n="projects.title1">What I’ve</span></span>
+            <span class="ln"><span data-i18n-html="projects.title2"><em>built so far.</em></span></span>
           </h2>
-          <p class="sec-lede">
-            Dois sistemas no ar, usados pela população de Angra dos Reis — e o que estudei pelo caminho.
+          <p class="sec-lede" data-i18n="projects.lede">
+            Two systems in production, used by the people of Angra dos Reis — plus what I studied along the way.
           </p>
         </header>
 
@@ -201,27 +251,27 @@
             <a class="plate" href="https://siga.angra.rj.gov.br/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
               <img src="img/projetos/siga.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="" />
               <span class="plate-meta mono">
-                <span>Prancha 01</span><span>siga.angra.rj.gov.br</span><span>23°00'24"S 44°19'05"W</span>
+                <span data-i18n="projects.plate1">Plate 01</span><span>siga.angra.rj.gov.br</span><span>23°00'24"S 44°19'05"W</span>
               </span>
             </a>
             <div class="case-info">
               <div class="case-head">
                 <p class="case-num mono">01</p>
                 <h3 class="case-title">SIGA Angra</h3>
-                <p class="case-kicker">Prefeitura de Angra dos Reis, 2024 — o sistema de informações geográficas do município.</p>
+                <p class="case-kicker" data-i18n="siga.kicker">City of Angra dos Reis, 2024 — the municipality’s geographic information system.</p>
               </div>
               <div class="case-body">
-                <p class="case-desc">
-                  Desenvolvi todo o front-end da plataforma de visualização geográfica de Angra dos Reis: interface,
-                  experiência de uso e integração visual com os dados do mapa, com navegação intuitiva e
-                  responsiva.
+                <p class="case-desc" data-i18n="siga.desc">
+                  I built the entire front end of Angra dos Reis’s geographic visualization platform: the interface,
+                  the user experience and the visual integration with the map data, with intuitive, responsive
+                  navigation.
                 </p>
                 <dl class="facts">
-                  <div><dt>Papel</dt><dd>Front-end completo</dd></div>
-                  <div><dt>Stack</dt><dd>HTML, CSS, Bootstrap, JavaScript</dd></div>
+                  <div><dt data-i18n="projects.role">Role</dt><dd data-i18n="siga.role">Entire front end</dd></div>
+                  <div><dt data-i18n="projects.stack">Stack</dt><dd>HTML, CSS, Bootstrap, JavaScript</dd></div>
                 </dl>
                 <p class="case-links">
-                  <a class="link-arrow" href="https://siga.angra.rj.gov.br/" target="_blank" rel="noopener">Ver site no ar <span aria-hidden="true">↗</span></a>
+                  <a class="link-arrow" href="https://siga.angra.rj.gov.br/" target="_blank" rel="noopener" data-i18n-html="projects.live">View live site <span aria-hidden="true">↗</span></a>
                 </p>
               </div>
             </div>
@@ -231,26 +281,26 @@
             <a class="plate" href="https://bancodetalentos.angra.rj.gov.br/home/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
               <img src="img/projetos/banco-talentos.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="" />
               <span class="plate-meta mono">
-                <span>Prancha 02</span><span>bancodetalentos.angra.rj.gov.br</span>
+                <span data-i18n="projects.plate2">Plate 02</span><span>bancodetalentos.angra.rj.gov.br</span>
               </span>
             </a>
             <div class="case-info">
               <div class="case-head">
                 <p class="case-num mono">02</p>
                 <h3 class="case-title">Banco de Talentos</h3>
-                <p class="case-kicker">Prefeitura de Angra dos Reis, 2025 — vagas e cadastro de profissionais do município.</p>
+                <p class="case-kicker" data-i18n="talentos.kicker">City of Angra dos Reis, 2025 — job openings and a registry of local professionals.</p>
               </div>
               <div class="case-body">
-                <p class="case-desc">
-                  Desenvolvimento full-stack da aplicação web Banco de Talentos da Prefeitura de Angra dos Reis,
-                  do banco de dados à interface.
+                <p class="case-desc" data-i18n="talentos.desc">
+                  Full-stack development of Banco de Talentos, the City of Angra dos Reis’s talent pool web app,
+                  from the database to the interface.
                 </p>
                 <dl class="facts">
-                  <div><dt>Papel</dt><dd>Full-stack</dd></div>
-                  <div><dt>Stack</dt><dd>PHP, Laravel, MySQL</dd></div>
+                  <div><dt data-i18n="projects.role">Role</dt><dd data-i18n="talentos.role">Full stack</dd></div>
+                  <div><dt data-i18n="projects.stack">Stack</dt><dd>PHP, Laravel, MySQL</dd></div>
                 </dl>
                 <p class="case-links">
-                  <a class="link-arrow" href="https://bancodetalentos.angra.rj.gov.br/home/" target="_blank" rel="noopener">Ver site no ar <span aria-hidden="true">↗</span></a>
+                  <a class="link-arrow" href="https://bancodetalentos.angra.rj.gov.br/home/" target="_blank" rel="noopener" data-i18n-html="projects.live">View live site <span aria-hidden="true">↗</span></a>
                 </p>
               </div>
             </div>
@@ -259,18 +309,18 @@
         </ol>
 
         <div class="studies">
-          <p class="studies-label mono">Estudos</p>
+          <p class="studies-label mono" data-i18n="studies.label">Studies</p>
           <ul class="studies-list">
             <li>
               <span class="study-year mono">2024</span>
-              <span class="study-title">Tela de login responsiva</span>
-              <span class="study-note">Primeiro projeto com Bootstrap 5 — onde aprendi que CSS puro e framework se complementam.</span>
-              <a class="link-arrow" href="https://github.com/gustavodecamposs/Projeto-tela-de-login-com-bootstrap" target="_blank" rel="noopener">Código <span aria-hidden="true">↗</span></a>
+              <span class="study-title" data-i18n="studies.loginTitle">Responsive login screen</span>
+              <span class="study-note" data-i18n="studies.loginNote">My first Bootstrap 5 project — where I learned that plain CSS and a framework complement each other.</span>
+              <a class="link-arrow" href="https://github.com/gustavodecamposs/Projeto-tela-de-login-com-bootstrap" target="_blank" rel="noopener" data-i18n-html="studies.code">Code <span aria-hidden="true">↗</span></a>
             </li>
           </ul>
           <p class="studies-foot">
-            <span>Projetos freelancer em andamento entram aqui quando os clientes liberarem a publicação.</span>
-            <a class="link-arrow" href="https://github.com/gustavodecamposs" target="_blank" rel="noopener">Tudo no GitHub <span aria-hidden="true">↗</span></a>
+            <span data-i18n="studies.foot">Freelance projects in progress will show up here once clients approve publishing them.</span>
+            <a class="link-arrow" href="https://github.com/gustavodecamposs" target="_blank" rel="noopener" data-i18n-html="studies.github">Everything on GitHub <span aria-hidden="true">↗</span></a>
           </p>
         </div>
       </div>
@@ -280,45 +330,45 @@
     <section class="sec" id="experiencia" aria-labelledby="exp-title">
       <div class="wrap">
         <header class="sec-head" data-reveal>
-          <p class="sec-index mono">03 — Experiência</p>
+          <p class="sec-index mono" data-i18n="exp.index">03 — Experience</p>
           <h2 class="sec-title" id="exp-title">
-            <span class="ln"><span>Minha <em>jornada.</em></span></span>
+            <span class="ln"><span data-i18n-html="exp.title">The <em>path so far.</em></span></span>
           </h2>
-          <p class="sec-lede">Cada fase me ensinou algo diferente.</p>
+          <p class="sec-lede" data-i18n="exp.lede">Each stage taught me something different.</p>
         </header>
 
         <ol class="ledger">
           <li class="ledger-row is-current">
-            <p class="ledger-period mono">2024 — hoje</p>
+            <p class="ledger-period mono" data-i18n="exp.present2024">2024 — present</p>
             <div class="ledger-role">
-              <h3>Desenvolvedor Front-End</h3>
-              <p class="mono">Freelancer · Projetos independentes</p>
+              <h3 data-i18n="exp.job1.role">Front-End Developer</h3>
+              <p class="mono" data-i18n="exp.job1.meta">Freelance · Independent projects</p>
             </div>
-            <p class="ledger-desc">
-              Interfaces web sob demanda, de landing pages a sistemas de formulário. Foco em responsividade,
-              performance e no detalhe que o cliente não pediu, mas nota.
+            <p class="ledger-desc" data-i18n="exp.job1.desc">
+              Web interfaces on demand, from landing pages to form-based systems. Focused on responsiveness,
+              performance and the detail the client didn’t ask for, but notices.
             </p>
           </li>
           <li class="ledger-row is-current">
-            <p class="ledger-period mono">2023 — hoje</p>
+            <p class="ledger-period mono" data-i18n="exp.present2023">2023 — present</p>
             <div class="ledger-role">
-              <h3>Estudante de Desenvolvimento Web</h3>
-              <p class="mono">Autodidata + cursos</p>
+              <h3 data-i18n="exp.job2.role">Web Development Student</h3>
+              <p class="mono" data-i18n="exp.job2.meta">Self-taught + courses</p>
             </div>
-            <p class="ledger-desc">
-              Comecei pelo front-end — HTML, CSS, JavaScript e design de interfaces. Hoje estou expandindo para
-              o back-end com C# .NET e PHP Laravel.
+            <p class="ledger-desc" data-i18n="exp.job2.desc">
+              I started with the front end — HTML, CSS, JavaScript and interface design. Now I’m expanding into
+              the back end with C# .NET and PHP Laravel.
             </p>
           </li>
           <li class="ledger-row">
             <p class="ledger-period mono">2023</p>
             <div class="ledger-role">
-              <h3>Aprendiz em TI</h3>
-              <p class="mono">Suporte · Redes · Fundamentos</p>
+              <h3 data-i18n="exp.job3.role">IT Apprentice</h3>
+              <p class="mono" data-i18n="exp.job3.meta">Support · Networking · Fundamentals</p>
             </div>
-            <p class="ledger-desc">
-              Meu primeiro contato sério com tecnologia. Entrei curioso e saí com um rumo claro: construir coisas
-              que as pessoas usem.
+            <p class="ledger-desc" data-i18n="exp.job3.desc">
+              My first serious contact with technology. I came in curious and left with a clear direction:
+              building things people actually use.
             </p>
           </li>
         </ol>
@@ -332,32 +382,32 @@
       <canvas id="topoContact" aria-hidden="true"></canvas>
       <div class="wrap">
         <header class="sec-head" data-reveal>
-          <p class="sec-index mono">04 — Contato</p>
+          <p class="sec-index mono" data-i18n="contact.index">04 — Contact</p>
           <h2 class="sec-title" id="contato-title">
-            <span class="ln"><span>Tem um projeto</span></span>
-            <span class="ln"><span><em>na cabeça?</em></span></span>
+            <span class="ln"><span data-i18n="contact.title1">Got a project</span></span>
+            <span class="ln"><span data-i18n-html="contact.title2"><em>in mind?</em></span></span>
           </h2>
-          <p class="sec-lede">
-            Proposta, freela, dúvida ou só para trocar uma ideia sobre tecnologia. Respondo tudo.
+          <p class="sec-lede" data-i18n="contact.lede">
+            A proposal, a freelance job, a question, or just to talk tech. I answer everything.
           </p>
         </header>
 
         <div class="contact-grid">
           <dl class="channels">
             <div>
-              <dt class="mono">WhatsApp</dt>
-              <dd><a href="https://wa.me/5524974051952?text=Ol%C3%A1%2C%20vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar!" target="_blank" rel="noopener">(24) 97405-1952</a></dd>
+              <dt class="mono"><svg class="ico" aria-hidden="true"><use href="#i-whatsapp" /></svg>WhatsApp</dt>
+              <dd><a href="https://wa.me/5524974051952?text=Hi%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20talk!" target="_blank" rel="noopener" data-i18n-attr="href:contact.whatsapp">(24) 97405-1952</a></dd>
             </div>
             <div>
-              <dt class="mono">LinkedIn</dt>
+              <dt class="mono"><svg class="ico" aria-hidden="true"><use href="#i-linkedin" /></svg>LinkedIn</dt>
               <dd><a href="https://www.linkedin.com/in/gustavodecamposs/" target="_blank" rel="noopener">in/gustavodecamposs</a></dd>
             </div>
             <div>
-              <dt class="mono">GitHub</dt>
+              <dt class="mono"><svg class="ico" aria-hidden="true"><use href="#i-github" /></svg>GitHub</dt>
               <dd><a href="https://github.com/gustavodecamposs" target="_blank" rel="noopener">gustavodecamposs</a></dd>
             </div>
             <div>
-              <dt class="mono">Instagram</dt>
+              <dt class="mono"><svg class="ico" aria-hidden="true"><use href="#i-instagram" /></svg>Instagram</dt>
               <dd><a href="https://www.instagram.com/gustavoo.dcs/" target="_blank" rel="noopener">@gustavoo.dcs</a></dd>
             </div>
           </dl>
@@ -365,30 +415,30 @@
           <!-- O formulário é um rascunho de e-mail: enviar abre o app de e-mail com tudo preenchido -->
           <form class="letter" id="contactForm">
             <div class="letter-row letter-row--to">
-              <span class="letter-k mono">Para</span>
+              <span class="letter-k mono" data-i18n="contact.to">To</span>
               <a class="letter-to" href="mailto:gustavoo.dcsilva@gmail.com">gustavoo.dcsilva@gmail.com</a>
-              <button class="copy-btn mono" type="button" id="copyMail" data-copy="gustavoo.dcsilva@gmail.com">Copiar</button>
+              <button class="copy-btn mono" type="button" id="copyMail" data-copy="gustavoo.dcsilva@gmail.com" data-i18n="contact.copy">Copy</button>
               <span class="sr-only" id="copyStatus" aria-live="polite"></span>
             </div>
             <div class="letter-row">
-              <label class="letter-k mono" for="nome">De</label>
-              <input type="text" id="nome" name="nome" autocomplete="name" placeholder="Seu nome" required />
+              <label class="letter-k mono" for="nome" data-i18n="contact.from">From</label>
+              <input type="text" id="nome" name="nome" autocomplete="name" placeholder="Your name" data-i18n-attr="placeholder:contact.namePh" required />
             </div>
             <div class="letter-row">
-              <label class="letter-k mono" for="email">E-mail</label>
-              <input type="email" id="email" name="email" autocomplete="email" placeholder="voce@exemplo.com" required />
+              <label class="letter-k mono" for="email" data-i18n="contact.email">Email</label>
+              <input type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com" data-i18n-attr="placeholder:contact.emailPh" required />
             </div>
             <div class="letter-row">
-              <label class="letter-k mono" for="assunto">Assunto</label>
-              <input type="text" id="assunto" name="assunto" autocomplete="off" placeholder="Sobre o quê?" />
+              <label class="letter-k mono" for="assunto" data-i18n="contact.subject">Subject</label>
+              <input type="text" id="assunto" name="assunto" autocomplete="off" placeholder="What’s it about?" data-i18n-attr="placeholder:contact.subjectPh" />
             </div>
             <div class="letter-row letter-row--msg">
-              <label class="letter-k mono" for="mensagem">Mensagem</label>
+              <label class="letter-k mono" for="mensagem" data-i18n="contact.message">Message</label>
               <textarea id="mensagem" name="mensagem" rows="6" required></textarea>
             </div>
             <div class="letter-foot">
-              <p class="form-note">Abre seu aplicativo de e-mail com a mensagem pronta.</p>
-              <button type="submit" class="btn" id="sendBtn">Enviar <span aria-hidden="true">→</span></button>
+              <p class="form-note" data-i18n="contact.note">Opens your email app with the message ready to send.</p>
+              <button type="submit" class="btn" id="sendBtn" data-i18n-html="contact.send">Send <span aria-hidden="true">→</span></button>
             </div>
           </form>
         </div>
@@ -397,6 +447,11 @@
 
   </main>
 
+  <!-- Aparece quando o hero sai da tela -->
+  <a class="to-top" id="toTop" href="#inicio" aria-label="Back to top" data-i18n-attr="aria-label:top.label">
+    <svg class="ico" aria-hidden="true"><use href="#i-up" /></svg>
+  </a>
+
   <footer class="site-footer">
     <div class="wrap">
       <div class="footer-map mono" aria-hidden="true">
@@ -404,12 +459,15 @@
         <span>23°00'24"S 44°19'05"W</span>
       </div>
       <div class="footer-row">
-        <p class="footer-copy">© 2026 Gustavo de Campos. Feito à mão, com muito café.</p>
-        <a class="link-arrow" href="#inicio">Voltar ao topo <span aria-hidden="true">↑</span></a>
+        <p class="footer-copy" data-i18n="footer.copy">© 2026 Gustavo de Campos. Handmade, with plenty of coffee.</p>
+        <a class="link-arrow" href="#inicio" data-i18n-html="footer.top">Back to top <span aria-hidden="true">↑</span></a>
       </div>
     </div>
   </footer>
 
+  <!-- Um arquivo por idioma; para adicionar outro, crie i18n/xx.js e um botão .lang-btn -->
+  <script src="i18n/en.js"></script>
+  <script src="i18n/pt.js"></script>
   <script src="scripts.js"></script>
 </body>
 

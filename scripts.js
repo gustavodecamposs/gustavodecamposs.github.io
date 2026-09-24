@@ -1,18 +1,65 @@
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 const root = document.documentElement;
 
-// ─── TOPOGRAFIA (canvas) ──────────────────────────────
-// Value noise 2D + marching squares. Grade em pixels CSS; o DPR só dá nitidez.
-function createTopo(canvas, { animated = true, opacity = 1 } = {}) {
-  if (!canvas || !canvas.getContext) return;
+// ─── IDIOMA ───────────────────────────────────────────
+// Textos em i18n/<código>.js. O HTML marca o que traduzir:
+//   data-i18n="chave"            → texto
+//   data-i18n-html="chave"       → texto com marcação (<em>, seta)
+//   data-i18n-attr="attr:chave"  → atributos (vários separados por ;)
+// Inglês é o padrão; a escolha fica salva. ?lang=pt na URL também escolhe.
+const I18N = window.I18N || {};
+const HTML_LANG = { en: 'en', pt: 'pt-BR' };
+let lang = 'en';
 
-  const ctx    = canvas.getContext('2d');
-  const CELL   = 14;
-  const LEVELS = 8;
-  const FREQ   = 0.0032;
-  const live   = animated && !reducedMotion;
+const t = (key) => (I18N[lang] && I18N[lang][key]) || I18N.en[key] || key;
 
-  // Permutação aleatória: cada carregamento gera um relevo diferente
+function applyLang(next) {
+  lang = I18N[next] ? next : 'en';
+  root.lang = HTML_LANG[lang] || lang;
+
+  document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-html]').forEach((el) => { el.innerHTML = t(el.dataset.i18nHtml); });
+  document.querySelectorAll('[data-i18n-attr]').forEach((el) => {
+    el.dataset.i18nAttr.split(';').forEach((pair) => {
+      const [attr, key] = pair.split(':');
+      el.setAttribute(attr.trim(), t(key.trim()));
+    });
+  });
+  document.querySelectorAll('.lang-btn').forEach((b) => {
+    b.setAttribute('aria-pressed', String(b.dataset.lang === lang));
+  });
+
+  document.dispatchEvent(new Event('langchange'));
+}
+
+(function () {
+  const stored = () => { try { return localStorage.getItem('lang'); } catch (e) { return null; } };
+  const save = (v) => { try { localStorage.setItem('lang', v); } catch (e) {} };
+
+  const param = new URLSearchParams(location.search).get('lang');
+  if (param && I18N[param]) save(param);
+  applyLang(param || stored() || 'en');
+  root.classList.remove('i18n-pending');
+
+  // Troca com um fade curto do conteúdo; sem movimento, troca direto
+  document.querySelectorAll('.lang-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const next = btn.dataset.lang;
+      if (next === lang) return;
+      save(next);
+      if (!root.classList.contains('motion')) { applyLang(next); return; }
+      root.classList.add('is-switching');
+      setTimeout(() => {
+        applyLang(next);
+        root.classList.remove('is-switching');
+      }, 180);
+    });
+  });
+})();
+
+// ─── RUÍDO ────────────────────────────────────────────
+// Value noise 2D. Permutação aleatória: cada carregamento gera um desenho diferente.
+function makeNoise() {
   const perm = new Uint8Array(512);
   for (let k = 0; k < 256; k++) perm[k] = k;
   for (let k = 255; k > 0; k--) {
@@ -24,13 +71,228 @@ function createTopo(canvas, { animated = true, opacity = 1 } = {}) {
   const hash = (x, y) => perm[perm[x & 255] + (y & 255)] / 255;
   const fade = (t) => t * t * (3 - 2 * t);
 
-  function noise(x, y) {
+  return function noise(x, y) {
     const xi = Math.floor(x), yi = Math.floor(y);
     const u = fade(x - xi), v = fade(y - yi);
     const a = hash(xi, yi),     b = hash(xi + 1, yi);
     const c = hash(xi, yi + 1), d = hash(xi + 1, yi + 1);
     return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
+  };
+}
+
+// ─── CÉU DE ANGRA (fundo do hero) ─────────────────────
+// Estrelas reais na posição de agora, vistas de Angra dos Reis (23°00'S 44°19'W).
+// Projeção estereográfica a partir do zênite; só pontos, sem traços nem rótulos.
+const SKY_LAT = -23.0067, SKY_LON = -44.3181;
+
+// [nome, constelação, AR (horas), Dec (graus), magnitude]
+const STARS = [
+  ['Acrux', 'Cruzeiro do Sul', 12.443, -63.10, 0.77],
+  ['Mimosa', 'Cruzeiro do Sul', 12.795, -59.69, 1.25],
+  ['Gacrux', 'Cruzeiro do Sul', 12.519, -57.11, 1.63],
+  ['Imai', 'Cruzeiro do Sul', 12.252, -58.75, 2.8],
+  ['Ginan', 'Cruzeiro do Sul', 12.356, -60.40, 3.59],
+  ['Rigil Kentaurus', 'Centauro', 14.660, -60.83, -0.27],
+  ['Hadar', 'Centauro', 14.064, -60.37, 0.61],
+  ['Betelgeuse', 'Órion', 5.919, 7.41, 0.5],
+  ['Rigel', 'Órion', 5.242, -8.20, 0.13],
+  ['Bellatrix', 'Órion', 5.419, 6.35, 1.64],
+  ['Saiph', 'Órion', 5.796, -9.67, 2.07],
+  ['Alnitak', 'Órion', 5.679, -1.94, 1.77],
+  ['Alnilam', 'Órion', 5.604, -1.20, 1.69],
+  ['Mintaka', 'Órion', 5.533, -0.30, 2.23],
+  ['Sirius', 'Cão Maior', 6.752, -16.72, -1.46],
+  ['Mirzam', 'Cão Maior', 6.378, -17.96, 1.98],
+  ['Adhara', 'Cão Maior', 6.977, -28.97, 1.5],
+  ['Wezen', 'Cão Maior', 7.140, -26.39, 1.83],
+  ['Aludra', 'Cão Maior', 7.402, -29.30, 2.45],
+  ['Antares', 'Escorpião', 16.490, -26.43, 0.96],
+  ['Graffias', 'Escorpião', 16.090, -19.81, 2.62],
+  ['Dschubba', 'Escorpião', 16.006, -22.62, 2.29],
+  ['Fang', 'Escorpião', 15.981, -26.11, 2.89],
+  ['Al Niyat', 'Escorpião', 16.353, -25.59, 2.89],
+  ['Paikauhale', 'Escorpião', 16.598, -28.22, 2.82],
+  ['Larawag', 'Escorpião', 16.836, -34.29, 2.29],
+  ['Xamidimura', 'Escorpião', 16.864, -38.05, 3.0],
+  ['ζ Scorpii', 'Escorpião', 16.910, -42.36, 3.6],
+  ['η Scorpii', 'Escorpião', 17.203, -43.24, 3.3],
+  ['Sargas', 'Escorpião', 17.622, -43.00, 1.86],
+  ['ι Scorpii', 'Escorpião', 17.793, -40.13, 3.0],
+  ['Girtab', 'Escorpião', 17.708, -39.03, 2.4],
+  ['Shaula', 'Escorpião', 17.560, -37.10, 1.62],
+  ['Kaus Australis', 'Sagitário', 18.403, -34.38, 1.85],
+  ['Kaus Media', 'Sagitário', 18.350, -29.83, 2.7],
+  ['Kaus Borealis', 'Sagitário', 18.466, -25.42, 2.8],
+  ['Nunki', 'Sagitário', 18.921, -26.30, 2.05],
+  ['Ascella', 'Sagitário', 19.044, -29.88, 2.6],
+  ['φ Sagittarii', 'Sagitário', 18.761, -26.99, 3.2],
+  ['τ Sagittarii', 'Sagitário', 19.116, -27.67, 3.3],
+  ['Alnasl', 'Sagitário', 18.097, -30.42, 2.99],
+  ['Canopus', 'Carina', 6.399, -52.70, -0.74],
+  ['Achernar', 'Erídano', 1.629, -57.24, 0.46],
+  ['Fomalhaut', 'Peixe Austral', 22.961, -29.62, 1.16],
+  ['Aldebaran', 'Touro', 4.599, 16.51, 0.85],
+  ['Pollux', 'Gêmeos', 7.755, 28.03, 1.14],
+  ['Castor', 'Gêmeos', 7.577, 31.89, 1.58],
+  ['Procyon', 'Cão Menor', 7.655, 5.22, 0.34],
+  ['Regulus', 'Leão', 10.140, 11.97, 1.35],
+  ['Spica', 'Virgem', 13.420, -11.16, 0.97],
+  ['Arcturus', 'Boieiro', 14.261, 19.18, -0.05],
+  ['Vega', 'Lira', 18.616, 38.78, 0.03],
+  ['Altair', 'Águia', 19.846, 8.87, 0.76],
+  ['Deneb', 'Cisne', 20.690, 45.28, 1.25],
+];
+
+function createSky(canvas) {
+  if (!canvas || !canvas.getContext) return;
+
+  const ctx  = canvas.getContext('2d');
+  const live = !reducedMotion;
+  const rad  = Math.PI / 180;
+
+  // Estrelas fracas de fundo: posições fixas no céu (semente fixa), giram junto com as reais
+  let seed = 7;
+  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const field = Array.from({ length: 420 }, () => ({
+    ra: rnd() * 24, dec: Math.asin(rnd() * 2 - 1) / rad, mag: 4 + rnd() * 2, ph: rnd() * 6.3,
+  }));
+  const named = STARS.map(([, , ra, dec, mag]) => ({ ra, dec, mag, ph: rnd() * 6.3 }));
+
+  let w = 0, h = 0, R = 0, ink = '236, 232, 225';
+  let rafId = 0, last = 0, onScreen = true, born = 0, placedAt = 0;
+
+  function readColor() {
+    ink = getComputedStyle(root).getPropertyValue('--ink-rgb').trim() || ink;
   }
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = canvas.clientWidth;
+    h = canvas.clientHeight;
+    canvas.width  = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    R = Math.hypot(w, h) * 0.62;   // recorte do céu em volta do zênite
+    place();
+  }
+
+  // AR/Dec → posição na tela para o instante atual
+  function place() {
+    const jd   = Date.now() / 86400000 + 2440587.5;
+    const gmst = 280.46061837 + 360.98564736629 * (jd - 2451545);
+    const lst  = gmst + SKY_LON;
+    const sl = Math.sin(SKY_LAT * rad), cl = Math.cos(SKY_LAT * rad);
+
+    for (const s of named.concat(field)) {
+      const ha = (lst - s.ra * 15) * rad, dec = s.dec * rad;
+      const east  = -Math.cos(dec) * Math.sin(ha);
+      const north = Math.sin(dec) * cl - Math.cos(dec) * Math.cos(ha) * sl;
+      const up    = Math.sin(dec) * sl + Math.cos(dec) * Math.cos(ha) * cl;
+      s.up = up;
+      // Olhando para cima com o norte no topo, o leste fica à esquerda
+      s.x = w / 2 - (R * east) / (1 + up);
+      s.y = h / 2 - (R * north) / (1 + up);
+    }
+    placedAt = performance.now();
+  }
+
+  const smooth = (a, b, x) => {
+    const k = Math.min(Math.max((x - a) / (b - a), 0), 1);
+    return k * k * (3 - 2 * k);
+  };
+
+  // Mais fraco no centro, onde está o texto
+  const clear = (x, y) => 0.3 + 0.7 * smooth(0.3, 0.85, Math.hypot((x - w / 2) / (w * 0.45), (y - h / 2) / (h * 0.45)));
+  const size  = (mag) => Math.max(0.5, 2.6 - mag * 0.42);
+
+  function draw(now) {
+    ctx.clearRect(0, 0, w, h);
+    const age = live ? (now - born) / 1000 : 9;
+
+    // Entrada: as mais brilhantes acendem primeiro, as fracas vão aparecendo depois
+    const litAt = (mag) => smooth(0, 0.6, age - 0.15 - (mag + 1.5) * 0.12);
+
+    ctx.beginPath();
+    for (const s of field) {
+      if (s.up <= 0) continue;
+      const a = litAt(s.mag) * clear(s.x, s.y) * (0.5 + 0.5 * Math.sin(now / 1400 + s.ph));
+      if (a < 0.05) continue;
+      ctx.moveTo(s.x + 0.7, s.y);
+      ctx.arc(s.x, s.y, 0.7, 0, Math.PI * 2);
+    }
+    ctx.fillStyle = `rgba(${ink}, 0.4)`;
+    ctx.fill();
+
+    for (const s of named) {
+      if (s.up <= 0) continue;
+      const lit = litAt(s.mag);
+      if (!lit) continue;
+      const tw = live ? 0.85 + 0.15 * Math.sin(now / 900 + s.ph) : 1;
+      ctx.fillStyle = `rgba(${ink}, ${(0.85 * lit * tw * clear(s.x, s.y)).toFixed(3)})`;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, size(s.mag), 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+
+  // ~30fps: o céu só cintila; a posição é recalculada a cada 30s (a Terra gira 0,125° nesse tempo)
+  function loop(now) {
+    rafId = requestAnimationFrame(loop);
+    if (now - last < 33) return;
+    last = now;
+    if (now - placedAt > 30000) place();
+    draw(now);
+  }
+
+  function start() {
+    if (live && !rafId && onScreen && !document.hidden) rafId = requestAnimationFrame(loop);
+  }
+
+  function stop() {
+    cancelAnimationFrame(rafId);
+    rafId = 0;
+  }
+
+  readColor();
+  resize();
+  born = performance.now();
+  draw(born);
+
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => { resize(); draw(performance.now()); }, 150);
+  });
+
+  // Remede ao trocar de tema: escondido (display: none), o canvas tinha medido 0
+  new MutationObserver(() => { readColor(); resize(); draw(performance.now()); })
+    .observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+
+  if (!live) return;
+
+  new IntersectionObserver(([entry]) => {
+    onScreen = entry.isIntersecting;
+    onScreen ? start() : stop();
+  }).observe(canvas);
+
+  document.addEventListener('visibilitychange', () => {
+    document.hidden ? stop() : start();
+  });
+
+  start();
+}
+
+// ─── TOPOGRAFIA (canvas do contato) ───────────────────
+// Marching squares sobre o ruído. Grade em pixels CSS; o DPR só dá nitidez.
+function createTopo(canvas, { animated = true, opacity = 1 } = {}) {
+  if (!canvas || !canvas.getContext) return;
+
+  const ctx    = canvas.getContext('2d');
+  const CELL   = 14;
+  const LEVELS = 8;
+  const FREQ   = 0.0032;
+  const live   = animated && !reducedMotion;
+  const noise  = makeNoise();
 
   // Oitavas deslizando em direções diferentes: o relevo muda de forma, não só anda
   function field(x, y, z) {
@@ -57,7 +319,6 @@ function createTopo(canvas, { animated = true, opacity = 1 } = {}) {
   }
 
   function resize() {
-    // clientWidth ignora transforms (o hero escala o fundo no scroll)
     const dpr  = Math.min(window.devicePixelRatio || 1, 2);
     w = canvas.clientWidth;
     h = canvas.clientHeight;
@@ -146,7 +407,7 @@ function createTopo(canvas, { animated = true, opacity = 1 } = {}) {
     resizeTimer = setTimeout(() => { resize(); draw(); }, 150);
   });
 
-  new MutationObserver(() => { readColor(); draw(); })
+  new MutationObserver(() => { readColor(); resize(); draw(); })
     .observe(root, { attributes: true, attributeFilter: ['data-theme'] });
 
   if (!live) return;
@@ -169,8 +430,20 @@ function createTopo(canvas, { animated = true, opacity = 1 } = {}) {
   start();
 }
 
-createTopo(document.getElementById('topo'), { animated: true, opacity: 0.6 });
+createSky(document.getElementById('stars'));
+createTopo(document.getElementById('topo'), { animated: true, opacity: 0.5 });
 createTopo(document.getElementById('topoContact'), { animated: false, opacity: 0.35 });
+
+// ─── VOLTAR AO TOPO ───────────────────────────────────
+// Visível só depois que o hero sai da tela
+(function () {
+  const btn  = document.getElementById('toTop');
+  const hero = document.getElementById('inicio');
+  if (!btn || !hero || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver(([entry]) => {
+    btn.classList.toggle('is-visible', !entry.isIntersecting);
+  }).observe(hero);
+})();
 
 // ─── CONTATO: vídeo de fundo sob demanda ──────────────
 // Carrega só quando a seção entra na tela; pausa fora dela. Sem vídeo com dados limitados.
@@ -284,7 +557,7 @@ createTopo(document.getElementById('topoContact'), { animated: false, opacity: 0
   function label() {
     if (!btn) return;
     const dark = root.getAttribute('data-theme') !== 'light';
-    btn.setAttribute('aria-label', dark ? 'Mudar para tema claro' : 'Mudar para tema escuro');
+    btn.setAttribute('aria-label', t(dark ? 'theme.toLight' : 'theme.toDark'));
   }
 
   // Só grava quando a pessoa escolhe; sem escolha, segue o sistema
@@ -301,28 +574,31 @@ createTopo(document.getElementById('topoContact'), { animated: false, opacity: 0
     label();
   });
 
+  document.addEventListener('langchange', label);
   label();
 })();
 
-// ─── HERO: entrada + scroll + botão magnético ─────────
+// ─── HERO: entrada + scroll ───────────────────────────
 (function () {
   const hero = document.getElementById('inicio');
   if (!hero || !root.classList.contains('motion')) return;
 
-  // Cada caractere vira um span com atraso próprio: onda da esquerda para a direita, linha a linha
+  // Cada palavra vira um span com atraso próprio (entra também no <em>), linha a linha
   hero.querySelectorAll('[data-split]').forEach((line, li) => {
-    let ci = 0;
-    [...line.childNodes].forEach((node) => {
-      if (node.nodeType !== Node.TEXT_NODE) return;
+    let wi = 0;
+    const walker = document.createTreeWalker(line, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach((node) => {
       const frag = document.createDocumentFragment();
-      for (const char of node.textContent) {
-        if (char.trim() === '') { frag.append(char); continue; }
+      node.textContent.split(/(\s+)/).forEach((part) => {
+        if (!part.trim()) { if (part) frag.append(part); return; }
         const span = document.createElement('span');
-        span.className = 'ch';
-        span.textContent = char;
-        span.style.setProperty('--d', `${(0.15 + li * 0.09 + ci++ * 0.026).toFixed(3)}s`);
+        span.className = 'w';
+        span.textContent = part;
+        span.style.setProperty('--d', `${(0.35 + li * 0.14 + wi++ * 0.07).toFixed(3)}s`);
         frag.append(span);
-      }
+      });
       node.replaceWith(frag);
     });
   });
@@ -332,12 +608,8 @@ createTopo(document.getElementById('topoContact'), { animated: false, opacity: 0
   Promise.race([fontsReady, new Promise((r) => setTimeout(r, 1500))])
     .then(() => requestAnimationFrame(() => hero.classList.add('is-ready')));
 
-  // Scroll e ímã interpolados no mesmo rAF: o movimento continua suave mesmo com a roda do mouse "aos saltos"
-  const btn = hero.querySelector('.hero-down');
-  const magnetic = btn && window.matchMedia('(pointer: fine)').matches;
-  let target = 0, cur = -1;
-  const m = { tx: 0, ty: 0, x: 0, y: 0 };
-  let raf = 0, last = 0;
+  // Scroll interpolado no rAF: o movimento continua suave mesmo com a roda do mouse "aos saltos"
+  let target = 0, cur = -1, raf = 0, last = 0;
 
   function measure() {
     target = Math.min(Math.max(window.scrollY / (hero.offsetHeight * 0.85), 0), 1);
@@ -352,17 +624,7 @@ createTopo(document.getElementById('topoContact'), { animated: false, opacity: 0
     if (Math.abs(target - cur) < 0.0005) cur = target;
     hero.style.setProperty('--p', cur.toFixed(4));
 
-    let moving = cur !== target;
-
-    if (magnetic) {
-      m.x += (m.tx - m.x) * k;
-      m.y += (m.ty - m.y) * k;
-      if (Math.abs(m.tx - m.x) < 0.05 && Math.abs(m.ty - m.y) < 0.05) { m.x = m.tx; m.y = m.ty; }
-      else moving = true;
-      btn.style.transform = `translate3d(${m.x.toFixed(2)}px, ${m.y.toFixed(2)}px, 0)`;
-    }
-
-    raf = moving ? requestAnimationFrame(frame) : 0;
+    raf = cur !== target ? requestAnimationFrame(frame) : 0;
     if (!raf) last = 0;
   }
 
@@ -372,19 +634,6 @@ createTopo(document.getElementById('topoContact'), { animated: false, opacity: 0
 
   window.addEventListener('scroll', () => { measure(); kick(); }, { passive: true });
   window.addEventListener('resize', () => { measure(); kick(); });
-
-  if (magnetic) {
-    window.addEventListener('pointermove', (e) => {
-      if (target >= 1) return;
-      const r = btn.getBoundingClientRect();
-      const dx = e.clientX - (r.left + r.width / 2 - m.x);
-      const dy = e.clientY - (r.top + r.height / 2 - m.y);
-      const near = Math.hypot(dx, dy) < 140;
-      m.tx = near ? dx * 0.35 : 0;
-      m.ty = near ? dy * 0.35 : 0;
-      kick();
-    }, { passive: true });
-  }
 
   measure();
   kick();
@@ -402,13 +651,13 @@ createTopo(document.getElementById('topoContact'), { animated: false, opacity: 0
   btn.addEventListener('click', async () => {
     try {
       await navigator.clipboard.writeText(btn.dataset.copy);
-      btn.textContent = 'Copiado';
-      if (status) status.textContent = 'E-mail copiado.';
+      btn.textContent = t('contact.copied');
+      if (status) status.textContent = t('contact.copyStatus');
     } catch (e) {
-      btn.textContent = 'Não copiou';
+      btn.textContent = t('contact.copyFailed');
     }
     setTimeout(() => {
-      btn.textContent = 'Copiar';
+      btn.textContent = t('contact.copy');
       if (status) status.textContent = '';
     }, 2200);
   });
@@ -426,16 +675,15 @@ createTopo(document.getElementById('topoContact'), { animated: false, opacity: 0
 
     const v = (id) => document.getElementById(id).value.trim();
     const url = 'mailto:gustavoo.dcsilva@gmail.com'
-      + `?subject=${encodeURIComponent(v('assunto') || 'Contato pelo portfólio')}`
-      + `&body=${encodeURIComponent(`Nome: ${v('nome')}\nE-mail: ${v('email')}\n\n${v('mensagem')}`)}`;
+      + `?subject=${encodeURIComponent(v('assunto') || t('contact.mailSubject'))}`
+      + `&body=${encodeURIComponent(`${t('contact.mailName')}: ${v('nome')}\n${t('contact.mailEmail')}: ${v('email')}\n\n${v('mensagem')}`)}`;
 
-    const orig = btn.innerHTML;
-    btn.textContent = 'Abrindo seu e-mail…';
+    btn.textContent = t('contact.sending');
     btn.disabled = true;
     window.location.href = url;
 
     setTimeout(() => {
-      btn.innerHTML = orig;
+      btn.innerHTML = t('contact.send');
       btn.disabled = false;
     }, 2500);
   });
