@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..400&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..400&family=Instrument+Sans:wght@400..600&family=DM+Mono:wght@400;500&display=swap"
     rel="stylesheet">
 
   <!-- Tema e flags antes do CSS pintar -->
@@ -37,32 +37,24 @@
 <body>
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-    <symbol id="contour" viewBox="0 0 160 100">
-      <path d="M71 18c19-5 41 1 52 13 9 10 6 25-7 35-12 9-30 16-49 13-18-3-33-14-32-29 1-14 17-27 36-32z" />
-      <path d="M74 30c13-3 28 1 35 9 6 7 3 17-6 23-9 6-22 9-35 6-12-3-20-11-19-20 1-8 12-15 25-18z" />
-      <path d="M79 41c7-1 14 1 17 5 2 4-1 9-6 11-6 3-14 3-18 0-5-3-4-8-1-11 2-3 5-4 8-5z" />
-      <path d="M0 90c18-4 33 3 51 2 22-1 34-12 58-12 20 0 35 7 51 4" />
-      <path d="M0 10c20 5 36-3 57-2 24 1 37 10 60 9 17-1 30-6 43-4" />
-    </symbol>
-  </svg>
-
   <!-- ─── HEADER ─────────────────────────────────────── -->
   <header class="site-header" id="siteHeader">
+    <span class="nav-cross" aria-hidden="true"></span>
     <nav class="nav wrap" aria-label="Principal">
       <a class="brand" href="#inicio" aria-label="Gustavo de Campos, início">
         <span class="brand-mark" aria-hidden="true">G<em>C</em></span>
-        <span class="brand-name">Gustavo de Campos</span>
+        <span class="brand-name">Gustavo C.</span>
       </a>
 
       <ul class="nav-links">
-        <li><a href="#sobre" data-nav><span class="nav-n">01</span>Sobre</a></li>
-        <li><a href="#projetos" data-nav><span class="nav-n">02</span>Projetos</a></li>
-        <li><a href="#experiencia" data-nav><span class="nav-n">03</span>Experiência</a></li>
-        <li><a href="#contato" data-nav><span class="nav-n">04</span>Contato</a></li>
+        <li><a href="#sobre" data-nav>Sobre</a></li>
+        <li><a href="#projetos" data-nav>Projetos</a></li>
+        <li><a href="#experiencia" data-nav>Experiência</a></li>
+        <li><a href="#contato" data-nav>Contato</a></li>
       </ul>
 
       <div class="nav-tools">
+        <a class="nav-pill" href="#contato"><i aria-hidden="true"></i>Disponível para projetos</a>
         <button class="theme-btn" id="themeToggle" type="button" aria-label="Mudar para tema claro">
           <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />
@@ -96,35 +88,26 @@
 
     <!-- ─── HERO ─────────────────────────────────────── -->
     <section class="hero" id="inicio" aria-labelledby="hero-title">
-      <canvas id="topo" aria-hidden="true"></canvas>
+      <div class="hero-bg" aria-hidden="true"><canvas id="topo"></canvas></div>
 
-      <div class="hero-top wrap mono">
-        <span>Angra dos Reis, RJ — 23°00'24"S 44°19'05"W</span>
-        <span class="status"><i aria-hidden="true"></i>Disponível para projetos</span>
-      </div>
+      <div class="hero-stage wrap">
+        <p class="hero-marker" aria-hidden="true">01 // 05 — Role <span>↓</span></p>
 
-      <div class="hero-main wrap" data-reveal>
-        <h1 class="hero-name" id="hero-title">
-          <span class="ln"><span>Gustavo</span></span>
-          <span class="ln"><span><em>de</em> Campos</span></span>
+        <!-- Quebras e nota são visuais; o nome acessível vem do aria-label -->
+        <h1 class="hero-title" id="hero-title" aria-label="Gustavo de Campos, desenvolvedor front-end detalhista">
+          <span class="hl hl--1"><span class="hl-in" data-split>Desenvol-</span></span>
+          <span class="hl hl--2"><span class="hl-in" data-split>vedor<br class="br-m"> front-end</span></span>
+          <span class="hl hl--3">
+            <span class="hl-in" data-split>detalhista</span>
+            <span class="hero-note" aria-hidden="true">Passo horas num detalhe que 99% das pessoas não vão notar. Mas quem nota, não esquece.</span>
+          </span>
         </h1>
+        <p class="sr-only">Passo horas num detalhe que 99% das pessoas não vão notar. Mas quem nota, não esquece.</p>
 
-        <div class="hero-aside">
-          <p class="hero-role mono">Desenvolvedor front-end</p>
-          <p class="hero-lede">
-            Passo horas num detalhe que 99% das pessoas não vão notar.
-            <strong>Mas quem nota, não esquece.</strong>
-          </p>
-          <p class="hero-links">
-            <a class="link-arrow" href="#projetos">Ver projetos <span aria-hidden="true">↓</span></a>
-            <a class="link-arrow" href="#contato">Falar comigo <span aria-hidden="true">→</span></a>
-          </p>
-        </div>
-      </div>
-
-      <div class="hero-foot wrap mono">
-        <span>Hora local <time id="localTime">—</time></span>
-        <span class="hero-fig">Fig. 00 — relevo gerado a cada visita</span>
+        <a class="hero-down" href="#sobre" aria-label="Rolar até Sobre">
+          <svg class="hero-down-ring" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="31" /></svg>
+          <svg class="hero-down-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M6 13l6 6 6-6" /></svg>
+        </a>
       </div>
     </section>
 
@@ -208,33 +191,24 @@
             <span class="ln"><span><em>já construí.</em></span></span>
           </h2>
           <p class="sec-lede">
-            Projetos reais, com usuários reais. Dois deles estão no ar hoje, atendendo a população de Angra dos Reis.
+            Dois sistemas no ar, usados pela população de Angra dos Reis — e o que estudei pelo caminho.
           </p>
         </header>
 
-        <div class="filters" role="group" aria-label="Filtrar projetos">
-          <button type="button" class="filter" data-filter="todos" aria-pressed="true">Todos<sup data-count></sup></button>
-          <button type="button" class="filter" data-filter="angra" aria-pressed="false">Prefeitura de Angra<sup data-count></sup></button>
-          <button type="button" class="filter" data-filter="pessoal" aria-pressed="false">Pessoais<sup data-count></sup></button>
-          <button type="button" class="filter" data-filter="freelancer" aria-pressed="false">Freelancer<sup data-count></sup></button>
-        </div>
+        <ol class="cases">
 
-        <ol class="cases" id="cases">
-
-          <li class="case case--feature" data-category="angra" data-reveal>
-            <figure class="plate case-media case-media--empty">
-              <video muted loop playsinline preload="none" aria-hidden="true" data-poster="img/projetos/siga.webp"
-                data-src="img/projetos/siga.mp4"></video>
-              <div class="case-fallback" aria-hidden="true"><svg viewBox="0 0 160 100"><use href="#contour" /></svg></div>
-              <figcaption class="plate-meta mono">
-                <span>Prancha 01</span><span>SIGA Angra</span><span>23°00'24"S 44°19'05"W</span>
-              </figcaption>
-            </figure>
+          <li class="case case--feature" data-reveal>
+            <a class="plate" href="https://siga.angra.rj.gov.br/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+              <img src="img/projetos/siga.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="" />
+              <span class="plate-meta mono">
+                <span>Prancha 01</span><span>siga.angra.rj.gov.br</span><span>23°00'24"S 44°19'05"W</span>
+              </span>
+            </a>
             <div class="case-info">
               <div class="case-head">
                 <p class="case-num mono">01</p>
                 <h3 class="case-title">SIGA Angra</h3>
-                <p class="case-kicker">Sistema de Informações Geográficas do município</p>
+                <p class="case-kicker">Prefeitura de Angra dos Reis, 2024 — o sistema de informações geográficas do município.</p>
               </div>
               <div class="case-body">
                 <p class="case-desc">
@@ -243,8 +217,6 @@
                   responsiva.
                 </p>
                 <dl class="facts">
-                  <div><dt>Ano</dt><dd>2024</dd></div>
-                  <div><dt>Cliente</dt><dd>Prefeitura de Angra dos Reis</dd></div>
                   <div><dt>Papel</dt><dd>Front-end completo</dd></div>
                   <div><dt>Stack</dt><dd>HTML, CSS, Bootstrap, JavaScript</dd></div>
                 </dl>
@@ -255,20 +227,18 @@
             </div>
           </li>
 
-          <li class="case" data-category="angra" data-reveal>
-            <figure class="plate case-media case-media--empty">
-              <video muted loop playsinline preload="none" aria-hidden="true" data-poster="img/projetos/banco-talentos.webp"
-                data-src="img/projetos/banco-talentos.mp4"></video>
-              <div class="case-fallback" aria-hidden="true"><svg viewBox="0 0 160 100"><use href="#contour" /></svg></div>
-              <figcaption class="plate-meta mono">
-                <span>Prancha 02</span><span>Banco de Talentos</span>
-              </figcaption>
-            </figure>
+          <li class="case" data-reveal>
+            <a class="plate" href="https://bancodetalentos.angra.rj.gov.br/home/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
+              <img src="img/projetos/banco-talentos.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="" />
+              <span class="plate-meta mono">
+                <span>Prancha 02</span><span>bancodetalentos.angra.rj.gov.br</span>
+              </span>
+            </a>
             <div class="case-info">
               <div class="case-head">
                 <p class="case-num mono">02</p>
                 <h3 class="case-title">Banco de Talentos</h3>
-                <p class="case-kicker">Aplicação web da Prefeitura de Angra dos Reis</p>
+                <p class="case-kicker">Prefeitura de Angra dos Reis, 2025 — vagas e cadastro de profissionais do município.</p>
               </div>
               <div class="case-body">
                 <p class="case-desc">
@@ -276,7 +246,6 @@
                   do banco de dados à interface.
                 </p>
                 <dl class="facts">
-                  <div><dt>Ano</dt><dd>2025</dd></div>
                   <div><dt>Papel</dt><dd>Full-stack</dd></div>
                   <div><dt>Stack</dt><dd>PHP, Laravel, MySQL</dd></div>
                 </dl>
@@ -287,47 +256,23 @@
             </div>
           </li>
 
-          <li class="case case--flip" data-category="pessoal" data-reveal>
-            <figure class="plate case-media case-media--empty">
-              <video muted loop playsinline preload="none" aria-hidden="true" data-poster="img/projetos/formulario.webp"
-                data-src="img/projetos/formulario.mp4"></video>
-              <div class="case-fallback" aria-hidden="true"><svg viewBox="0 0 160 100"><use href="#contour" /></svg></div>
-              <figcaption class="plate-meta mono">
-                <span>Prancha 03</span><span>Formulário Responsivo</span>
-              </figcaption>
-            </figure>
-            <div class="case-info">
-              <div class="case-head">
-                <p class="case-num mono">03</p>
-                <h3 class="case-title">Formulário Responsivo</h3>
-                <p class="case-kicker">Estudo de validação e layout</p>
-              </div>
-              <div class="case-body">
-                <p class="case-desc">
-                  Formulário de contato com validações em JavaScript. Meu primeiro projeto com Bootstrap 5 — onde
-                  aprendi que CSS puro e framework se complementam quando usados com critério.
-                </p>
-                <dl class="facts">
-                  <div><dt>Ano</dt><dd>2024</dd></div>
-                  <div><dt>Stack</dt><dd>HTML, CSS, Bootstrap 5, JavaScript</dd></div>
-                </dl>
-                <p class="case-links">
-                  <a class="link-arrow" href="https://gustavodecamposs.github.io/Projeto-tela-de-login-com-bootstrap/" target="_blank" rel="noopener">Demo <span aria-hidden="true">↗</span></a>
-                  <a class="link-arrow" href="https://github.com/gustavodecamposs/Projeto-tela-de-login-com-bootstrap" target="_blank" rel="noopener">Código <span aria-hidden="true">↗</span></a>
-                </p>
-              </div>
-            </div>
-          </li>
-
         </ol>
 
-        <p class="cases-empty" id="casesEmpty" hidden>
-          Os projetos freelancer em andamento entram aqui assim que os clientes liberarem a publicação.
-        </p>
-
-        <p class="cases-more">
-          <a class="link-arrow" href="https://github.com/gustavodecamposs" target="_blank" rel="noopener">Mais no GitHub <span aria-hidden="true">↗</span></a>
-        </p>
+        <div class="studies">
+          <p class="studies-label mono">Estudos</p>
+          <ul class="studies-list">
+            <li>
+              <span class="study-year mono">2024</span>
+              <span class="study-title">Tela de login responsiva</span>
+              <span class="study-note">Primeiro projeto com Bootstrap 5 — onde aprendi que CSS puro e framework se complementam.</span>
+              <a class="link-arrow" href="https://github.com/gustavodecamposs/Projeto-tela-de-login-com-bootstrap" target="_blank" rel="noopener">Código <span aria-hidden="true">↗</span></a>
+            </li>
+          </ul>
+          <p class="studies-foot">
+            <span>Projetos freelancer em andamento entram aqui quando os clientes liberarem a publicação.</span>
+            <a class="link-arrow" href="https://github.com/gustavodecamposs" target="_blank" rel="noopener">Tudo no GitHub <span aria-hidden="true">↗</span></a>
+          </p>
+        </div>
       </div>
     </section>
 
@@ -382,6 +327,8 @@
 
     <!-- ─── CONTATO ──────────────────────────────────── -->
     <section class="sec contact" id="contato" aria-labelledby="contato-title">
+      <video class="contact-bg" muted loop playsinline preload="none" aria-hidden="true"
+        data-src="video/ocean-night.mp4"></video>
       <canvas id="topoContact" aria-hidden="true"></canvas>
       <div class="wrap">
         <header class="sec-head" data-reveal>
@@ -394,12 +341,6 @@
             Proposta, freela, dúvida ou só para trocar uma ideia sobre tecnologia. Respondo tudo.
           </p>
         </header>
-
-        <div class="contact-mail">
-          <a class="mail-link" href="mailto:gustavoo.dcsilva@gmail.com">gustavoo.dcsilva@gmail.com</a>
-          <button class="copy-btn mono" type="button" id="copyMail" data-copy="gustavoo.dcsilva@gmail.com">Copiar</button>
-          <span class="sr-only" id="copyStatus" aria-live="polite"></span>
-        </div>
 
         <div class="contact-grid">
           <dl class="channels">
@@ -421,28 +362,33 @@
             </div>
           </dl>
 
-          <form class="form" id="contactForm">
-            <div class="form-row">
-              <div class="field">
-                <label for="nome" class="mono">Nome</label>
-                <input type="text" id="nome" name="nome" autocomplete="name" required />
-              </div>
-              <div class="field">
-                <label for="email" class="mono">E-mail</label>
-                <input type="email" id="email" name="email" autocomplete="email" required />
-              </div>
+          <!-- O formulário é um rascunho de e-mail: enviar abre o app de e-mail com tudo preenchido -->
+          <form class="letter" id="contactForm">
+            <div class="letter-row letter-row--to">
+              <span class="letter-k mono">Para</span>
+              <a class="letter-to" href="mailto:gustavoo.dcsilva@gmail.com">gustavoo.dcsilva@gmail.com</a>
+              <button class="copy-btn mono" type="button" id="copyMail" data-copy="gustavoo.dcsilva@gmail.com">Copiar</button>
+              <span class="sr-only" id="copyStatus" aria-live="polite"></span>
             </div>
-            <div class="field">
-              <label for="assunto" class="mono">Assunto</label>
-              <input type="text" id="assunto" name="assunto" autocomplete="off" />
+            <div class="letter-row">
+              <label class="letter-k mono" for="nome">De</label>
+              <input type="text" id="nome" name="nome" autocomplete="name" placeholder="Seu nome" required />
             </div>
-            <div class="field">
-              <label for="mensagem" class="mono">Mensagem</label>
-              <textarea id="mensagem" name="mensagem" rows="5" required></textarea>
+            <div class="letter-row">
+              <label class="letter-k mono" for="email">E-mail</label>
+              <input type="email" id="email" name="email" autocomplete="email" placeholder="voce@exemplo.com" required />
             </div>
-            <div class="form-foot">
-              <button type="submit" class="btn" id="sendBtn">Enviar mensagem <span aria-hidden="true">→</span></button>
+            <div class="letter-row">
+              <label class="letter-k mono" for="assunto">Assunto</label>
+              <input type="text" id="assunto" name="assunto" autocomplete="off" placeholder="Sobre o quê?" />
+            </div>
+            <div class="letter-row letter-row--msg">
+              <label class="letter-k mono" for="mensagem">Mensagem</label>
+              <textarea id="mensagem" name="mensagem" rows="6" required></textarea>
+            </div>
+            <div class="letter-foot">
               <p class="form-note">Abre seu aplicativo de e-mail com a mensagem pronta.</p>
+              <button type="submit" class="btn" id="sendBtn">Enviar <span aria-hidden="true">→</span></button>
             </div>
           </form>
         </div>

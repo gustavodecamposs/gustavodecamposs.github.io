@@ -57,10 +57,10 @@ function createTopo(canvas, { animated = true, opacity = 1 } = {}) {
   }
 
   function resize() {
-    const rect = canvas.getBoundingClientRect();
+    // clientWidth ignora transforms (o hero escala o fundo no scroll)
     const dpr  = Math.min(window.devicePixelRatio || 1, 2);
-    w = rect.width;
-    h = rect.height;
+    w = canvas.clientWidth;
+    h = canvas.clientHeight;
     canvas.width  = Math.round(w * dpr);
     canvas.height = Math.round(h * dpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -172,6 +172,27 @@ function createTopo(canvas, { animated = true, opacity = 1 } = {}) {
 createTopo(document.getElementById('topo'), { animated: true, opacity: 0.6 });
 createTopo(document.getElementById('topoContact'), { animated: false, opacity: 0.35 });
 
+// ─── CONTATO: vídeo de fundo sob demanda ──────────────
+// Carrega só quando a seção entra na tela; pausa fora dela. Sem vídeo com dados limitados.
+(function () {
+  const video = document.querySelector('.contact-bg');
+  if (!video) return;
+
+  const saveData = navigator.connection && navigator.connection.saveData === true;
+  const narrow = window.matchMedia('(max-width: 720px)').matches;
+  if (reducedMotion || saveData || narrow) { video.remove(); return; }
+
+  new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) {
+      if (!video.getAttribute('src') && video.dataset.src) video.src = video.dataset.src;
+      const p = video.play();
+      if (p) p.catch(() => {});
+    } else {
+      video.pause();
+    }
+  }, { threshold: 0.15 }).observe(video.closest('.contact'));
+})();
+
 // ─── REVEAL ───────────────────────────────────────────
 (function () {
   const items = document.querySelectorAll('[data-reveal]');
@@ -191,15 +212,15 @@ createTopo(document.getElementById('topoContact'), { animated: false, opacity: 0
   items.forEach((el) => io.observe(el));
 })();
 
-// ─── HEADER: transparente no hero, sólido depois ──────
-const header = document.getElementById('siteHeader');
-const hero   = document.getElementById('inicio');
-
-if (header && hero) {
-  new IntersectionObserver(([entry]) => {
-    header.classList.toggle('is-solid', !entry.isIntersecting);
-  }, { rootMargin: '-72px 0px 0px 0px', threshold: 0.02 }).observe(hero);
-}
+// ─── HEADER: transparente no topo, sólido ao rolar ────
+// Sólido cedo: o título do hero passa por baixo do header enquanto some
+(function () {
+  const header = document.getElementById('siteHeader');
+  if (!header) return;
+  const update = () => header.classList.toggle('is-solid', window.scrollY > 24);
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
 
 // ─── SEÇÃO ATIVA NO MENU ──────────────────────────────
 (function () {
@@ -283,86 +304,90 @@ if (header && hero) {
   label();
 })();
 
-// ─── HORA LOCAL ───────────────────────────────────────
+// ─── HERO: entrada + scroll + botão magnético ─────────
 (function () {
-  const el = document.getElementById('localTime');
-  if (!el) return;
-  const fmt = new Intl.DateTimeFormat('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: 'America/Sao_Paulo' });
-  const tick = () => {
-    const now = new Date();
-    el.textContent = fmt.format(now);
-    el.dateTime = now.toISOString();
-  };
-  tick();
-  setInterval(tick, 30000);
-})();
+  const hero = document.getElementById('inicio');
+  if (!hero || !root.classList.contains('motion')) return;
 
-// ─── PROJETOS: mídia sob demanda ──────────────────────
-// Começa em .case-media--empty. Poster testado via Image(): <video> não avisa quando o poster falta.
-(function () {
-  const boxes = document.querySelectorAll('.case-media');
-  const saveData = navigator.connection && navigator.connection.saveData === true;
-  const allowVideo = !reducedMotion && !saveData;
-
-  const videoObserver = allowVideo && new IntersectionObserver((entries) => {
-    entries.forEach(({ target, isIntersecting }) => {
-      const video = target.querySelector('video');
-      if (!video || video.dataset.failed) return;
-
-      if (isIntersecting) {
-        if (!video.getAttribute('src') && video.dataset.src) video.src = video.dataset.src;
-        const p = video.play();
-        if (p) p.catch(() => {});
-      } else {
-        video.pause();
+  // Cada caractere vira um span com atraso próprio: onda da esquerda para a direita, linha a linha
+  hero.querySelectorAll('[data-split]').forEach((line, li) => {
+    let ci = 0;
+    [...line.childNodes].forEach((node) => {
+      if (node.nodeType !== Node.TEXT_NODE) return;
+      const frag = document.createDocumentFragment();
+      for (const char of node.textContent) {
+        if (char.trim() === '') { frag.append(char); continue; }
+        const span = document.createElement('span');
+        span.className = 'ch';
+        span.textContent = char;
+        span.style.setProperty('--d', `${(0.15 + li * 0.09 + ci++ * 0.026).toFixed(3)}s`);
+        frag.append(span);
       }
+      node.replaceWith(frag);
     });
-  }, { threshold: 0.25 });
+  });
 
-  boxes.forEach((box) => {
-    const video = box.querySelector('video');
-    if (!video) return;
+  // Espera a fonte: animar antes faria as letras trocarem de forma no meio do movimento
+  const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
+  Promise.race([fontsReady, new Promise((r) => setTimeout(r, 1500))])
+    .then(() => requestAnimationFrame(() => hero.classList.add('is-ready')));
 
-    const poster = video.dataset.poster;
-    if (poster) {
-      const img = new Image();
-      img.onload = () => {
-        video.poster = poster;
-        box.classList.remove('case-media--empty');
-      };
-      img.src = poster;
+  // Scroll e ímã interpolados no mesmo rAF: o movimento continua suave mesmo com a roda do mouse "aos saltos"
+  const btn = hero.querySelector('.hero-down');
+  const magnetic = btn && window.matchMedia('(pointer: fine)').matches;
+  let target = 0, cur = -1;
+  const m = { tx: 0, ty: 0, x: 0, y: 0 };
+  let raf = 0, last = 0;
+
+  function measure() {
+    target = Math.min(Math.max(window.scrollY / (hero.offsetHeight * 0.85), 0), 1);
+  }
+
+  function frame(time) {
+    const dt = last ? Math.min(time - last, 64) : 16.7;
+    last = time;
+    const k = 1 - Math.pow(0.86, dt / 16.7);
+
+    cur = cur < 0 ? target : cur + (target - cur) * k;
+    if (Math.abs(target - cur) < 0.0005) cur = target;
+    hero.style.setProperty('--p', cur.toFixed(4));
+
+    let moving = cur !== target;
+
+    if (magnetic) {
+      m.x += (m.tx - m.x) * k;
+      m.y += (m.ty - m.y) * k;
+      if (Math.abs(m.tx - m.x) < 0.05 && Math.abs(m.ty - m.y) < 0.05) { m.x = m.tx; m.y = m.ty; }
+      else moving = true;
+      btn.style.transform = `translate3d(${m.x.toFixed(2)}px, ${m.y.toFixed(2)}px, 0)`;
     }
 
-    video.addEventListener('error', () => { video.dataset.failed = '1'; });
-    video.addEventListener('loadeddata', () => box.classList.remove('case-media--empty'));
+    raf = moving ? requestAnimationFrame(frame) : 0;
+    if (!raf) last = 0;
+  }
 
-    if (videoObserver) videoObserver.observe(box);
-  });
-})();
+  function kick() {
+    if (!raf) raf = requestAnimationFrame(frame);
+  }
 
-// ─── PROJETOS: filtro ─────────────────────────────────
-(function () {
-  const buttons = document.querySelectorAll('.filter');
-  const cases   = document.querySelectorAll('.case[data-category]');
-  const empty   = document.getElementById('casesEmpty');
+  window.addEventListener('scroll', () => { measure(); kick(); }, { passive: true });
+  window.addEventListener('resize', () => { measure(); kick(); });
 
-  const count = (f) => [...cases].filter((c) => f === 'todos' || c.dataset.category === f).length;
+  if (magnetic) {
+    window.addEventListener('pointermove', (e) => {
+      if (target >= 1) return;
+      const r = btn.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width / 2 - m.x);
+      const dy = e.clientY - (r.top + r.height / 2 - m.y);
+      const near = Math.hypot(dx, dy) < 140;
+      m.tx = near ? dx * 0.35 : 0;
+      m.ty = near ? dy * 0.35 : 0;
+      kick();
+    }, { passive: true });
+  }
 
-  buttons.forEach((btn) => {
-    const n = btn.querySelector('[data-count]');
-    if (n) n.textContent = count(btn.dataset.filter);
-
-    btn.addEventListener('click', () => {
-      const f = btn.dataset.filter;
-      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
-      cases.forEach((c) => {
-        c.hidden = !(f === 'todos' || c.dataset.category === f);
-        // Item revelado por filtro não deve ficar preso no estado inicial da animação
-        c.classList.add('is-in');
-      });
-      if (empty) empty.hidden = count(f) > 0;
-    });
-  });
+  measure();
+  kick();
 })();
 
 // ─── E-MAIL: copiar ───────────────────────────────────
