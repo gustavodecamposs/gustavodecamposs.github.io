@@ -94,6 +94,7 @@ window.I18N.en = {
   'contact.from': 'From',
   'contact.namePh': 'Your name',
   'contact.email': 'Email',
+  'contact.whatsappCta': 'Message me on WhatsApp',
   'contact.emailPh': 'you@example.com',
   'contact.subject': 'Subject',
   'contact.subjectPh': 'What’s it about?',

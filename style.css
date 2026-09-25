@@ -258,6 +258,46 @@ em {
   height: 16px;
 }
 
+/* WhatsApp fixo: canto oposto ao voltar-ao-topo, sempre visível.
+   Única cor de marca no site — convenção reconhecida, não decoração */
+.wpp-fab {
+  position: fixed;
+  left: var(--gutter);
+  bottom: var(--gutter);
+  z-index: 80;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: #25d366;
+  color: #fff;
+  transition: transform 0.3s var(--ease);
+}
+
+.wpp-fab:hover {
+  transform: scale(1.08);
+}
+
+.wpp-fab .ico {
+  width: 20px;
+  height: 20px;
+  stroke: #fff;
+}
+
+/* Botão de WhatsApp dentro do Contato: mesma coluna da lista de canais, logo abaixo dela */
+.contact-whatsapp {
+  grid-column: 1 / 5;
+  justify-self: start;
+  margin-top: var(--s-2);
+}
+
+.contact-whatsapp:hover {
+  background: #25d366;
+  border-color: #25d366;
+  color: #fff;
+}
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -382,6 +422,25 @@ em {
   color: var(--bg);
 }
 
+/* WhatsApp no nav: mesmo padrão do botão de tema, ícone só */
+.nav-wpp {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--ink-2);
+  transition: color var(--fast), opacity 0.18s ease;
+}
+
+.nav-wpp:hover {
+  color: var(--ink);
+}
+
+.nav-wpp .ico {
+  width: 18px;
+  height: 18px;
+}
+
 .nav-links a::after {
   content: '';
   position: absolute;
@@ -460,7 +519,8 @@ em {
 .is-switching main,
 .is-switching .site-footer,
 .is-switching .nav-links,
-.is-switching .nav-pill {
+.is-switching .nav-pill,
+.is-switching .nav-wpp {
   opacity: 0;
 }
 
@@ -1583,7 +1643,8 @@ em {
     grid-column: 1 / -1;
   }
 
-  .channels {
+  .channels,
+  .contact-whatsapp {
     grid-column: 1 / 7;
   }
 
@@ -1598,12 +1659,18 @@ em {
   }
 
   .nav-links,
-  .nav-pill {
+  .nav-pill,
+  .nav-wpp {
     display: none;
   }
 
   .menu-btn {
     display: inline-block;
+  }
+
+  /* No mobile o link de WhatsApp já está no hero e no menu; o fixo só tomaria espaço da tela */
+  .wpp-fab {
+    display: none;
   }
 }
 
@@ -1698,7 +1765,8 @@ em {
     justify-self: start;
   }
 
-  .channels {
+  .channels,
+  .contact-whatsapp {
     grid-column: 1 / -1;
   }
 

@@ -153,13 +153,17 @@ function createSky(canvas) {
   // Estrelas fracas de fundo: posições fixas no céu (semente fixa), giram junto com as reais
   let seed = 7;
   const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-  const field = Array.from({ length: 420 }, () => ({
+  const field = Array.from({ length: 600 }, () => ({
     ra: rnd() * 24, dec: Math.asin(rnd() * 2 - 1) / rad, mag: 4 + rnd() * 2, ph: rnd() * 6.3,
   }));
   const named = STARS.map(([, , ra, dec, mag]) => ({ ra, dec, mag, ph: rnd() * 6.3 }));
 
   let w = 0, h = 0, R = 0, ink = '236, 232, 225';
-  let rafId = 0, last = 0, onScreen = true, born = 0, placedAt = 0;
+  let rafId = 0, last = 0, onScreen = true, born = 0;
+
+  // Abre no céu de agora e segue girando 12x mais rápido: a rotação real da Terra, só perceptível
+  const SPIN = 12;
+  let skyMs = Date.now();
 
   function readColor() {
     ink = getComputedStyle(root).getPropertyValue('--ink-rgb').trim() || ink;
@@ -178,7 +182,7 @@ function createSky(canvas) {
 
   // AR/Dec → posição na tela para o instante atual
   function place() {
-    const jd   = Date.now() / 86400000 + 2440587.5;
+    const jd   = skyMs / 86400000 + 2440587.5;
     const gmst = 280.46061837 + 360.98564736629 * (jd - 2451545);
     const lst  = gmst + SKY_LON;
     const sl = Math.sin(SKY_LAT * rad), cl = Math.cos(SKY_LAT * rad);
@@ -193,7 +197,6 @@ function createSky(canvas) {
       s.x = w / 2 - (R * east) / (1 + up);
       s.y = h / 2 - (R * north) / (1 + up);
     }
-    placedAt = performance.now();
   }
 
   const smooth = (a, b, x) => {
@@ -235,12 +238,14 @@ function createSky(canvas) {
     }
   }
 
-  // ~30fps: o céu só cintila; a posição é recalculada a cada 30s (a Terra gira 0,125° nesse tempo)
+  // ~30fps: reposiciona e desenha a cada quadro
   function loop(now) {
     rafId = requestAnimationFrame(loop);
     if (now - last < 33) return;
+    // Pausado (aba oculta, fora da tela) o céu não avança: volta de onde parou, sem salto
+    if (last) skyMs += Math.min(now - last, 100) * SPIN;
     last = now;
-    if (now - placedAt > 30000) place();
+    place();
     draw(now);
   }
 
@@ -251,11 +256,12 @@ function createSky(canvas) {
   function stop() {
     cancelAnimationFrame(rafId);
     rafId = 0;
+    last = 0;
   }
 
+  born = performance.now();
   readColor();
   resize();
-  born = performance.now();
   draw(born);
 
   let resizeTimer;

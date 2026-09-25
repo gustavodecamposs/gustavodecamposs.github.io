@@ -93,6 +93,7 @@ window.I18N.pt = {
   'contact.from': 'De',
   'contact.namePh': 'Seu nome',
   'contact.email': 'E-mail',
+  'contact.whatsappCta': 'Fale comigo pelo WhatsApp',
   'contact.emailPh': 'voce@exemplo.com',
   'contact.subject': 'Assunto',
   'contact.subjectPh': 'Sobre o quê?',

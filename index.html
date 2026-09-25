@@ -96,6 +96,10 @@
 
       <div class="nav-tools">
         <a class="nav-pill" href="#contato"><i aria-hidden="true"></i><span data-i18n="nav.available">Available for work</span></a>
+        <a class="nav-wpp" href="https://wa.me/5524974051952?text=Hi%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20talk!"
+          target="_blank" rel="noopener" aria-label="WhatsApp" data-i18n-attr="href:contact.whatsapp">
+          <svg class="ico" aria-hidden="true"><use href="#i-whatsapp" /></svg>
+        </a>
         <!-- Cada botão se anuncia no próprio idioma; aria-pressed marca o ativo -->
         <div class="lang" role="group" aria-label="Language" data-i18n-attr="aria-label:lang.label">
           <button class="lang-btn" type="button" data-lang="en" lang="en" aria-label="English" aria-pressed="true">EN</button>
@@ -412,6 +416,13 @@
             </div>
           </dl>
 
+          <!-- Resposta mais rápida: manda direto pro app, sem passar pelo formulário -->
+          <a class="btn contact-whatsapp" href="https://wa.me/5524974051952?text=Hi%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20talk!"
+            target="_blank" rel="noopener" data-i18n-attr="href:contact.whatsapp">
+            <svg class="ico" aria-hidden="true"><use href="#i-whatsapp" /></svg>
+            <span data-i18n="contact.whatsappCta">Message me on WhatsApp</span>
+          </a>
+
           <!-- O formulário é um rascunho de e-mail: enviar abre o app de e-mail com tudo preenchido -->
           <form class="letter" id="contactForm">
             <div class="letter-row letter-row--to">
@@ -450,6 +461,12 @@
   <!-- Aparece quando o hero sai da tela -->
   <a class="to-top" id="toTop" href="#inicio" aria-label="Back to top" data-i18n-attr="aria-label:top.label">
     <svg class="ico" aria-hidden="true"><use href="#i-up" /></svg>
+  </a>
+
+  <!-- Fixo, sempre visível; canto oposto ao voltar-ao-topo -->
+  <a class="wpp-fab" href="https://wa.me/5524974051952?text=Hi%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20talk!"
+    target="_blank" rel="noopener" aria-label="Talk on WhatsApp" data-i18n-attr="href:contact.whatsapp;aria-label:contact.whatsappCta">
+    <svg class="ico" aria-hidden="true"><use href="#i-whatsapp" /></svg>
   </a>
 
   <footer class="site-footer">
