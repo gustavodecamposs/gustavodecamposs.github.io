@@ -76,9 +76,9 @@ window.I18N.pt = {
   'exp.job2.role': 'Estudante de Desenvolvimento Web',
   'exp.job2.meta': 'Autodidata + cursos',
   'exp.job2.desc': 'Comecei pelo front-end — HTML, CSS, JavaScript e design de interfaces. Hoje estou expandindo para o back-end com C# .NET e PHP Laravel.',
-  'exp.job3.role': 'Aprendiz em TI',
-  'exp.job3.meta': 'Suporte · Redes · Fundamentos',
-  'exp.job3.desc': 'Meu primeiro contato sério com tecnologia. Entrei curioso e saí com um rumo claro: construir coisas que as pessoas usem.',
+  'exp.job3.role': 'Estudando Back-End',
+  'exp.job3.meta': 'PHP/Laravel · C#/.NET · MySQL',
+  'exp.job3.desc': 'Aplicando na prática o que o Banco de Talentos exigiu: modelagem de banco de dados, lógica de servidor e APIs, para entregar soluções completas, não só a interface.',
 
   'contact.index': '04 — Contato',
   'contact.title1': 'Tem um projeto',

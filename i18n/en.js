@@ -77,9 +77,9 @@ window.I18N.en = {
   'exp.job2.role': 'Web Development Student',
   'exp.job2.meta': 'Self-taught + courses',
   'exp.job2.desc': 'I started with the front end — HTML, CSS, JavaScript and interface design. Now I’m expanding into the back end with C# .NET and PHP Laravel.',
-  'exp.job3.role': 'IT Apprentice',
-  'exp.job3.meta': 'Support · Networking · Fundamentals',
-  'exp.job3.desc': 'My first serious contact with technology. I came in curious and left with a clear direction: building things people actually use.',
+  'exp.job3.role': 'Learning Back-End',
+  'exp.job3.meta': 'PHP/Laravel · C#/.NET · MySQL',
+  'exp.job3.desc': 'Applying what Banco de Talentos demanded in practice: database design, server-side logic and APIs, so I can deliver complete solutions, not just the interface.',
 
   'contact.index': '04 — Contact',
   'contact.title1': 'Got a project',
