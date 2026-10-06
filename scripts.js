@@ -166,26 +166,71 @@ function applyLang(next) {
 // O reveal é enfeite: nunca pode deixar conteúdo escondido. Por isso
 // existe uma rede de segurança que revela tudo se o observer não agir.
 (function reveal() {
-  const items = [...document.querySelectorAll('[data-reveal], [data-lay], [data-cascade]')];
-  const showAll = () => items.forEach(el => el.classList.add('is-in'));
+  // Títulos de seção viram letras individuais, como o hero. O texto
+  // original fica no aria-label pra não ser soletrado por leitor de tela.
+  document.querySelectorAll('.sec-title').forEach(title => {
+    const text = title.textContent.trim();
+    if (!text || title.querySelector('.letter')) return;
+    title.setAttribute('aria-label', text);
+    title.textContent = '';
+    let i = 0;
+    text.split(' ').forEach((word, w, all) => {
+      const group = document.createElement('span');
+      group.className = 'word';
+      group.setAttribute('aria-hidden', 'true');
+      [...word].forEach(ch => {
+        const span = document.createElement('span');
+        span.className = 'letter';
+        span.style.setProperty('--i', String(i++));
+        span.textContent = ch;
+        group.appendChild(span);
+      });
+      title.appendChild(group);
+      if (w < all.length - 1) {
+        const gap = document.createElement('span');
+        gap.className = 'letter is-space';
+        gap.setAttribute('aria-hidden', 'true');
+        gap.style.setProperty('--i', String(i++));
+        gap.textContent = ' ';
+        title.appendChild(gap);
+      }
+    });
+    title.setAttribute('data-reveal', '');
+  });
 
   // Numera os filhos da cascata: o CSS lê --i pra escalonar o atraso.
   document.querySelectorAll('[data-cascade]').forEach(list => {
     [...list.children].forEach((child, i) => child.style.setProperty('--i', String(i)));
   });
 
+  // Coletado só agora: a divisão acima marca os títulos com data-reveal.
+  const items = [...document.querySelectorAll('[data-reveal], [data-lay], [data-cascade]')];
+  const showAll = () => items.forEach(el => el.classList.add('is-in'));
+
   if (reducedMotion || !('IntersectionObserver' in window)) {
     showAll();
     return;
   }
 
+  // threshold em vez de rootMargin: o bloco só entra quando boa parte
+  // dele já está na tela. Disparar no primeiro pixel faz a animação
+  // rodar fora do campo de visão e chegar pronta — o movimento se perde.
+  //
+  // Dois thresholds porque um elemento mais alto que a janela nunca
+  // alcança 30% de si mesmo: para esses vale o 0, e quem decide é a
+  // fração da JANELA ocupada, não a do elemento.
   const io = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (!entry.isIntersecting) return;
+      const tall = entry.target.getBoundingClientRect().height > innerHeight * 0.8;
+      const enough = tall
+        ? entry.intersectionRect.height > innerHeight * 0.3
+        : entry.intersectionRatio >= 0.3;
+      if (!enough) return;
       entry.target.classList.add('is-in');
       io.unobserve(entry.target);
     });
-  }, { rootMargin: '0px 0px -10% 0px' });
+  }, { threshold: [0, 0.3] });
 
   items.forEach(el => io.observe(el));
 
@@ -193,6 +238,52 @@ function applyLang(next) {
   // segundo plano, print do navegador), mostra assim mesmo.
   setTimeout(showAll, 3000);
   addEventListener('beforeprint', showAll);
+})();
+
+// ─── TÍTULO DE QUEST: DECODIFICA ──────────────────────
+// O nome do projeto passa por caracteres aleatórios e assenta no texto
+// certo, uma letra de cada vez. O texto final já está no HTML: se o
+// efeito não rodar, o nome continua lá, legível.
+(function decodeTitles() {
+  const titles = [...document.querySelectorAll('.quest-title')];
+  if (!titles.length || reducedMotion || !('IntersectionObserver' in window)) return;
+
+  const GLYPHS = '#@%&$*+=<>/\\|[]{}';
+
+  function decode(el) {
+    const real = el.textContent;
+    let frame = 0;
+    const total = real.length * 2 + 6;
+
+    const timer = setInterval(() => {
+      frame++;
+      // Quantas letras já assentaram
+      const settled = Math.floor((frame / total) * real.length);
+      let out = '';
+      for (let i = 0; i < real.length; i++) {
+        if (i < settled || real[i] === ' ') out += real[i];
+        else out += GLYPHS[Math.floor(Math.random() * GLYPHS.length)];
+      }
+      el.textContent = out;
+      if (frame >= total) {
+        clearInterval(timer);
+        el.textContent = real;
+      }
+    }, 40);
+
+    // Rede de segurança: o nome do projeto não pode ficar embaralhado
+    setTimeout(() => { clearInterval(timer); el.textContent = real; }, total * 40 + 600);
+  }
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting || e.intersectionRatio < 0.3) return;
+      io.unobserve(e.target);
+      decode(e.target);
+    });
+  }, { threshold: [0, 0.3] });
+
+  titles.forEach(el => io.observe(el));
 })();
 
 // ─── HEADER SÓLIDO AO ROLAR ───────────────────────────
@@ -356,25 +447,6 @@ const secrets = (function () {
   });
 })();
 
-// 5 cliques no monograma: o GC pula
-(function brandHop() {
-  const mark = document.getElementById('brandMark');
-  if (!mark) return;
-  let hits = 0;
-  let timer = null;
-
-  mark.closest('a').addEventListener('click', () => {
-    hits++;
-    clearTimeout(timer);
-    timer = setTimeout(() => { hits = 0; }, 1200);
-    if (hits < 5) return;
-    hits = 0;
-    secrets.unlock('hop');
-    if (reducedMotion) return;
-    mark.classList.add('is-jumping');
-    setTimeout(() => mark.classList.remove('is-jumping'), 900);
-  });
-})();
 
 // ─── TERMINAL ─────────────────────────────────────────
 (function terminal() {

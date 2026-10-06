@@ -20,6 +20,7 @@
   --muted: #7d8884;
   --shadow: #26302c;
   --accent: #2fd4a7;
+  --accent-rgb: 47, 212, 167;
   --accent-2: #f2a43c;
   --dot: rgba(232, 236, 233, 0.06);
   color-scheme: dark;
@@ -36,6 +37,7 @@
   --muted: #525c57;
   --shadow: #b9c2bd;
   --accent: #0d6950;
+  --accent-rgb: 13, 105, 80;
   --accent-2: #7d4a10;
   --dot: rgba(11, 15, 14, 0.07);
   color-scheme: light;
@@ -70,8 +72,13 @@
   --radius: 0;
 
   /* steps() é a assinatura: nada se move suave */
+  /* steps() é para os momentos em que o movimento precisa ser visto
+     em quadros: varredura, letra do hero, seta. Para o resto vale uma
+     curva rápida de saída suave — passo travado em tudo deixa a
+     interface dura em vez de pixelada. */
   --step2: steps(2, end);
   --step3: steps(3, end);
+  --ease: cubic-bezier(0.23, 1, 0.32, 1);
   --fast: 0.12s;
   --mid: 0.2s;
 }
@@ -342,7 +349,7 @@ h4 {
 .motion [data-reveal] {
   opacity: 0;
   transform: translateY(8px);
-  transition: opacity var(--mid) var(--step3), transform var(--mid) var(--step3);
+  transition: opacity 0.16s ease-out, transform 0.22s var(--ease);
 }
 
 .motion [data-reveal].is-in {
@@ -409,7 +416,7 @@ h4 {
   left: 0;
   right: 0;
   z-index: 50;
-  transition: background var(--mid) var(--step2), box-shadow var(--mid) var(--step2);
+  transition: background var(--mid) var(--ease), box-shadow var(--mid) var(--ease);
 }
 
 .site-header.is-solid {
@@ -420,7 +427,7 @@ h4 {
 /* Durante a intro o header fica invisível; aparece na fase idle */
 .motion .site-header {
   opacity: 0;
-  transition: opacity var(--mid) var(--step2), background var(--mid) var(--step2),
+  transition: opacity var(--mid) var(--ease), background var(--mid) var(--ease),
               box-shadow var(--mid) var(--step2);
 }
 
@@ -445,31 +452,6 @@ h4 {
   color: var(--ink);
 }
 
-.brand-mark {
-  display: grid;
-  place-items: center;
-  width: 32px;
-  height: 32px;
-  background: var(--accent);
-  color: var(--bg);
-  font-size: var(--t-sm);
-  transition: transform var(--fast) var(--step2);
-}
-
-.brand-mark em {
-  font-style: normal;
-}
-
-/* Easter egg: 5 cliques no monograma */
-.brand-mark.is-jumping {
-  animation: hop 0.4s var(--step3) 2;
-}
-
-@keyframes hop {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-6px); }
-}
-
 .brand-name {
   font-size: var(--t-sm);
 }
@@ -486,7 +468,7 @@ h4 {
   min-height: 44px;
   /* --muted falha AA no tema claro neste tamanho; --ink-3 passa nos dois */
   color: var(--ink-3);
-  transition: color var(--fast) var(--step2);
+  transition: color var(--fast) var(--ease);
 }
 
 @media (hover: hover) {
@@ -515,7 +497,7 @@ h4 {
   font-size: var(--t-xs);
   color: var(--ink-3);
   box-shadow: inset 0 0 0 2px var(--shadow);
-  transition: color var(--fast) var(--step2), box-shadow var(--fast) var(--step2);
+  transition: color var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
 }
 
 @media (hover: hover) {
@@ -547,7 +529,7 @@ h4 {
   width: 44px;
   height: 44px;
   color: var(--muted);
-  transition: color var(--fast) var(--step2);
+  transition: color var(--fast) var(--ease);
 }
 
 @media (hover: hover) {
@@ -578,7 +560,7 @@ h4 {
   min-width: 32px;
   min-height: 44px;
   color: var(--muted);
-  transition: color var(--fast) var(--step2);
+  transition: color var(--fast) var(--ease);
 }
 
 .lang-btn[aria-pressed="true"] {
@@ -689,6 +671,28 @@ h4 {
   color: var(--ink);
   text-shadow: 0.125em 0.125em 0 var(--shadow);
   margin-bottom: var(--s-2);
+}
+
+/* Título de seção monta letra a letra ao entrar, como o hero.
+   Visível por padrão: a animação só adia a entrada. Se não rodar,
+   o título aparece inteiro — texto nunca fica escondido por enfeite. */
+.motion .sec-title.is-in .letter {
+  animation: block-in 1ms calc(var(--i, 0) * 30ms) backwards;
+}
+
+@media (hover: hover) {
+  /* Passar o mouse levanta a letra sob o cursor */
+  .sec-title .letter,
+  .quest-title .letter {
+    display: inline-block;
+    transition: transform 0.16s var(--step2), color 0.16s var(--step2);
+  }
+
+  .sec-title.is-in .letter:hover,
+  .quest-title .letter:hover {
+    transform: translateY(-0.125em);
+    color: var(--accent);
+  }
 }
 
 .sec-lede {
@@ -885,7 +889,7 @@ h4 {
   gap: var(--s-1);
   min-height: 44px;
   color: var(--ink-3);
-  transition: color var(--fast) var(--step2);
+  transition: color var(--fast) var(--ease);
 }
 
 @media (hover: hover) {
@@ -898,7 +902,7 @@ h4 {
 .motion .hero-role,
 .motion .hero-note,
 .motion .hero-links {
-  transition: opacity var(--mid) var(--step2);
+  transition: opacity var(--mid) var(--ease);
 }
 
 /* Botão de pular: primeiro na ordem de tab, some na fase idle */
@@ -917,7 +921,7 @@ h4 {
   text-transform: uppercase;
   color: var(--muted);
   box-shadow: inset 0 0 0 2px var(--shadow);
-  transition: color var(--fast) var(--step2), box-shadow var(--fast) var(--step2);
+  transition: color var(--fast) var(--ease), box-shadow var(--fast) var(--ease);
 }
 
 @media (hover: hover) {
@@ -1121,8 +1125,97 @@ html:not(.motion) .skip-intro {
 }
 
 .quest-shot {
+  position: relative;
   background: var(--bg-2);
   box-shadow: inset 0 0 0 2px var(--shadow), 4px 4px 0 var(--shadow);
+  transition: box-shadow var(--fast) var(--ease);
+}
+
+/* Scanline sobre a imagem: dá vida sem fingir que é uma demo rodando.
+   O gradiente é um gerador de linhas, não um degradê — segue valendo
+   a regra de não usar gradiente decorativo. */
+.quest-shot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.22) 0 1px,
+    transparent 1px 3px
+  );
+  opacity: 0.5;
+  transition: opacity var(--fast) var(--ease);
+}
+
+@media (hover: hover) {
+  /* Hover sutil, como no site de referência: a moldura acende e as
+     linhas recuam. O card não levanta nem escala. */
+  .quest:hover .quest-shot {
+    box-shadow: inset 0 0 0 2px var(--accent), 4px 4px 0 var(--shadow);
+  }
+
+  .quest:hover .quest-shot::after {
+    opacity: 0.22;
+  }
+
+  .quest:hover .quest-title {
+    color: var(--accent);
+  }
+}
+
+.quest-title {
+  transition: color var(--fast) var(--ease);
+}
+
+/* A varredura roda sob as scanlines, não sobre elas */
+.motion .quest-shot.is-in::after {
+  animation: scan 2.4s steps(8, end) 0.72s infinite;
+}
+
+@keyframes scan {
+  0%, 92% { background-position: 0 0; }
+  100% { background-position: 0 24px; }
+}
+
+/* Faixa de brilho atravessa a imagem de cima a baixo, como varredura
+   de tubo. Faz o card parecer uma tela ligada sem precisar de GIF:
+   nenhum arquivo extra, nenhum megabyte, e para sozinho fora da tela.
+   Isto é enfeite — não é, nem finge ser, uma demonstração do site. */
+.quest-shot::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 25%;
+  z-index: 1;
+  pointer-events: none;
+  background-image: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(var(--accent-rgb, 47, 212, 167), 0.07) 45%,
+    rgba(var(--accent-rgb, 47, 212, 167), 0.11) 55%,
+    transparent
+  );
+  opacity: 0;
+}
+
+.motion .quest-shot.is-in::before {
+  animation: sweep 4.5s steps(14, end) 1s infinite;
+}
+
+@keyframes sweep {
+  0% { top: -25%; opacity: 0; }
+  8% { opacity: 1; }
+  70% { opacity: 1; }
+  78%, 100% { top: 100%; opacity: 0; }
+}
+
+@media (hover: hover) {
+  /* No hover a varredura acelera: o card "acorda" */
+  .quest:hover .quest-shot::before {
+    animation-duration: 1.8s;
+  }
 }
 
 .quest-shot img {
@@ -1214,7 +1307,7 @@ html:not(.motion) .skip-intro {
   gap: var(--s-1);
   min-height: 44px;
   color: var(--ink);
-  transition: color var(--fast) var(--step2);
+  transition: color var(--fast) var(--ease);
 }
 
 @media (hover: hover) {
@@ -1544,7 +1637,7 @@ html:not(.motion) .skip-intro {
   box-shadow: inset 0 0 0 2px var(--accent), 3px 3px 0 var(--shadow);
   opacity: 0;
   pointer-events: none;
-  transition: opacity var(--fast) var(--step2);
+  transition: opacity var(--fast) var(--ease);
 }
 
 .crew-bubble[data-on] {
@@ -1578,10 +1671,13 @@ html:not(.motion) .skip-intro {
 
 /* ─── HUD ────────────────────────────────────────────
    Fase, barra de progresso e pontuação. */
+/* Canto direito, não centro: centralizado o HUD cruza a coluna de
+   texto e cobre o conteúdo. O portfólio vem antes do enfeite.
+   Fica acima do botão "voltar ao topo", que ocupa o mesmo canto. */
 .hud {
   position: fixed;
-  left: 50%;
-  bottom: var(--s-2);
+  right: var(--gutter);
+  bottom: calc(var(--gutter) + 56px);
   z-index: 29;
   display: flex;
   align-items: center;
@@ -1593,13 +1689,13 @@ html:not(.motion) .skip-intro {
   box-shadow: inset 0 0 0 2px var(--shadow), 3px 3px 0 var(--shadow);
   opacity: 0;
   pointer-events: none;
-  transform: translate(-50%, 8px);
-  transition: opacity var(--mid) var(--step2), transform var(--mid) var(--step2);
+  transform: translateY(8px);
+  transition: opacity var(--mid) var(--ease), transform var(--mid) var(--ease);
 }
 
 .hud[data-on] {
   opacity: 1;
-  transform: translate(-50%, 0);
+  transform: none;
 }
 
 .hud-phase {
@@ -1607,9 +1703,10 @@ html:not(.motion) .skip-intro {
   color: var(--ink-2);
 }
 
+/* A barra de 16 celulas deixava o HUD largo demais pra um canto;
+   fase e pontuacao ja dizem o mesmo em menos espaco. */
 .hud-bar {
-  display: flex;
-  gap: 2px;
+  display: none;
 }
 
 .hud-bar span {

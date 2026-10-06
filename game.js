@@ -264,7 +264,8 @@
     if (hero) hero.dataset.phase = 'idle';
     if (header) header.classList.add('is-ready');
 
-    workers.length = 0;
+    // Os operários não vão embora: passam a rondar a página, visitando
+    // cards e títulos enquanto o visitante rola. patrol() cuida disso.
     try { localStorage.setItem('introSeen', '1'); } catch (e) { }
 
     // Mascote entra depois que a construção termina
@@ -494,6 +495,66 @@
       if (i >= 0) setTimeout(() => setPhase(i), 600);
     });
   }
+
+  // ─── PATRULHA ───────────────────────────────────────
+  // Depois da intro os operários ficam. Cada um escolhe um alvo que
+  // esteja na tela (card, título, barra), caminha até lá, trabalha um
+  // pouco e vai pro próximo. Puramente decorativo: o canvas não
+  // captura clique e nada do conteúdo depende disto.
+  (function patrol() {
+    // Só elementos que valem uma visita, não qualquer coisa
+    const SPOTS = '.quest-shot, .quest-title, .sec-title, .player-portrait, .stat, .track-row, .passive, .term';
+
+    function visibleSpots() {
+      return [...document.querySelectorAll(SPOTS)].filter(el => {
+        const r = el.getBoundingClientRect();
+        return r.bottom > 40 && r.top < innerHeight - 40 && r.width > 40;
+      });
+    }
+
+    function sendToSpot(w) {
+      const spots = visibleSpots();
+      if (!spots.length) {
+        // Nada à vista: desce pro rodapé da janela e espera
+        sendWorker(w, 20 + Math.random() * (W - 80), innerHeight - 80);
+        w.pause = 600 + Math.random() * 900;
+        return;
+      }
+      const spot = spots[Math.floor(Math.random() * spots.length)];
+      const r = spot.getBoundingClientRect();
+      // Pousa na borda de baixo do alvo, em ponto aleatório da largura
+      const x = r.left + Math.random() * Math.max(r.width - 32, 8);
+      const y = Math.min(r.bottom - 32, innerHeight - 40);
+      sendWorker(w, Math.max(4, Math.min(x, W - 36)), Math.max(4, y));
+      // Fica trabalhando um tempo antes de seguir
+      w.pause = 900 + Math.random() * 1800;
+    }
+
+    // Enquanto o operário está parado no alvo, conta o tempo de pausa.
+    // Quando zera, escolhe outro lugar.
+    //
+    // Timer próprio, não o rAF: se o navegador estrangular os frames
+    // (aba em segundo plano, bateria fraca) o operário ficaria parado
+    // fora da tela para sempre. Com setInterval ele continua decidindo
+    // para onde ir, e o rAF só desenha o resultado.
+    setInterval(() => {
+      if (document.hidden) return;
+      workers.forEach(w => {
+        if (!w.done) return;
+        w.pause = (w.pause || 0) - 140;
+        if (w.pause > 0) return;
+        sendToSpot(w);
+      });
+    }, 140);
+
+    // Primeira saída logo depois da intro
+    document.addEventListener('introdone', () => {
+      setTimeout(() => workers.forEach((w, i) => {
+        w.pause = i * 400;
+        w.done = true;
+      }), 800);
+    });
+  })();
 
   // HUD so aparece depois da intro, ja com a fase 1 escrita:
   // nascer vazio parece quebrado se o observer demorar.
