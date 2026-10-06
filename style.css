@@ -12,34 +12,34 @@
 /* ─── TOKENS ─────────────────────────────────────── */
 :root,
 [data-theme="dark"] {
-  --bg: #0b0f0e;
-  --bg-2: #121814;
-  --ink: #e8ece9;
-  --ink-2: #ccd3cf;
-  --ink-3: #a8b2ad;
-  --muted: #7d8884;
-  --shadow: #26302c;
-  --accent: #2fd4a7;
-  --accent-rgb: 47, 212, 167;
+  --bg: #0f0d0a;
+  --bg-2: #17140f;
+  --ink: #ece7df;
+  --ink-2: #d2cbc0;
+  --ink-3: #aba396;
+  --muted: #8c8376;
+  --shadow: #302a21;
+  --accent: #00c9a7;
+  --accent-rgb: 0, 201, 167;
   --accent-2: #f2a43c;
-  --dot: rgba(232, 236, 233, 0.06);
+  --dot: rgba(236, 231, 223, 0.06);
   color-scheme: dark;
 }
 
 /* Verde-mar puro falha AA sobre fundo claro (4.02:1).
    Escurecido até 5.07:1 em --bg-2. Mesma família, contraste honesto. */
 [data-theme="light"] {
-  --bg: #e8ece9;
-  --bg-2: #dce2de;
-  --ink: #0b0f0e;
-  --ink-2: #2a3330;
-  --ink-3: #45504b;
-  --muted: #525c57;
-  --shadow: #b9c2bd;
-  --accent: #0d6950;
-  --accent-rgb: 13, 105, 80;
+  --bg: #ece7df;
+  --bg-2: #ddd6ca;
+  --ink: #0f0d0a;
+  --ink-2: #332d24;
+  --ink-3: #4d4538;
+  --muted: #5c5345;
+  --shadow: #bfb6a6;
+  --accent: #006651;
+  --accent-rgb: 0, 102, 81;
   --accent-2: #7d4a10;
-  --dot: rgba(11, 15, 14, 0.07);
+  --dot: rgba(15, 13, 10, 0.07);
   color-scheme: light;
 }
 
