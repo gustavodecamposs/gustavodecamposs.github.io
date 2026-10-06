@@ -166,8 +166,13 @@ function applyLang(next) {
 // O reveal é enfeite: nunca pode deixar conteúdo escondido. Por isso
 // existe uma rede de segurança que revela tudo se o observer não agir.
 (function reveal() {
-  const items = [...document.querySelectorAll('[data-reveal]')];
+  const items = [...document.querySelectorAll('[data-reveal], [data-lay], [data-cascade]')];
   const showAll = () => items.forEach(el => el.classList.add('is-in'));
+
+  // Numera os filhos da cascata: o CSS lê --i pra escalonar o atraso.
+  document.querySelectorAll('[data-cascade]').forEach(list => {
+    [...list.children].forEach((child, i) => child.style.setProperty('--i', String(i)));
+  });
 
   if (reducedMotion || !('IntersectionObserver' in window)) {
     showAll();

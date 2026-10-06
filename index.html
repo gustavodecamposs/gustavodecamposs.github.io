@@ -176,7 +176,7 @@
 
         <div class="player" data-reveal>
           <div>
-            <figure class="player-portrait">
+            <figure class="player-portrait" data-lay>
               <img src="img/eu.webp" width="1024" height="1536" loading="lazy" decoding="async"
                 alt="Illustration of Gustavo de Campos smiling, on a teal background." data-i18n-attr="alt:hero.avatarAlt" />
             </figure>
@@ -203,7 +203,7 @@
 
             <div>
               <h3 class="rule" data-i18n="about.inventory">Inventory</h3>
-              <ol class="inventory">
+              <ol class="inventory" data-cascade>
                 <li>
                   <span class="mark" aria-hidden="true">&gt;</span>
                   <span>SIGA Angra</span>
@@ -228,7 +228,7 @@
             <div>
               <h3 class="rule" data-i18n="about.stats">Stats</h3>
               <!-- As células são decorativas; o valor vai no aria-label de cada .stat -->
-              <div class="stats">
+              <div class="stats" data-cascade>
                 <div class="stat" role="img" aria-label="HTML and CSS: 8 of 10">
                   <span class="stat-name">HTML / CSS</span>
                   <span class="stat-bar" data-level="8" aria-hidden="true"></span>
@@ -266,7 +266,7 @@
 
             <div>
               <h3 class="rule" data-i18n="about.passives">Passive skills</h3>
-              <div class="passives">
+              <div class="passives" data-cascade>
                 <article class="passive">
                   <h3 data-i18n="about.pr1.title">Empathy first</h3>
                   <p data-i18n="about.pr1.text">I think about the person on the other side of the screen before I think about the code.</p>
@@ -308,7 +308,7 @@
 
         <ol class="quests">
           <li class="quest" data-reveal>
-            <figure class="quest-shot">
+            <figure class="quest-shot" data-lay>
               <img src="img/projetos/siga.webp" width="1200" height="750" loading="lazy" decoding="async"
                 alt="SIGA Angra interface showing a city map with data layers." data-i18n-attr="alt:siga.alt" />
               <figcaption class="quest-domain">siga.angra.rj.gov.br</figcaption>
@@ -340,7 +340,7 @@
           </li>
 
           <li class="quest" data-reveal>
-            <figure class="quest-shot">
+            <figure class="quest-shot" data-lay>
               <img src="img/projetos/banco-talentos.webp" width="1200" height="750" loading="lazy" decoding="async"
                 alt="Banco de Talentos interface listing job openings." data-i18n-attr="alt:talentos.alt" />
               <figcaption class="quest-domain">bancodetalentos.angra.rj.gov.br</figcaption>
@@ -397,7 +397,7 @@
           <p class="sec-lede" data-i18n="progress.lede">Not a commit graph. The work that actually shipped, year by year.</p>
         </header>
 
-        <div class="track" data-reveal>
+        <div class="track" data-reveal data-cascade>
           <div class="track-row">
             <span class="track-year">2024</span>
             <div class="track-main">
@@ -464,7 +464,7 @@
           <!-- Caminho óbvio pra quem não quer digitar -->
           <div>
             <h3 class="rule" data-i18n="contact.channels">Channels</h3>
-            <div class="channels">
+            <div class="channels" data-cascade>
               <a class="btn" href="https://wa.me/5524974051952?text=Hi%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20talk!"
                 target="_blank" rel="noopener" data-i18n-attr="href:contact.whatsapp">
                 <span>WhatsApp</span>

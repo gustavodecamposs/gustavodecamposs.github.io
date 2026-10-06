@@ -326,7 +326,19 @@ h4 {
 }
 
 /* ─── REVEAL ─────────────────────────────────────── */
-/* Só roda com .motion (JS ativo e sem reduced-motion) */
+/* Vocabulário de jogo, não de site. Nada faz fade: a coisa não
+   existe e então existe, ou é varrida pra dentro em degraus
+   visíveis. Fade suave entregaria o truque.
+
+   Três padrões:
+     [data-reveal]   bloco desliza 8px pra dentro
+     [data-lay]      varredura com clip-path em 12 degraus
+     [data-cascade]  filhos ligam um a um, 18ms entre cada
+
+   Regra que vale pros três: o estado visível é o padrão. A animação
+   só adia a entrada. Se ela não rodar, o conteúdo aparece mesmo
+   assim — animação nenhuma pode esconder conteúdo pra sempre. */
+
 .motion [data-reveal] {
   opacity: 0;
   transform: translateY(8px);
@@ -336,6 +348,43 @@ h4 {
 .motion [data-reveal].is-in {
   opacity: 1;
   transform: none;
+}
+
+/* lay: varredura da esquerda pra direita em 12 degraus. A imagem é
+   "assentada" no lugar, como peça de cenário entrando. */
+/* O corte só vale enquanto a imagem não entrou. Depois de .is-in o
+   estado final é declarado em CSS, não deixado por conta do fill-mode:
+   se a animação não rodar, a imagem aparece inteira do mesmo jeito. */
+.motion [data-lay]:not(.is-in) {
+  clip-path: inset(0 100% 0 0);
+}
+
+.motion [data-lay].is-in {
+  clip-path: inset(0);
+  animation: lay 0.72s steps(12, end);
+}
+
+@keyframes lay {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+/* block-in: cada filho liga de uma vez, 18ms depois do anterior.
+   Duração de 1ms porque não há transição nenhuma — só o instante
+   em que passa a existir. É isso que soa a jogo, e não um fade.
+
+   O filho nasce visível; a animação usa 'backwards' pra escondê-lo
+   apenas durante o próprio atraso. Com 'both' ele ficaria escondido
+   pra sempre caso a animação não completasse. */
+.motion [data-cascade].is-in > * {
+  animation: block-in 1ms calc(var(--i, 0) * 18ms) backwards;
+}
+
+@keyframes block-in {
+  0% {
+    visibility: hidden;
+  }
 }
 
 /* ─── REDUCED MOTION ─────────────────────────────── */
