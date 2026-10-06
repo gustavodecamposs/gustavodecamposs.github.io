@@ -1758,3 +1758,29 @@ html:not(.motion) .skip-intro {
     opacity: 1 !important;
   }
 }
+
+/* ─── CIDADE DO HERO ─────────────────────────────────
+   Angra em pixel no rodapé do hero: morros, prédios que
+   sobem, barcos, nuvens. Fica atrás de tudo e não captura
+   clique. É ambiente, não conteúdo. */
+.city-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  /* Esmaecida: o nome na tela tem que continuar sendo o foco */
+  opacity: 0.55;
+}
+
+/* O conteúdo do hero fica por cima da cidade */
+.hero-stage,
+.skip-intro {
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .city-layer {
+    display: none !important;
+  }
+}

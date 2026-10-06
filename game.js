@@ -183,8 +183,14 @@
   }
 
   function placeBubble() {
-    bubble.style.left = Math.round(mascot.x + 10 * PIXEL) + 'px';
-    bubble.style.top = Math.round(mascot.y - 12) + 'px';
+    // Preso à janela: sem o limite, um mascote fora de posição levaria
+    // o balão para fora da tela e a fala se perderia.
+    const w = bubble.offsetWidth || 160;
+    const h = bubble.offsetHeight || 32;
+    const x = Math.min(Math.max(mascot.x + 10 * PIXEL, 8), innerWidth - w - 8);
+    const y = Math.min(Math.max(mascot.y - 12, 8), innerHeight - h - 8);
+    bubble.style.left = Math.round(x) + 'px';
+    bubble.style.top = Math.round(y) + 'px';
   }
 
   // ─── LOOP ───────────────────────────────────────────
@@ -272,9 +278,9 @@
     setTimeout(() => {
       mascot.visible = true;
       mascot.x = -40;
-      mascot.y = innerHeight - 120;
+      mascot.y = innerHeight - 170;
       mascot.tx = 32;
-      mascot.ty = innerHeight - 120;
+      mascot.ty = innerHeight - 170;
       if (!skipped) setTimeout(() => say(t('game.welcome')), 900);
     }, skipped ? 0 : 400);
 
@@ -441,7 +447,7 @@
     // Mascote volta pro canto a cada troca de seção
     if (mascot.visible) {
       mascot.tx = 32;
-      mascot.ty = innerHeight - 120;
+      mascot.ty = innerHeight - 170;
     }
 
     if (quiet) return;
