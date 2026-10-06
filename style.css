@@ -12,17 +12,18 @@
 /* ─── TOKENS ─────────────────────────────────────── */
 :root,
 [data-theme="dark"] {
-  --bg: #0f0d0a;
-  --bg-2: #17140f;
+  --bg: #0c0b09;
+  --bg-2: #141210;
   --ink: #ece7df;
   --ink-2: #d2cbc0;
   --ink-3: #aba396;
   --muted: #8c8376;
-  --shadow: #302a21;
-  --accent: #00c9a7;
-  --accent-rgb: 0, 201, 167;
-  --accent-2: #f2a43c;
-  --dot: rgba(236, 231, 223, 0.06);
+  --shadow: #332d24;
+  --accent: #6fb8e8;
+  --accent-rgb: 111, 184, 232;
+  --accent-2: #e8a33d;
+  --dot: rgba(236, 231, 223, 0.12);
+  --dot-2: rgba(236, 231, 223, 0.06);
   color-scheme: dark;
 }
 
@@ -36,10 +37,11 @@
   --ink-3: #4d4538;
   --muted: #5c5345;
   --shadow: #bfb6a6;
-  --accent: #006651;
-  --accent-rgb: 0, 102, 81;
+  --accent: #1a5e8a;
+  --accent-rgb: 26, 94, 138;
   --accent-2: #7d4a10;
-  --dot: rgba(15, 13, 10, 0.07);
+  --dot: rgba(15, 13, 10, 0.14);
+  --dot-2: rgba(15, 13, 10, 0.07);
   color-scheme: light;
 }
 
@@ -218,15 +220,43 @@ h4 {
   position: relative;
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(var(--dot) 1px, transparent 1.5px),
+    radial-gradient(var(--dot-2) 1px, transparent 1.5px);
+  background-size: 24px 24px, 24px 24px;
+  background-position: 12px 12px, 0 0;
+}
+
+/* Conteudo acima da grade */
+.site-header,
+main,
+.site-footer,
+.mobile-menu {
+  position: relative;
+  z-index: 1;
+}
+
+/* Duas camadas de pontos, como no site de referência: uma mais forte
+   com passo de 24px e outra fraca deslocada, o que dá textura sem virar
+   padrão de xadrez. z-index 0, não -1: atrás do conteúdo, mas à frente
+   do fundo da seção, senão a grade desaparece. */
 .dots::before {
   content: "";
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: 0;
   pointer-events: none;
-  background-image: radial-gradient(var(--dot) 1px, transparent 1.5px);
-  background-size: 24px 24px;
-  background-position: 12px 12px;
+  background-image:
+    radial-gradient(var(--dot) 1px, transparent 1.5px),
+    radial-gradient(var(--dot-2) 1px, transparent 1.5px);
+  background-size: 24px 24px, 24px 24px;
+  background-position: 12px 12px, 0 0;
 }
 
 /* Moldura: inset, nunca border */
@@ -777,7 +807,7 @@ h4 {
   /* Verde do WhatsApp, fora do sistema de tokens de propósito:
      é cor de marca de terceiro, não cor do portfólio. */
   background: #25d366;
-  color: #0b0f0e;
+  color: #0c0b09;
   box-shadow: 3px 3px 0 var(--shadow);
   transition: transform var(--fast) var(--step2), box-shadow var(--fast) var(--step2);
 }

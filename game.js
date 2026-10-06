@@ -27,11 +27,11 @@
     const cs = getComputedStyle(root);
     const pick = (n, fb) => (cs.getPropertyValue(n) || '').trim() || fb;
     return {
-      accent: pick('--accent', '#2fd4a7'),
-      accent2: pick('--accent-2', '#f2a43c'),
-      ink: pick('--ink', '#e8ece9'),
-      shadow: pick('--shadow', '#26302c'),
-      bg: pick('--bg', '#0b0f0e')
+      accent: pick('--accent', '#6fb8e8'),
+      accent2: pick('--accent-2', '#e8a33d'),
+      ink: pick('--ink', '#ece7df'),
+      shadow: pick('--shadow', '#332d24'),
+      bg: pick('--bg', '#0c0b09')
     };
   }
 
@@ -187,7 +187,11 @@
     // o balão para fora da tela e a fala se perderia.
     const w = bubble.offsetWidth || 160;
     const h = bubble.offsetHeight || 32;
-    const x = Math.min(Math.max(mascot.x + 10 * PIXEL, 8), innerWidth - w - 8);
+    // Abre à direita do mascote; se não couber, abre à esquerda, para
+    // não cobrir o próprio boneco nem sair pela borda.
+    const right = mascot.x + 10 * PIXEL;
+    const fits = right + w + 8 <= innerWidth;
+    const x = Math.min(Math.max(fits ? right : mascot.x - w - 8, 8), innerWidth - w - 8);
     const y = Math.min(Math.max(mascot.y - 12, 8), innerHeight - h - 8);
     bubble.style.left = Math.round(x) + 'px';
     bubble.style.top = Math.round(y) + 'px';
@@ -277,9 +281,9 @@
     // Mascote entra depois que a construção termina
     setTimeout(() => {
       mascot.visible = true;
-      mascot.x = -40;
+      mascot.x = innerWidth + 40;
       mascot.y = innerHeight - 170;
-      mascot.tx = 32;
+      mascot.tx = Math.max(innerWidth - 220, innerWidth * 0.62);
       mascot.ty = innerHeight - 170;
       if (!skipped) setTimeout(() => say(t('game.welcome')), 900);
     }, skipped ? 0 : 400);
@@ -446,7 +450,7 @@
 
     // Mascote volta pro canto a cada troca de seção
     if (mascot.visible) {
-      mascot.tx = 32;
+      mascot.tx = Math.max(innerWidth - 220, innerWidth * 0.62);
       mascot.ty = innerHeight - 170;
     }
 

@@ -35,10 +35,10 @@
     const cs = getComputedStyle(root);
     const pick = (n, fb) => (cs.getPropertyValue(n) || '').trim() || fb;
     return {
-      accent: pick('--accent', '#2fd4a7'),
-      accent2: pick('--accent-2', '#f2a43c'),
-      shadow: pick('--shadow', '#26302c'),
-      ink3: pick('--ink-3', '#a8b2ad')
+      accent: pick('--accent', '#6fb8e8'),
+      accent2: pick('--accent-2', '#e8a33d'),
+      shadow: pick('--shadow', '#332d24'),
+      ink3: pick('--ink-3', '#aba396')
     };
   }
   let colors = palette();
