@@ -4,8 +4,8 @@
 window.I18N = window.I18N || {};
 window.I18N.en = {
   // ─── META ───────────────────────────────────────────
-  'meta.title': 'Gustavo de Campos — Front-End Developer',
-  'meta.description': 'Gustavo de Campos is a front-end developer in Angra dos Reis, Brazil, building responsive, accessible web interfaces with care for the details.',
+  'meta.title': 'Gustavo de Campos — Full Stack Developer',
+  'meta.description': 'Gustavo de Campos is a full stack developer in Angra dos Reis, Brazil, building responsive, accessible web interfaces with care for the details.',
   'meta.ogDescription': 'Responsive, accessible web interfaces, built with care for the details.',
   'meta.locale': 'en_US',
 
@@ -27,7 +27,7 @@ window.I18N.en = {
   // ─── HERO ───────────────────────────────────────────
   'hero.skip': 'Skip intro',
   'hero.avatarAlt': 'Illustration of Gustavo de Campos smiling, on a teal background.',
-  'hero.role': 'A <em>detail-minded</em> front-end developer in Angra dos Reis, Brazil.',
+  'hero.role': 'A <em>detail-minded</em> full stack developer in Angra dos Reis, Brazil.',
   'hero.note': 'I spend hours on details 99% of people will never notice. The ones who do, don’t forget.',
 
   // ─── ABOUT ──────────────────────────────────────────
@@ -36,7 +36,7 @@ window.I18N.en = {
   'about.player': 'Player 1',
   'about.lvl': 'Lvl',
   'about.class': 'Class',
-  'about.classValue': 'Front-End Developer',
+  'about.classValue': 'Full Stack Developer',
   'about.loc': 'Base',
   'about.since': 'Since',
   'about.sinceValue': '2024 · 3 years in the field',
