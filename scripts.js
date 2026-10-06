@@ -84,8 +84,8 @@ function applyLang(next) {
 })();
 
 // ─── HERO: INTRO "BUILD" ──────────────────────────────
-// Fases: loading → celebrate → idle. Cada letra recebe --i e entra atrasada.
-// Sem .motion a seção já nasce em idle (o CSS cuida), então aqui só marcamos.
+// Fallback: so roda quando game.js nao assume (sem motion, ou falha de rede).
+// Divide o titulo em letras e revela o hero sem a construcao com operarios.
 (function heroIntro() {
   const hero = document.getElementById('inicio');
   const header = document.getElementById('siteHeader');
@@ -128,6 +128,10 @@ function applyLang(next) {
 
   if (reducedMotion) { finish(); return; }
 
+  // game.js assume a intro quando carrega. Este caminho continua existindo
+  // como fallback: se game.js falhar, o hero ainda aparece.
+  if (window.__gameIntro) return;
+
   const letters = host ? host.children.length : 0;
   // Espera a fonte, senão as letras entram no tamanho errado. Timeout evita
   // travar a intro se a Google Fonts demorar.
@@ -144,9 +148,8 @@ function applyLang(next) {
 
   fontReady.then(() => {
     if (done) return;
-    hero.dataset.phase = 'celebrate';
-    // 30ms por letra (igual ao delay no CSS) + folga pra animação settle
-    setTimeout(skipIntro, letters * 30 + 500);
+    // Fallback sem game.js: revela direto, sem fase intermediaria
+    setTimeout(skipIntro, letters * 30 + 300);
   });
 
   // Rede de segurança: a intro esconde o hero inteiro, então em nenhuma
@@ -319,6 +322,7 @@ const secrets = (function () {
     found.add(id);
     try { localStorage.setItem('secrets', JSON.stringify([...found])); } catch (e) { }
     render();
+    document.dispatchEvent(new CustomEvent('secret', { detail: { id } }));
     return true;
   }
 

@@ -792,23 +792,6 @@ h4 {
   width: 0.4em;
 }
 
-.motion .hero[data-phase="loading"] .letter {
-  opacity: 0;
-}
-
-.motion .hero[data-phase="celebrate"] .letter,
-.motion .hero[data-phase="idle"] .letter {
-  opacity: 1;
-  animation: settle 0.36s var(--step3) both;
-  animation-delay: calc(var(--i) * 30ms);
-}
-
-@keyframes settle {
-  0% { transform: translateY(-0.2em); }
-  60% { transform: translateY(0.0625em); }
-  100% { transform: translateY(0); }
-}
-
 @media (hover: hover) {
   .hero[data-phase="idle"] .letter {
     transition: transform var(--fast) var(--step2), color var(--fast) var(--step2);
@@ -860,14 +843,6 @@ h4 {
   .hero-links a:hover {
     color: var(--accent);
   }
-}
-
-/* Conteúdo do hero só aparece depois das letras */
-.motion .hero[data-phase="loading"] .hero-avatar,
-.motion .hero[data-phase="loading"] .hero-role,
-.motion .hero[data-phase="loading"] .hero-note,
-.motion .hero[data-phase="loading"] .hero-links {
-  opacity: 0;
 }
 
 .motion .hero-avatar,
@@ -1491,5 +1466,149 @@ html:not(.motion) .skip-intro {
 
   .term-out {
     font-size: var(--t-xs);
+  }
+}
+
+/* ─── CAMADA DE JOGO ─────────────────────────────────
+   Operários, mascote e HUD. Tudo decorativo e por cima
+   da página: nada aqui pode capturar clique nem esconder
+   conteúdo de forma permanente. */
+
+.crew-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  image-rendering: pixelated;
+}
+
+/* Balão de fala do mascote */
+.crew-bubble {
+  position: fixed;
+  z-index: 31;
+  max-width: min(42ch, calc(100vw - 48px));
+  padding: var(--s-1) var(--s-2);
+  background: var(--bg-2);
+  color: var(--ink);
+  font-size: var(--t-xs);
+  line-height: 18px;
+  box-shadow: inset 0 0 0 2px var(--accent), 3px 3px 0 var(--shadow);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--fast) var(--step2);
+}
+
+.crew-bubble[data-on] {
+  opacity: 1;
+}
+
+/* ─── HERO EM CONSTRUÇÃO ─────────────────────────────
+   As peças nascem invisíveis e só materializam quando o
+   operário chega. data-solid é posto pelo game.js. */
+.motion .hero[data-phase="building"] [data-part] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.motion .hero [data-part][data-solid] {
+  opacity: 1;
+  pointer-events: auto;
+  animation: land 0.28s var(--step3) both;
+}
+
+@keyframes land {
+  0% { transform: translateY(-8px); }
+  60% { transform: translateY(2px); }
+  100% { transform: translateY(0); }
+}
+
+/* Enquanto constrói, o botão de pular fica visível */
+.hero[data-phase="building"] .skip-intro {
+  display: inline-flex;
+}
+
+/* ─── HUD ────────────────────────────────────────────
+   Fase, barra de progresso e pontuação. */
+.hud {
+  position: fixed;
+  left: 50%;
+  bottom: var(--s-2);
+  z-index: 29;
+  display: flex;
+  align-items: center;
+  gap: var(--s-2);
+  padding: var(--s-1) var(--s-2);
+  background: var(--bg-2);
+  font-size: var(--t-xs);
+  color: var(--ink-3);
+  box-shadow: inset 0 0 0 2px var(--shadow), 3px 3px 0 var(--shadow);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 8px);
+  transition: opacity var(--mid) var(--step2), transform var(--mid) var(--step2);
+}
+
+.hud[data-on] {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+.hud-phase {
+  white-space: nowrap;
+  color: var(--ink-2);
+}
+
+.hud-bar {
+  display: flex;
+  gap: 2px;
+}
+
+.hud-bar span {
+  width: 6px;
+  height: 10px;
+  background: var(--shadow);
+}
+
+.hud-bar span.on {
+  background: var(--accent);
+}
+
+.hud-score {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.hud-score[data-bump] {
+  animation: bump 0.3s var(--step3);
+}
+
+@keyframes bump {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+}
+
+/* Em tela estreita o HUD some: ocupa espaço demais e
+   compete com o conteúdo. O portfólio vem primeiro. */
+@media (max-width: 720px) {
+  .hud {
+    display: none;
+  }
+
+  .crew-bubble {
+    font-size: 11px;
+    max-width: calc(100vw - 32px);
+  }
+}
+
+/* Sem motion não existe camada de jogo nenhuma */
+@media (prefers-reduced-motion: reduce) {
+  .crew-layer,
+  .crew-bubble,
+  .hud {
+    display: none !important;
+  }
+
+  .motion .hero[data-phase="building"] [data-part] {
+    opacity: 1 !important;
   }
 }

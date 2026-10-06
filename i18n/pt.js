@@ -113,6 +113,20 @@ window.I18N.pt = {
   'term.coffee': 'Combustível localizado.',
   'term.sudo': 'Boa tentativa.',
 
+  // ─── JOGO (consumido só pelo game.js) ───────────────
+  'game.welcome': 'Construí sozinho. Rola pra baixo.',
+  'game.secret': 'Segredo encontrado. +500',
+  'game.s1': 'Início',
+  'game.s1.say': 'Partiu.',
+  'game.s2': 'Player',
+  'game.s2.say': 'Escolha seu player. Só tem um.',
+  'game.s3': 'Missões',
+  'game.s3.say': 'Dois entregues. Os dois no ar.',
+  'game.s4': 'Progresso',
+  'game.s4.say': 'Três anos, bloco por bloco.',
+  'game.s5': 'Contato',
+  'game.s5.say': 'Digita help. Vai.',
+
   // ─── FOOTER ─────────────────────────────────────────
   'footer.copy': '© 2026 Gustavo de Campos. Feito à mão, com muito café.',
   'footer.secrets': 'Segredos',

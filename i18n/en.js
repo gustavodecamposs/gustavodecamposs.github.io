@@ -115,6 +115,20 @@ window.I18N.en = {
   'term.coffee': 'Fuel located.',
   'term.sudo': 'Nice try.',
 
+  // ─── JOGO (consumido só pelo game.js) ───────────────
+  'game.welcome': 'Built it myself. Scroll down.',
+  'game.secret': 'Secret found. +500',
+  'game.s1': 'Start',
+  'game.s1.say': 'Here we go.',
+  'game.s2': 'Player',
+  'game.s2.say': 'Choose your player. Only one to pick.',
+  'game.s3': 'Quests',
+  'game.s3.say': 'Two shipped. Both still running.',
+  'game.s4': 'Progress',
+  'game.s4.say': 'Three years, block by block.',
+  'game.s5': 'Contact',
+  'game.s5.say': 'Type help. Go on.',
+
   // ─── FOOTER ─────────────────────────────────────────
   'footer.copy': '© 2026 Gustavo de Campos. Handmade, with plenty of coffee.',
   'footer.secrets': 'Secrets',

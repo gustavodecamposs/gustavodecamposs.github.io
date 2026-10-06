@@ -37,7 +37,11 @@
         }
       } catch (e) { }
       d.classList.add('js');
-      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) d.classList.add('motion');
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        d.classList.add('motion');
+        // Avisa o scripts.js que game.js vai assumir a intro do hero
+        window.__gameIntro = true;
+      }
     }();
   </script>
 
@@ -515,6 +519,9 @@
   <script src="i18n/en.js"></script>
   <script src="i18n/pt.js"></script>
   <script src="scripts.js"></script>
+  <!-- Camada de jogo: operarios, mascote, HUD. So enfeite:
+       o site funciona inteiro sem este arquivo. -->
+  <script src="game.js"></script>
 </body>
 
 </html>
