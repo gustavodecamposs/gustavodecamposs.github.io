@@ -163,11 +163,21 @@ function applyLang(next) {
 })();
 
 // ─── REVEAL AO ROLAR ──────────────────────────────────
-// O reveal é enfeite: nunca pode deixar conteúdo escondido. Por isso
-// existe uma rede de segurança que revela tudo se o observer não agir.
+// Três gatilhos, todos marcados com .is-in quando entram na tela:
+//   [data-reveal]   bloco desliza 8px pra dentro
+//   [data-lay]      varredura com clip-path em 12 degraus
+//   [data-cascade]  filhos aparecem um a um, 18ms entre cada
+//
+// Isto é enfeite: nunca pode deixar conteúdo escondido. Daí a rede de
+// segurança que revela tudo se o observer não agir.
 (function reveal() {
-  const items = [...document.querySelectorAll('[data-reveal]')];
+  const items = [...document.querySelectorAll('[data-reveal], [data-lay], [data-cascade]')];
   const showAll = () => items.forEach(el => el.classList.add('is-in'));
+
+  // Numera os filhos pra cascata: o CSS lê --i pra escalonar o atraso.
+  document.querySelectorAll('[data-cascade]').forEach(list => {
+    [...list.children].forEach((child, i) => child.style.setProperty('--i', String(i)));
+  });
 
   if (reducedMotion || !('IntersectionObserver' in window)) {
     showAll();

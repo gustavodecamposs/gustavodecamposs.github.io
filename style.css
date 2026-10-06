@@ -326,16 +326,68 @@ h4 {
 }
 
 /* ─── REVEAL ─────────────────────────────────────── */
-/* Só roda com .motion (JS ativo e sem reduced-motion) */
+/* Vocabulário de jogo, não de site: nada faz fade. As coisas
+   não existem e então existem, ou são varridas pra dentro da
+   tela em degraus visíveis. Fade suave entregaria o truque.
+
+   Três padrões:
+     lay      varredura com clip-path em 12 degraus (imagens, cartões)
+     block-in liga a visibilidade, escalonado por --i (listas, grades)
+     round-in deslize curto de 8px (painéis pequenos)
+
+   Só roda com .motion (JS ativo e sem reduced-motion). */
+
 .motion [data-reveal] {
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity var(--mid) var(--step3), transform var(--mid) var(--step3);
+  visibility: hidden;
 }
 
 .motion [data-reveal].is-in {
-  opacity: 1;
-  transform: none;
+  visibility: visible;
+}
+
+/* round-in: o bloco inteiro entra deslizando */
+.motion [data-reveal].is-in {
+  animation: round-in 0.22s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+@keyframes round-in {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+/* lay: varredura da esquerda pra direita, 12 degraus.
+   Vale pra imagem de projeto e retrato: o conteúdo é "assentado". */
+.motion [data-lay] {
+  clip-path: inset(0 100% 0 0);
+}
+
+.motion [data-lay].is-in {
+  animation: lay 0.72s steps(12, end) forwards;
+}
+
+@keyframes lay {
+  to {
+    clip-path: inset(0);
+  }
+}
+
+/* block-in: cada filho aparece de uma vez, 18ms depois do anterior.
+   Duração de 1ms porque não há transição — só liga a visibilidade. */
+.motion [data-cascade] > * {
+  visibility: hidden;
+}
+
+.motion [data-cascade].is-in > * {
+  visibility: visible;
+  animation: block-in 1ms calc(var(--i, 0) * 18ms) backwards;
+}
+
+@keyframes block-in {
+  0% {
+    visibility: hidden;
+  }
 }
 
 /* ─── REDUCED MOTION ─────────────────────────────── */
