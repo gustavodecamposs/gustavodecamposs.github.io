@@ -19,9 +19,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..400&family=Instrument+Sans:wght@400..600&family=DM+Mono:wght@400;500&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
 
   <!-- Tema, idioma e flags antes do CSS pintar -->
   <script>
@@ -50,32 +48,28 @@
 <body>
   <a class="skip-link" href="#conteudo" data-i18n="skip">Skip to content</a>
 
-  <!-- Ícones de contato: traço fino, como os do tema. Usados com <use href="#i-..."> -->
+  <!-- Ícones em grade de pixels: traços retos, cantos quadrados, shape-rendering crispEdges -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
-    <symbol id="i-github" viewBox="0 0 24 24">
-      <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.4 5.4 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
-      <path d="M9 18c-4.51 2-5-2-7-2" />
+    <symbol id="i-github" viewBox="0 0 16 16">
+      <path d="M2 2h2v2H2zM12 2h2v2h-2zM4 4h2v2H4zM10 4h2v2h-2zM2 6h2v4H2zM12 6h2v4h-2zM6 4h4v2H6zM4 10h2v2H4zM10 10h2v2h-2zM6 12h4v2H6zM5 6h2v2H5zM9 6h2v2H9z" />
     </symbol>
-    <symbol id="i-linkedin" viewBox="0 0 24 24">
-      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" />
-      <rect x="2" y="9" width="4" height="12" />
-      <circle cx="4" cy="4" r="2" />
+    <symbol id="i-linkedin" viewBox="0 0 16 16">
+      <path d="M2 2h3v3H2zM2 6h3v8H2zM7 6h3v1H7zM10 6h4v1h-4zM13 7h1v7h-1zM10 8h1v6h-1zM7 7h3v7H7z" />
     </symbol>
-    <symbol id="i-instagram" viewBox="0 0 24 24">
-      <rect x="2" y="2" width="20" height="20" rx="5" />
-      <circle cx="12" cy="12" r="4" />
-      <path d="M17.5 6.5h.01" />
+    <symbol id="i-instagram" viewBox="0 0 16 16">
+      <path d="M2 2h12v2H2zM2 12h12v2H2zM2 4h2v8H2zM12 4h2v8h-2zM6 6h4v1H6zM5 7h1v2H5zM10 7h1v2h-1zM6 9h4v1H6zM11 4h2v2h-2z" />
     </symbol>
-    <symbol id="i-whatsapp" viewBox="0 0 24 24">
-      <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22z" />
-      <path d="M9 9.5c0 3 2.5 5.5 5.5 5.5l1-1.5-2-1-1 .8a4 4 0 0 1-1.8-1.8l.8-1-1-2L9 9.5z" />
+    <symbol id="i-whatsapp" viewBox="0 0 16 16">
+      <path d="M4 2h8v2H4zM2 4h2v6H2zM12 4h2v6h-2zM4 10h2v2H4zM10 10h2v2h-2zM6 12h4v2H6zM2 12h2v2H2zM1 13h1v2H1zM5 5h2v3H5zM9 8h2v2H9zM7 8h2v2H7z" />
     </symbol>
-    <symbol id="i-mail" viewBox="0 0 24 24">
-      <rect x="2" y="4" width="20" height="16" rx="2" />
-      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+    <symbol id="i-mail" viewBox="0 0 16 16">
+      <path d="M1 3h14v2H1zM1 5h2v8H1zM13 5h2v8h-2zM1 11h14v2H1zM3 5h2v2H3zM11 5h2v2h-2zM5 7h2v2H5zM9 7h2v2H9zM7 9h2v1H7z" />
     </symbol>
-    <symbol id="i-up" viewBox="0 0 24 24">
-      <path d="M12 19V5M6 11l6-6 6 6" />
+    <symbol id="i-up" viewBox="0 0 16 16">
+      <path d="M7 2h2v12H7zM5 4h2v2H5zM9 4h2v2H9zM3 6h2v2H3zM11 6h2v2h-2z" />
+    </symbol>
+    <symbol id="i-ext" viewBox="0 0 16 16">
+      <path d="M6 2h8v2H6zM12 4h2v8h-2zM2 6h2v8H2zM4 12h8v2H4zM6 8h2v2H6zM8 6h2v2H8z" />
     </symbol>
   </svg>
 
@@ -83,14 +77,14 @@
   <header class="site-header" id="siteHeader">
     <nav class="nav wrap" aria-label="Main" data-i18n-attr="aria-label:nav.label">
       <a class="brand" href="#inicio" aria-label="Gustavo de Campos, home" data-i18n-attr="aria-label:nav.home">
-        <span class="brand-mark" aria-hidden="true">G<em>C</em></span>
+        <span class="brand-mark" id="brandMark" aria-hidden="true">G<em>C</em></span>
         <span class="brand-name">Gustavo C.</span>
       </a>
 
       <ul class="nav-links">
         <li><a href="#sobre" data-nav data-i18n="nav.about">About</a></li>
         <li><a href="#projetos" data-nav data-i18n="nav.projects">Projects</a></li>
-        <li><a href="#experiencia" data-nav data-i18n="nav.experience">Experience</a></li>
+        <li><a href="#progresso" data-nav data-i18n="nav.progress">Progress</a></li>
         <li><a href="#contato" data-nav data-i18n="nav.contact">Contact</a></li>
       </ul>
 
@@ -107,12 +101,13 @@
           <button class="lang-btn" type="button" data-lang="pt" lang="pt-BR" aria-label="Português" aria-pressed="false">PT</button>
         </div>
         <button class="theme-btn" id="themeToggle" type="button" aria-label="Switch to light theme">
-          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />
+          <svg class="i-moon" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M5 2h5v2H5zM3 4h2v2H3zM2 6h2v4H2zM3 10h2v2H3zM5 12h5v2H5zM10 10h2v2h-2zM10 4h2v2h-2z"
+              fill="currentColor" stroke="none" />
           </svg>
-          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="4" />
-            <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+          <svg class="i-sun" viewBox="0 0 16 16" aria-hidden="true">
+            <path d="M6 6h4v4H6zM7 3h2v2H7zM7 11h2v2H7zM3 7h2v2H3zM11 7h2v2h-2zM4 4h2v2H4zM10 4h2v2h-2zM4 10h2v2H4zM10 10h2v2h-2z"
+              fill="currentColor" stroke="none" />
           </svg>
         </button>
         <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mobileMenu">
@@ -124,365 +119,399 @@
 
   <div class="mobile-menu" id="mobileMenu" hidden>
     <ol class="mobile-links">
-      <li><a href="#sobre"><span class="mono">01</span><span data-i18n="nav.about">About</span></a></li>
-      <li><a href="#projetos"><span class="mono">02</span><span data-i18n="nav.projects">Projects</span></a></li>
-      <li><a href="#experiencia"><span class="mono">03</span><span data-i18n="nav.experience">Experience</span></a></li>
-      <li><a href="#contato"><span class="mono">04</span><span data-i18n="nav.contact">Contact</span></a></li>
+      <li><a href="#sobre"><span class="num">01</span><span data-i18n="nav.about">About</span></a></li>
+      <li><a href="#projetos"><span class="num">02</span><span data-i18n="nav.projects">Projects</span></a></li>
+      <li><a href="#progresso"><span class="num">03</span><span data-i18n="nav.progress">Progress</span></a></li>
+      <li><a href="#contato"><span class="num">04</span><span data-i18n="nav.contact">Contact</span></a></li>
     </ol>
-    <div class="mobile-foot mono">
+    <div class="mobile-foot">
       <a href="mailto:gustavoo.dcsilva@gmail.com">gustavoo.dcsilva@gmail.com</a>
-      <span>23°00'24"S 44°19'05"W</span>
+      <span>23&deg;00'24"S 44&deg;19'05"W</span>
     </div>
   </div>
 
   <main id="conteudo">
 
     <!-- ─── HERO ─────────────────────────────────────── -->
-    <section class="hero" id="inicio" aria-labelledby="hero-title">
-      <!-- Fundo: estrelas na posição real do céu sobre Angra dos Reis neste momento -->
-      <!-- Tema claro: no lugar do céu, o relevo em curvas de nível (de dia, o mapa) -->
-      <div class="hero-bg" aria-hidden="true"><canvas id="stars"></canvas><canvas id="topo"></canvas></div>
+    <!-- data-phase: loading > celebrate > idle. O JS avança; sem .motion nasce idle. -->
+    <section class="hero dots" id="inicio" data-phase="loading" aria-labelledby="hero-title">
+      <button class="skip-intro" id="skipIntro" type="button">
+        <span data-i18n="hero.skip">Skip intro</span><kbd>Esc</kbd>
+      </button>
 
       <div class="hero-stage wrap">
-        <img class="hero-avatar" src="img/eu.webp" width="1024" height="1536" decoding="async" fetchpriority="high"
+        <img class="hero-avatar" src="img/eu.webp" width="96" height="96" decoding="async" fetchpriority="high"
           alt="Illustration of Gustavo de Campos smiling, on a teal background." data-i18n-attr="alt:hero.avatarAlt" />
 
-        <h1 class="hero-title" id="hero-title">
-          <span class="hl-in" data-split>Gustavo de Campos</span>
+        <!-- aria-label porque as letras viram spans individuais: sem ele o
+             leitor de tela soletraria o nome -->
+        <h1 class="hero-title" id="hero-title" aria-label="Gustavo de Campos">
+          <span data-letters aria-hidden="true">Gustavo de Campos</span>
         </h1>
 
         <p class="hero-role" data-i18n-html="hero.role">A <em>detail-minded</em> front-end developer in Angra dos Reis, Brazil.</p>
-        <p class="hero-note" data-i18n="hero.note">I spend hours on details 99% of people will never notice. The ones who do, don’t forget.</p>
+        <p class="hero-note" data-i18n="hero.note">I spend hours on details 99% of people will never notice. The ones who do, don&rsquo;t forget.</p>
 
-        <ul class="hero-links mono">
-          <li><a href="https://github.com/gustavodecamposs" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-github" /></svg>GitHub</a></li>
-          <li><a href="https://www.linkedin.com/in/gustavodecamposs/" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-linkedin" /></svg>LinkedIn</a></li>
-          <li><a href="https://www.instagram.com/gustavoo.dcs/" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-instagram" /></svg>Instagram</a></li>
-          <li><a href="https://wa.me/5524974051952?text=Hi%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20talk!" target="_blank" rel="noopener" data-i18n-attr="href:contact.whatsapp"><svg class="ico" aria-hidden="true"><use href="#i-whatsapp" /></svg>WhatsApp</a></li>
+        <ul class="hero-links">
+          <li><a href="https://github.com/gustavodecamposs" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-github" /></svg>GitHub<span class="arw" aria-hidden="true">&#8599;</span></a></li>
+          <li><a href="https://www.linkedin.com/in/gustavodecamposs/" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-linkedin" /></svg>LinkedIn<span class="arw" aria-hidden="true">&#8599;</span></a></li>
+          <li><a href="https://www.instagram.com/gustavoo.dcs/" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-instagram" /></svg>Instagram<span class="arw" aria-hidden="true">&#8599;</span></a></li>
+          <li><a href="https://wa.me/5524974051952?text=Hi%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20talk!" target="_blank" rel="noopener" data-i18n-attr="href:contact.whatsapp"><svg class="ico" aria-hidden="true"><use href="#i-whatsapp" /></svg>WhatsApp<span class="arw" aria-hidden="true">&#8599;</span></a></li>
           <li><a href="mailto:gustavoo.dcsilva@gmail.com"><svg class="ico" aria-hidden="true"><use href="#i-mail" /></svg><span data-i18n="contact.email">Email</span></a></li>
         </ul>
       </div>
     </section>
 
-    <!-- ─── SOBRE ────────────────────────────────────── -->
+    <!-- ─── SOBRE: FICHA DE PERSONAGEM ───────────────── -->
     <section class="sec" id="sobre" aria-labelledby="sobre-title">
       <div class="wrap">
         <header class="sec-head" data-reveal>
-          <p class="sec-index mono" data-i18n="about.index">01 — About</p>
-          <h2 class="sec-title" id="sobre-title">
-            <span class="ln"><span data-i18n="about.title1">Code is just the tool.</span></span>
-            <span class="ln"><span data-i18n-html="about.title2"><em>People</em> are what matter.</span></span>
-          </h2>
+          <span class="sec-index" data-i18n="about.index">01 — About</span>
+          <h2 class="sec-title" id="sobre-title" data-i18n="about.title">Choose your player</h2>
         </header>
 
-        <div class="about">
-          <figure class="about-fig" data-reveal>
-            <img src="img/eu.webp" width="1024" height="1536" loading="lazy" decoding="async"
-              alt="Illustration of Gustavo de Campos: a young man with short dark hair, a light beard and a black T-shirt, smiling on a teal background."
-              data-i18n-attr="alt:about.photoAlt" />
-            <figcaption class="mono" data-i18n="about.caption">Fig. 01 — the author</figcaption>
-          </figure>
-
-          <div class="about-text">
-            <p class="about-lead" data-i18n="about.lead">
-              I’m Gustavo, a front-end developer in Angra dos Reis, Brazil. I believe no interface is good unless
-              the people using it can feel it — and that every detail on a screen needs a reason to be there.
-            </p>
-            <p data-i18n="about.p1">
-              I have systems in production for the City of Angra dos Reis and take on independent projects. I’m
-              expanding into the back end with PHP/Laravel and C#/.NET so I can deliver complete solutions.
-            </p>
-            <p data-i18n="about.p2">
-              When I’m not coding, I’m listening to music, hunting for design references, or trying to figure out
-              why that CSS didn’t do what I wanted. Comes with the job.
-            </p>
-
-            <ol class="principles">
-              <li>
-                <h3 data-i18n="about.pr1.title">Empathy first</h3>
-                <p data-i18n="about.pr1.text">I think about who will use it before writing the first line.</p>
-              </li>
-              <li>
-                <h3 data-i18n="about.pr2.title">Details matter</h3>
-                <p data-i18n="about.pr2.text">The millimeters and milliseconds that make the difference.</p>
-              </li>
-              <li>
-                <h3 data-i18n="about.pr3.title">Mobile first</h3>
-                <p data-i18n="about.pr3.text">If it doesn’t work on a phone, it doesn’t work.</p>
-              </li>
-              <li>
-                <h3 data-i18n="about.pr4.title">Always learning</h3>
-                <p data-i18n="about.pr4.text">Back end today, so I can ship the whole product tomorrow.</p>
-              </li>
-            </ol>
+        <div class="player" data-reveal>
+          <div>
+            <figure class="player-portrait">
+              <img src="img/eu.webp" width="1024" height="1536" loading="lazy" decoding="async"
+                alt="Illustration of Gustavo de Campos smiling, on a teal background." data-i18n-attr="alt:hero.avatarAlt" />
+            </figure>
+            <div class="player-badge">
+              <span data-i18n="about.player">Player 1</span>
+              <span><span data-i18n="about.lvl">Lvl</span> <b>3</b></span>
+            </div>
           </div>
-        </div>
 
-        <div class="stack">
-          <p class="stack-label mono" data-i18n="stack.label">Tools</p>
-          <ul class="stack-list">
-            <li><i style="--i:url(img/stack/html5.svg)" aria-hidden="true"></i>HTML</li>
-            <li><i style="--i:url(img/stack/css3.svg)" aria-hidden="true"></i>CSS</li>
-            <li><i style="--i:url(img/stack/javascript.svg)" aria-hidden="true"></i>JavaScript</li>
-            <li><i style="--i:url(img/stack/bootstrap.svg)" aria-hidden="true"></i>Bootstrap</li>
-            <li><i style="--i:url(img/stack/git.svg)" aria-hidden="true"></i>Git &amp; GitHub</li>
-            <li><i style="--i:url(img/stack/figma.svg)" aria-hidden="true"></i>Figma</li>
-            <li><i style="--i:url(img/stack/php.svg)" aria-hidden="true"></i>PHP / Laravel <em data-i18n="stack.learning">learning</em></li>
-            <li><i style="--i:url(img/stack/sql.svg)" aria-hidden="true"></i>MySQL</li>
-            <li><i style="--i:url(img/stack/dotnet.svg)" aria-hidden="true"></i>C# / .NET <em data-i18n="stack.learning">learning</em></li>
-          </ul>
+          <div class="player-body">
+            <dl class="player-id">
+              <dt data-i18n="about.class">Class</dt>
+              <dd data-i18n="about.classValue">Front-End Developer</dd>
+              <dt data-i18n="about.loc">Base</dt>
+              <dd>Angra dos Reis, BR &middot; <span>23&deg;00'24"S 44&deg;19'05"W</span></dd>
+              <dt data-i18n="about.since">Since</dt>
+              <dd data-i18n="about.sinceValue">2024 &middot; 3 years in the field</dd>
+            </dl>
+
+            <div class="player-prose read">
+              <p data-i18n="about.p1">I build web interfaces that work for the person on the other side of the screen — not just for the spec. Two of them are running in production for my city hall right now.</p>
+              <p data-i18n="about.p2">When I am not coding, I am listening to music, hunting for design references, or trying to figure out why that CSS did not do what I wanted.</p>
+            </div>
+
+            <div>
+              <h3 class="rule" data-i18n="about.inventory">Inventory</h3>
+              <ol class="inventory">
+                <li>
+                  <span class="mark" aria-hidden="true">&gt;</span>
+                  <span>SIGA Angra</span>
+                  <span class="dotfill" aria-hidden="true"></span>
+                  <span class="meta">2024 &middot; <span data-i18n="about.inProduction">in production</span></span>
+                </li>
+                <li>
+                  <span class="mark" aria-hidden="true">&gt;</span>
+                  <span>Banco de Talentos</span>
+                  <span class="dotfill" aria-hidden="true"></span>
+                  <span class="meta">2025 &middot; <span data-i18n="about.inProduction">in production</span></span>
+                </li>
+                <li>
+                  <span class="mark" aria-hidden="true">&gt;</span>
+                  <span data-i18n="about.loginStudy">Bootstrap login screen</span>
+                  <span class="dotfill" aria-hidden="true"></span>
+                  <span class="meta">2024 &middot; <span data-i18n="about.study">study</span></span>
+                </li>
+              </ol>
+            </div>
+
+            <div>
+              <h3 class="rule" data-i18n="about.stats">Stats</h3>
+              <!-- As células são decorativas; o valor vai no aria-label de cada .stat -->
+              <div class="stats">
+                <div class="stat" role="img" aria-label="HTML and CSS: 8 of 10">
+                  <span class="stat-name">HTML / CSS</span>
+                  <span class="stat-bar" data-level="8" aria-hidden="true"></span>
+                </div>
+                <div class="stat" role="img" aria-label="JavaScript: 7 of 10">
+                  <span class="stat-name">JavaScript</span>
+                  <span class="stat-bar" data-level="7" aria-hidden="true"></span>
+                </div>
+                <div class="stat" role="img" aria-label="Bootstrap: 7 of 10">
+                  <span class="stat-name">Bootstrap</span>
+                  <span class="stat-bar" data-level="7" aria-hidden="true"></span>
+                </div>
+                <div class="stat" role="img" aria-label="Git and GitHub: 7 of 10">
+                  <span class="stat-name">Git / GitHub</span>
+                  <span class="stat-bar" data-level="7" aria-hidden="true"></span>
+                </div>
+                <div class="stat" role="img" aria-label="Figma: 6 of 10">
+                  <span class="stat-name">Figma</span>
+                  <span class="stat-bar" data-level="6" aria-hidden="true"></span>
+                </div>
+                <div class="stat" role="img" aria-label="PHP and Laravel: 4 of 10">
+                  <span class="stat-name">PHP / Laravel</span>
+                  <span class="stat-bar" data-level="4" aria-hidden="true"></span>
+                </div>
+                <div class="stat" role="img" aria-label="MySQL: 4 of 10">
+                  <span class="stat-name">MySQL</span>
+                  <span class="stat-bar" data-level="4" aria-hidden="true"></span>
+                </div>
+                <div class="stat" role="img" aria-label="C sharp and dot NET: 3 of 10">
+                  <span class="stat-name">C# / .NET</span>
+                  <span class="stat-bar" data-level="3" aria-hidden="true"></span>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="rule" data-i18n="about.passives">Passive skills</h3>
+              <div class="passives">
+                <article class="passive">
+                  <h3 data-i18n="about.pr1.title">Empathy first</h3>
+                  <p data-i18n="about.pr1.text">I think about the person on the other side of the screen before I think about the code.</p>
+                </article>
+                <article class="passive">
+                  <h3 data-i18n="about.pr2.title">Details matter</h3>
+                  <p data-i18n="about.pr2.text">Spacing, contrast, the weight of a word. Small decisions are what make a page feel finished.</p>
+                </article>
+                <article class="passive">
+                  <h3 data-i18n="about.pr3.title">Mobile first</h3>
+                  <p data-i18n="about.pr3.text">Most people arrive on a phone. That is where I start, not where I patch things up.</p>
+                </article>
+                <article class="passive">
+                  <h3 data-i18n="about.pr4.title">Always learning</h3>
+                  <p data-i18n="about.pr4.text">Front end got me in. Back end is where I am heading, one project at a time.</p>
+                </article>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="rule" data-i18n="about.special">Special move</h3>
+              <div class="special">
+                <blockquote data-i18n="hero.note">I spend hours on details 99% of people will never notice. The ones who do, don&rsquo;t forget.</blockquote>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ─── PROJETOS ─────────────────────────────────── -->
+    <!-- ─── PROJETOS: QUESTS ─────────────────────────── -->
     <section class="sec" id="projetos" aria-labelledby="projetos-title">
       <div class="wrap">
         <header class="sec-head" data-reveal>
-          <p class="sec-index mono" data-i18n="projects.index">02 — Projects</p>
-          <h2 class="sec-title" id="projetos-title">
-            <span class="ln"><span data-i18n="projects.title1">What I’ve</span></span>
-            <span class="ln"><span data-i18n-html="projects.title2"><em>built so far.</em></span></span>
-          </h2>
-          <p class="sec-lede" data-i18n="projects.lede">
-            Two systems in production, used by the people of Angra dos Reis — plus what I studied along the way.
-          </p>
+          <span class="sec-index" data-i18n="projects.index">02 — Projects</span>
+          <h2 class="sec-title" id="projetos-title" data-i18n="projects.title">Look what we shipped</h2>
+          <p class="sec-lede" data-i18n="projects.lede">Two systems serving the city of Angra dos Reis, both live. Click through and poke at them.</p>
         </header>
 
-        <ol class="cases">
-
-          <li class="case case--feature" data-reveal>
-            <a class="plate" href="https://siga.angra.rj.gov.br/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
-              <img src="img/projetos/siga.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="" />
-              <span class="plate-meta mono">
-                <span data-i18n="projects.plate1">Plate 01</span><span>siga.angra.rj.gov.br</span><span>23°00'24"S 44°19'05"W</span>
-              </span>
-            </a>
-            <div class="case-info">
-              <div class="case-head">
-                <p class="case-num mono">01</p>
-                <h3 class="case-title">SIGA Angra</h3>
-                <p class="case-kicker" data-i18n="siga.kicker">City of Angra dos Reis, 2024 — the municipality’s geographic information system.</p>
-              </div>
-              <div class="case-body">
-                <p class="case-desc" data-i18n="siga.desc">
-                  I built the entire front end of Angra dos Reis’s geographic visualization platform: the interface,
-                  the user experience and the visual integration with the map data, with intuitive, responsive
-                  navigation.
-                </p>
-                <dl class="facts">
-                  <div><dt data-i18n="projects.role">Role</dt><dd data-i18n="siga.role">Entire front end</dd></div>
-                  <div><dt data-i18n="projects.stack">Stack</dt><dd>HTML, CSS, Bootstrap, JavaScript</dd></div>
-                </dl>
-                <p class="case-links">
-                  <a class="link-arrow" href="https://siga.angra.rj.gov.br/" target="_blank" rel="noopener" data-i18n-html="projects.live">View live site <span aria-hidden="true">↗</span></a>
-                </p>
-              </div>
+        <ol class="quests">
+          <li class="quest" data-reveal>
+            <figure class="quest-shot">
+              <img src="img/projetos/siga.webp" width="1200" height="750" loading="lazy" decoding="async"
+                alt="SIGA Angra interface showing a city map with data layers." data-i18n-attr="alt:siga.alt" />
+              <figcaption class="quest-domain">siga.angra.rj.gov.br</figcaption>
+            </figure>
+            <div class="quest-body">
+              <p class="quest-top">
+                <span>Quest 01</span>
+                <span class="quest-status" data-i18n="projects.done">Completed</span>
+              </p>
+              <h3 class="quest-title">SIGA Angra</h3>
+              <p class="quest-desc" data-i18n="siga.desc">The city hall geographic information system. Residents and staff use it to find what is where across the municipality.</p>
+              <dl class="quest-facts">
+                <dt data-i18n="projects.client">Client</dt>
+                <dd data-i18n="siga.client">City of Angra dos Reis</dd>
+                <dt data-i18n="projects.year">Year</dt>
+                <dd>2024</dd>
+                <dt data-i18n="projects.role">Role</dt>
+                <dd data-i18n="siga.role">Entire front end — interface, UX, visual integration with map data</dd>
+                <dt data-i18n="projects.stack">Stack</dt>
+                <dd>HTML &middot; CSS &middot; Bootstrap &middot; JavaScript</dd>
+              </dl>
+              <p>
+                <a class="btn btn--primary" href="https://siga.angra.rj.gov.br/" target="_blank" rel="noopener">
+                  <span data-i18n="projects.visit">See it live</span>
+                  <svg class="ico" aria-hidden="true"><use href="#i-ext" /></svg>
+                </a>
+              </p>
             </div>
           </li>
 
-          <li class="case" data-reveal>
-            <a class="plate" href="https://bancodetalentos.angra.rj.gov.br/home/" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
-              <img src="img/projetos/banco-talentos.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="" />
-              <span class="plate-meta mono">
-                <span data-i18n="projects.plate2">Plate 02</span><span>bancodetalentos.angra.rj.gov.br</span>
-              </span>
-            </a>
-            <div class="case-info">
-              <div class="case-head">
-                <p class="case-num mono">02</p>
-                <h3 class="case-title">Banco de Talentos</h3>
-                <p class="case-kicker" data-i18n="talentos.kicker">City of Angra dos Reis, 2025 — job openings and a registry of local professionals.</p>
-              </div>
-              <div class="case-body">
-                <p class="case-desc" data-i18n="talentos.desc">
-                  Full-stack development of Banco de Talentos, the City of Angra dos Reis’s talent pool web app,
-                  from the database to the interface.
-                </p>
-                <dl class="facts">
-                  <div><dt data-i18n="projects.role">Role</dt><dd data-i18n="talentos.role">Full stack</dd></div>
-                  <div><dt data-i18n="projects.stack">Stack</dt><dd>PHP, Laravel, MySQL</dd></div>
-                </dl>
-                <p class="case-links">
-                  <a class="link-arrow" href="https://bancodetalentos.angra.rj.gov.br/home/" target="_blank" rel="noopener" data-i18n-html="projects.live">View live site <span aria-hidden="true">↗</span></a>
-                </p>
-              </div>
+          <li class="quest" data-reveal>
+            <figure class="quest-shot">
+              <img src="img/projetos/banco-talentos.webp" width="1200" height="750" loading="lazy" decoding="async"
+                alt="Banco de Talentos interface listing job openings." data-i18n-attr="alt:talentos.alt" />
+              <figcaption class="quest-domain">bancodetalentos.angra.rj.gov.br</figcaption>
+            </figure>
+            <div class="quest-body">
+              <p class="quest-top">
+                <span>Quest 02</span>
+                <span class="quest-status" data-i18n="projects.done">Completed</span>
+              </p>
+              <h3 class="quest-title">Banco de Talentos</h3>
+              <p class="quest-desc" data-i18n="talentos.desc">Job openings and a registry of local professionals. My first full-stack build: database to interface.</p>
+              <dl class="quest-facts">
+                <dt data-i18n="projects.client">Client</dt>
+                <dd data-i18n="siga.client">City of Angra dos Reis</dd>
+                <dt data-i18n="projects.year">Year</dt>
+                <dd>2025</dd>
+                <dt data-i18n="projects.role">Role</dt>
+                <dd data-i18n="talentos.role">Full stack, database to interface</dd>
+                <dt data-i18n="projects.stack">Stack</dt>
+                <dd>PHP &middot; Laravel &middot; MySQL</dd>
+              </dl>
+              <p>
+                <a class="btn btn--primary" href="https://bancodetalentos.angra.rj.gov.br/home/" target="_blank" rel="noopener">
+                  <span data-i18n="projects.visit">See it live</span>
+                  <svg class="ico" aria-hidden="true"><use href="#i-ext" /></svg>
+                </a>
+              </p>
             </div>
           </li>
-
         </ol>
 
-        <div class="studies">
-          <p class="studies-label mono" data-i18n="studies.label">Studies</p>
-          <ul class="studies-list">
-            <li>
-              <span class="study-year mono">2024</span>
-              <span class="study-title" data-i18n="studies.loginTitle">Responsive login screen</span>
-              <span class="study-note" data-i18n="studies.loginNote">My first Bootstrap 5 project — where I learned that plain CSS and a framework complement each other.</span>
-              <a class="link-arrow" href="https://github.com/gustavodecamposs/Projeto-tela-de-login-com-bootstrap" target="_blank" rel="noopener" data-i18n-html="studies.code">Code <span aria-hidden="true">↗</span></a>
-            </li>
-          </ul>
-          <p class="studies-foot">
-            <span data-i18n="studies.foot">Freelance projects in progress will show up here once clients approve publishing them.</span>
-            <a class="link-arrow" href="https://github.com/gustavodecamposs" target="_blank" rel="noopener" data-i18n-html="studies.github">Everything on GitHub <span aria-hidden="true">↗</span></a>
+        <div data-reveal style="margin-top: var(--s-4); display: grid; gap: var(--s-2);">
+          <h3 class="rule" data-i18n="projects.side">Side quest</h3>
+          <div class="sidequest">
+            <span class="tag" data-i18n="about.study">Study</span>
+            <a href="https://github.com/gustavodecamposs/Projeto-tela-de-login-com-bootstrap" target="_blank" rel="noopener">
+              <span data-i18n="about.loginStudy">Bootstrap login screen</span>
+              <span class="arw" aria-hidden="true">&#8599;</span>
+            </a>
+            <p data-i18n="projects.sideText">My first Bootstrap 5 project — where I learned that plain CSS and a framework complement each other.</p>
+          </div>
+          <p class="quests-note" data-i18n="projects.note">Freelance work shows up here once clients approve publication.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── PROGRESSO ────────────────────────────────── -->
+    <!-- As barras são decorativas (aria-hidden); o texto ao lado carrega o dado. -->
+    <section class="sec" id="progresso" aria-labelledby="progresso-title">
+      <div class="wrap">
+        <header class="sec-head" data-reveal>
+          <span class="sec-index" data-i18n="progress.index">03 — Progress</span>
+          <h2 class="sec-title" id="progresso-title" data-i18n="progress.title">Three years, two systems live</h2>
+          <p class="sec-lede" data-i18n="progress.lede">Not a commit graph. The work that actually shipped, year by year.</p>
+        </header>
+
+        <div class="track" data-reveal>
+          <div class="track-row">
+            <span class="track-year">2024</span>
+            <div class="track-main">
+              <span class="track-bar" data-fill="8" data-total="16" aria-hidden="true"></span>
+              <span class="track-label" data-i18n="progress.y1">SIGA Angra went live &middot; started front end</span>
+              <span class="track-stack">HTML &middot; CSS &middot; Bootstrap &middot; JavaScript</span>
+            </div>
+          </div>
+          <div class="track-row">
+            <span class="track-year">2025</span>
+            <div class="track-main">
+              <span class="track-bar" data-fill="12" data-total="16" aria-hidden="true"></span>
+              <span class="track-label" data-i18n="progress.y2">Banco de Talentos went live &middot; first full-stack build</span>
+              <span class="track-stack">PHP &middot; Laravel &middot; MySQL</span>
+            </div>
+          </div>
+          <div class="track-row">
+            <span class="track-year">2026</span>
+            <div class="track-main">
+              <span class="track-bar" data-fill="16" data-total="16" aria-hidden="true"></span>
+              <span class="track-label" data-i18n="progress.y3">Freelance &middot; going deeper into back end</span>
+              <span class="track-stack">C# &middot; .NET &middot; APIs</span>
+            </div>
+          </div>
+
+          <p class="track-sum">
+            <span><b>3</b> <span data-i18n="progress.years">years</span></span>
+            <span><b>2</b> <span data-i18n="progress.systems">systems in production</span></span>
+            <span><b>1</b> <span data-i18n="progress.city">city served</span></span>
           </p>
         </div>
       </div>
     </section>
 
-    <!-- ─── EXPERIÊNCIA ──────────────────────────────── -->
-    <section class="sec" id="experiencia" aria-labelledby="exp-title">
+    <!-- ─── CONTATO: TERMINAL + CANAIS ───────────────── -->
+    <section class="sec" id="contato" aria-labelledby="contato-title">
       <div class="wrap">
         <header class="sec-head" data-reveal>
-          <p class="sec-index mono" data-i18n="exp.index">03 — Experience</p>
-          <h2 class="sec-title" id="exp-title">
-            <span class="ln"><span data-i18n-html="exp.title">The <em>path so far.</em></span></span>
-          </h2>
-          <p class="sec-lede" data-i18n="exp.lede">Each stage taught me something different.</p>
+          <span class="sec-index" data-i18n="contact.index">04 — Contact</span>
+          <h2 class="sec-title" id="contato-title" data-i18n="contact.title">Go on, say hi</h2>
+          <p class="sec-lede" data-i18n="contact.lede">Type a command, or just use the buttons. Both get to me.</p>
         </header>
 
-        <ol class="ledger">
-          <li class="ledger-row is-current">
-            <p class="ledger-period mono" data-i18n="exp.present2026">2026 — present</p>
-            <div class="ledger-role">
-              <h3 data-i18n="exp.job1.role">Front-End Developer</h3>
-              <p class="mono" data-i18n="exp.job1.meta">Freelance · Independent projects</p>
+        <div class="contact-grid" data-reveal>
+          <!-- Terminal. O <input> é real: teclado mobile e leitor de tela precisam dele. -->
+          <div class="term">
+            <div class="term-bar">
+              <span class="term-dot" aria-hidden="true"></span>
+              <span class="term-dot" aria-hidden="true"></span>
+              <span class="term-dot" aria-hidden="true"></span>
+              <span>guest@gustavodecampos</span>
             </div>
-            <p class="ledger-desc" data-i18n="exp.job1.desc">
-              Web interfaces on demand, from landing pages to form-based systems. Focused on responsiveness,
-              performance and the detail the client didn’t ask for, but notices.
+            <div class="term-out" id="termOut" role="log" aria-live="polite" aria-atomic="false"></div>
+            <div class="term-line">
+              <span class="term-prompt" aria-hidden="true">guest@gustavodecampos:~$</span>
+              <span class="term-mirror" id="termMirror" aria-hidden="true"></span>
+              <span class="term-cursor" aria-hidden="true"></span>
+              <label class="sr-only" for="termInput" data-i18n="contact.termLabel">Type a command. Try help.</label>
+              <input class="term-input" id="termInput" type="text" autocomplete="off" autocapitalize="off"
+                spellcheck="false" data-mail="gustavoo.dcsilva@gmail.com" />
+            </div>
+          </div>
+
+          <!-- Caminho óbvio pra quem não quer digitar -->
+          <div>
+            <h3 class="rule" data-i18n="contact.channels">Channels</h3>
+            <div class="channels">
+              <a class="btn" href="https://wa.me/5524974051952?text=Hi%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20talk!"
+                target="_blank" rel="noopener" data-i18n-attr="href:contact.whatsapp">
+                <span>WhatsApp</span>
+                <svg class="ico" aria-hidden="true"><use href="#i-whatsapp" /></svg>
+              </a>
+              <a class="btn" href="mailto:gustavoo.dcsilva@gmail.com">
+                <span data-i18n="contact.email">Email</span>
+                <svg class="ico" aria-hidden="true"><use href="#i-mail" /></svg>
+              </a>
+              <a class="btn" href="https://github.com/gustavodecamposs" target="_blank" rel="noopener">
+                <span>GitHub</span>
+                <svg class="ico" aria-hidden="true"><use href="#i-github" /></svg>
+              </a>
+              <a class="btn" href="https://www.linkedin.com/in/gustavodecamposs/" target="_blank" rel="noopener">
+                <span>LinkedIn</span>
+                <svg class="ico" aria-hidden="true"><use href="#i-linkedin" /></svg>
+              </a>
+            </div>
+            <p class="channels-note">
+              gustavoo.dcsilva@gmail.com<br />
+              (24) 97405-1952<br />
+              Angra dos Reis, RJ
             </p>
-          </li>
-          <li class="ledger-row is-current">
-            <p class="ledger-period mono" data-i18n="exp.present2025">2025 — present</p>
-            <div class="ledger-role">
-              <h3 data-i18n="exp.job2.role">Web Development Student</h3>
-              <p class="mono" data-i18n="exp.job2.meta">Self-taught + courses</p>
-            </div>
-            <p class="ledger-desc" data-i18n="exp.job2.desc">
-              I started with the front end — HTML, CSS, JavaScript and interface design. Now I’m expanding into
-              the back end with C# .NET and PHP Laravel.
-            </p>
-          </li>
-          <li class="ledger-row is-current">
-            <p class="ledger-period mono" data-i18n="exp.present2026">2026 — present</p>
-            <div class="ledger-role">
-              <h3 data-i18n="exp.job3.role">Learning Back-End</h3>
-              <p class="mono" data-i18n="exp.job3.meta">PHP/Laravel · C#/.NET · MySQL</p>
-            </div>
-            <p class="ledger-desc" data-i18n="exp.job3.desc">
-              Applying what Banco de Talentos demanded in practice: database design, server-side logic and
-              APIs, so I can deliver complete solutions, not just the interface.
-            </p>
-          </li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- ─── CONTATO ──────────────────────────────────── -->
-    <section class="sec contact" id="contato" aria-labelledby="contato-title">
-      <video class="contact-bg" muted loop playsinline preload="none" aria-hidden="true"
-        data-src="video/ocean-night.mp4"></video>
-      <canvas id="topoContact" aria-hidden="true"></canvas>
-      <div class="wrap">
-        <header class="sec-head" data-reveal>
-          <p class="sec-index mono" data-i18n="contact.index">04 — Contact</p>
-          <h2 class="sec-title" id="contato-title">
-            <span class="ln"><span data-i18n="contact.title1">Got a project</span></span>
-            <span class="ln"><span data-i18n-html="contact.title2"><em>in mind?</em></span></span>
-          </h2>
-          <p class="sec-lede" data-i18n="contact.lede">
-            A proposal, a freelance job, a question, or just to talk tech. I answer everything.
-          </p>
-        </header>
-
-        <div class="contact-grid">
-          <dl class="channels">
-            <div>
-              <dt class="mono"><svg class="ico" aria-hidden="true"><use href="#i-whatsapp" /></svg>WhatsApp</dt>
-              <dd><a href="https://wa.me/5524974051952?text=Hi%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20talk!" target="_blank" rel="noopener" data-i18n-attr="href:contact.whatsapp">(24) 97405-1952</a></dd>
-            </div>
-            <div>
-              <dt class="mono"><svg class="ico" aria-hidden="true"><use href="#i-linkedin" /></svg>LinkedIn</dt>
-              <dd><a href="https://www.linkedin.com/in/gustavodecamposs/" target="_blank" rel="noopener">in/gustavodecamposs</a></dd>
-            </div>
-            <div>
-              <dt class="mono"><svg class="ico" aria-hidden="true"><use href="#i-github" /></svg>GitHub</dt>
-              <dd><a href="https://github.com/gustavodecamposs" target="_blank" rel="noopener">gustavodecamposs</a></dd>
-            </div>
-            <div>
-              <dt class="mono"><svg class="ico" aria-hidden="true"><use href="#i-instagram" /></svg>Instagram</dt>
-              <dd><a href="https://www.instagram.com/gustavoo.dcs/" target="_blank" rel="noopener">@gustavoo.dcs</a></dd>
-            </div>
-          </dl>
-
-          <!-- Resposta mais rápida: manda direto pro app, sem passar pelo formulário -->
-          <a class="btn contact-whatsapp" href="https://wa.me/5524974051952?text=Hi%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20talk!"
-            target="_blank" rel="noopener" data-i18n-attr="href:contact.whatsapp">
-            <svg class="ico" aria-hidden="true"><use href="#i-whatsapp" /></svg>
-            <span data-i18n="contact.whatsappCta">Message me on WhatsApp</span>
-          </a>
-
-          <!-- O formulário é um rascunho de e-mail: enviar abre o app de e-mail com tudo preenchido -->
-          <form class="letter" id="contactForm">
-            <div class="letter-row letter-row--to">
-              <span class="letter-k mono" data-i18n="contact.to">To</span>
-              <a class="letter-to" href="mailto:gustavoo.dcsilva@gmail.com">gustavoo.dcsilva@gmail.com</a>
-              <button class="copy-btn mono" type="button" id="copyMail" data-copy="gustavoo.dcsilva@gmail.com" data-i18n="contact.copy">Copy</button>
-              <span class="sr-only" id="copyStatus" aria-live="polite"></span>
-            </div>
-            <div class="letter-row">
-              <label class="letter-k mono" for="nome" data-i18n="contact.from">From</label>
-              <input type="text" id="nome" name="nome" autocomplete="name" placeholder="Your name" data-i18n-attr="placeholder:contact.namePh" required />
-            </div>
-            <div class="letter-row">
-              <label class="letter-k mono" for="email" data-i18n="contact.email">Email</label>
-              <input type="email" id="email" name="email" autocomplete="email" placeholder="you@example.com" data-i18n-attr="placeholder:contact.emailPh" required />
-            </div>
-            <div class="letter-row">
-              <label class="letter-k mono" for="assunto" data-i18n="contact.subject">Subject</label>
-              <input type="text" id="assunto" name="assunto" autocomplete="off" placeholder="What’s it about?" data-i18n-attr="placeholder:contact.subjectPh" />
-            </div>
-            <div class="letter-row letter-row--msg">
-              <label class="letter-k mono" for="mensagem" data-i18n="contact.message">Message</label>
-              <textarea id="mensagem" name="mensagem" rows="6" required></textarea>
-            </div>
-            <div class="letter-foot">
-              <p class="form-note" data-i18n="contact.note">Opens your email app with the message ready to send.</p>
-              <button type="submit" class="btn" id="sendBtn" data-i18n-html="contact.send">Send <span aria-hidden="true">→</span></button>
-            </div>
-          </form>
+          </div>
         </div>
       </div>
     </section>
 
   </main>
 
-  <!-- Aparece quando o hero sai da tela -->
-  <a class="to-top" id="toTop" href="#inicio" aria-label="Back to top" data-i18n-attr="aria-label:top.label">
+  <a class="to-top" id="toTop" href="#inicio" aria-label="Back to top" data-i18n-attr="aria-label:footer.toTop">
     <svg class="ico" aria-hidden="true"><use href="#i-up" /></svg>
   </a>
 
-  <!-- Fixo, sempre visível; canto oposto ao voltar-ao-topo -->
   <a class="wpp-fab" href="https://wa.me/5524974051952?text=Hi%2C%20I%20saw%20your%20portfolio%20and%20would%20like%20to%20talk!"
-    target="_blank" rel="noopener" aria-label="Talk on WhatsApp" data-i18n-attr="href:contact.whatsapp;aria-label:contact.whatsappCta">
+    target="_blank" rel="noopener" aria-label="WhatsApp" data-i18n-attr="href:contact.whatsapp;aria-label:contact.whatsappCta">
     <svg class="ico" aria-hidden="true"><use href="#i-whatsapp" /></svg>
   </a>
 
   <footer class="site-footer">
-    <div class="wrap">
-      <div class="footer-map mono" aria-hidden="true">
-        <span class="map-scale">0 <span class="map-scale-bar"><i></i><i></i><i></i><i></i></span> 1 km</span>
-        <span>23°00'24"S 44°19'05"W</span>
-      </div>
-      <div class="footer-row">
-        <p class="footer-copy" data-i18n="footer.copy">© 2026 Gustavo de Campos. Handmade, with plenty of coffee.</p>
-        <a class="link-arrow" href="#inicio" data-i18n-html="footer.top">Back to top <span aria-hidden="true">↑</span></a>
-      </div>
+    <div class="wrap footer-row">
+      <span data-i18n="footer.copy">&copy; 2026 Gustavo de Campos. Handmade, with plenty of coffee.</span>
+      <span class="secrets">
+        <span data-i18n="footer.secrets">Secrets</span>
+        <b><span id="secretsFound">0</span>/4</b>
+      </span>
     </div>
   </footer>
 
-  <!-- Um arquivo por idioma; para adicionar outro, crie i18n/xx.js e um botão .lang-btn -->
+  <!-- Dicionários antes do script que os consome. Novo idioma: crie i18n/xx.js,
+       adicione o <script>, um .lang-btn[data-lang="xx"] e a entrada em HTML_LANG. -->
   <script src="i18n/en.js"></script>
   <script src="i18n/pt.js"></script>
   <script src="scripts.js"></script>

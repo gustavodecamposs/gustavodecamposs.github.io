@@ -1,581 +1,295 @@
-const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reducedMotion = !document.documentElement.classList.contains('motion');
 const root = document.documentElement;
 
-// ─── IDIOMA ───────────────────────────────────────────
-// Textos em i18n/<código>.js. O HTML marca o que traduzir:
-//   data-i18n="chave"            → texto
-//   data-i18n-html="chave"       → texto com marcação (<em>, seta)
-//   data-i18n-attr="attr:chave"  → atributos (vários separados por ;)
-// Inglês é o padrão; a escolha fica salva. ?lang=pt na URL também escolhe.
-const I18N = window.I18N || {};
+// ─── i18n ─────────────────────────────────────────────
+// Três atributos no HTML:
+//   data-i18n="chave"            → textContent
+//   data-i18n-html="chave"       → innerHTML (valores com <em>, setas)
+//   data-i18n-attr="attr:chave"  → setAttribute, vários pares com ;
 const HTML_LANG = { en: 'en', pt: 'pt-BR' };
 let lang = 'en';
 
-const t = (key) => (I18N[lang] && I18N[lang][key]) || I18N.en[key] || key;
-
-function applyLang(next) {
-  lang = I18N[next] ? next : 'en';
-  root.lang = HTML_LANG[lang] || lang;
-
-  document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
-  document.querySelectorAll('[data-i18n-html]').forEach((el) => { el.innerHTML = t(el.dataset.i18nHtml); });
-  document.querySelectorAll('[data-i18n-attr]').forEach((el) => {
-    el.dataset.i18nAttr.split(';').forEach((pair) => {
-      const [attr, key] = pair.split(':');
-      el.setAttribute(attr.trim(), t(key.trim()));
-    });
-  });
-  document.querySelectorAll('.lang-btn').forEach((b) => {
-    b.setAttribute('aria-pressed', String(b.dataset.lang === lang));
-  });
-
-  document.dispatchEvent(new Event('langchange'));
+function t(key) {
+  const dict = window.I18N || {};
+  return (dict[lang] && dict[lang][key]) || (dict.en && dict.en[key]) || key;
 }
 
-(function () {
-  const stored = () => { try { return localStorage.getItem('lang'); } catch (e) { return null; } };
-  const save = (v) => { try { localStorage.setItem('lang', v); } catch (e) {} };
+function applyLang(next) {
+  lang = next;
+  root.lang = HTML_LANG[next] || next;
 
-  const param = new URLSearchParams(location.search).get('lang');
-  if (param && I18N[param]) save(param);
-  applyLang(param || stored() || 'en');
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
+  document.querySelectorAll('[data-i18n-attr]').forEach(el => {
+    el.dataset.i18nAttr.split(';').forEach(pair => {
+      const [attr, key] = pair.split(':');
+      if (attr && key) el.setAttribute(attr.trim(), t(key.trim()));
+    });
+  });
+
+  document.querySelectorAll('.lang-btn').forEach(b => {
+    b.setAttribute('aria-pressed', String(b.dataset.lang === next));
+  });
+
+  document.dispatchEvent(new CustomEvent('langchange', { detail: { lang: next } }));
+}
+
+(function initLang() {
+  const q = /[?&]lang=(en|pt)\b/.exec(location.search);
+  let stored = null;
+  try { stored = localStorage.getItem('lang'); } catch (e) { }
+  applyLang((q ? q[1] : stored) === 'pt' ? 'pt' : 'en');
   root.classList.remove('i18n-pending');
 
-  // Troca com um fade curto do conteúdo; sem movimento, troca direto
-  document.querySelectorAll('.lang-btn').forEach((btn) => {
+  document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const next = btn.dataset.lang;
       if (next === lang) return;
-      save(next);
-      if (!root.classList.contains('motion')) { applyLang(next); return; }
-      root.classList.add('is-switching');
-      setTimeout(() => {
+      try { localStorage.setItem('lang', next); } catch (e) { }
+      // Fade curto pra troca não parecer um salto
+      if (!reducedMotion) {
+        root.classList.add('is-switching');
+        setTimeout(() => { applyLang(next); root.classList.remove('is-switching'); }, 180);
+      } else {
         applyLang(next);
-        root.classList.remove('is-switching');
-      }, 180);
+      }
     });
   });
 })();
 
-// ─── RUÍDO ────────────────────────────────────────────
-// Value noise 2D. Permutação aleatória: cada carregamento gera um desenho diferente.
-function makeNoise() {
-  const perm = new Uint8Array(512);
-  for (let k = 0; k < 256; k++) perm[k] = k;
-  for (let k = 255; k > 0; k--) {
-    const j = Math.floor(Math.random() * (k + 1));
-    [perm[k], perm[j]] = [perm[j], perm[k]];
-  }
-  for (let k = 0; k < 256; k++) perm[k + 256] = perm[k];
-
-  const hash = (x, y) => perm[perm[x & 255] + (y & 255)] / 255;
-  const fade = (t) => t * t * (3 - 2 * t);
-
-  return function noise(x, y) {
-    const xi = Math.floor(x), yi = Math.floor(y);
-    const u = fade(x - xi), v = fade(y - yi);
-    const a = hash(xi, yi),     b = hash(xi + 1, yi);
-    const c = hash(xi, yi + 1), d = hash(xi + 1, yi + 1);
-    return a + (b - a) * u + (c - a) * v + (a - b - c + d) * u * v;
-  };
-}
-
-// ─── CÉU DE ANGRA (fundo do hero) ─────────────────────
-// Estrelas reais na posição de agora, vistas de Angra dos Reis (23°00'S 44°19'W).
-// Projeção estereográfica a partir do zênite; só pontos, sem traços nem rótulos.
-const SKY_LAT = -23.0067, SKY_LON = -44.3181;
-
-// [nome, constelação, AR (horas), Dec (graus), magnitude]
-const STARS = [
-  ['Acrux', 'Cruzeiro do Sul', 12.443, -63.10, 0.77],
-  ['Mimosa', 'Cruzeiro do Sul', 12.795, -59.69, 1.25],
-  ['Gacrux', 'Cruzeiro do Sul', 12.519, -57.11, 1.63],
-  ['Imai', 'Cruzeiro do Sul', 12.252, -58.75, 2.8],
-  ['Ginan', 'Cruzeiro do Sul', 12.356, -60.40, 3.59],
-  ['Rigil Kentaurus', 'Centauro', 14.660, -60.83, -0.27],
-  ['Hadar', 'Centauro', 14.064, -60.37, 0.61],
-  ['Betelgeuse', 'Órion', 5.919, 7.41, 0.5],
-  ['Rigel', 'Órion', 5.242, -8.20, 0.13],
-  ['Bellatrix', 'Órion', 5.419, 6.35, 1.64],
-  ['Saiph', 'Órion', 5.796, -9.67, 2.07],
-  ['Alnitak', 'Órion', 5.679, -1.94, 1.77],
-  ['Alnilam', 'Órion', 5.604, -1.20, 1.69],
-  ['Mintaka', 'Órion', 5.533, -0.30, 2.23],
-  ['Sirius', 'Cão Maior', 6.752, -16.72, -1.46],
-  ['Mirzam', 'Cão Maior', 6.378, -17.96, 1.98],
-  ['Adhara', 'Cão Maior', 6.977, -28.97, 1.5],
-  ['Wezen', 'Cão Maior', 7.140, -26.39, 1.83],
-  ['Aludra', 'Cão Maior', 7.402, -29.30, 2.45],
-  ['Antares', 'Escorpião', 16.490, -26.43, 0.96],
-  ['Graffias', 'Escorpião', 16.090, -19.81, 2.62],
-  ['Dschubba', 'Escorpião', 16.006, -22.62, 2.29],
-  ['Fang', 'Escorpião', 15.981, -26.11, 2.89],
-  ['Al Niyat', 'Escorpião', 16.353, -25.59, 2.89],
-  ['Paikauhale', 'Escorpião', 16.598, -28.22, 2.82],
-  ['Larawag', 'Escorpião', 16.836, -34.29, 2.29],
-  ['Xamidimura', 'Escorpião', 16.864, -38.05, 3.0],
-  ['ζ Scorpii', 'Escorpião', 16.910, -42.36, 3.6],
-  ['η Scorpii', 'Escorpião', 17.203, -43.24, 3.3],
-  ['Sargas', 'Escorpião', 17.622, -43.00, 1.86],
-  ['ι Scorpii', 'Escorpião', 17.793, -40.13, 3.0],
-  ['Girtab', 'Escorpião', 17.708, -39.03, 2.4],
-  ['Shaula', 'Escorpião', 17.560, -37.10, 1.62],
-  ['Kaus Australis', 'Sagitário', 18.403, -34.38, 1.85],
-  ['Kaus Media', 'Sagitário', 18.350, -29.83, 2.7],
-  ['Kaus Borealis', 'Sagitário', 18.466, -25.42, 2.8],
-  ['Nunki', 'Sagitário', 18.921, -26.30, 2.05],
-  ['Ascella', 'Sagitário', 19.044, -29.88, 2.6],
-  ['φ Sagittarii', 'Sagitário', 18.761, -26.99, 3.2],
-  ['τ Sagittarii', 'Sagitário', 19.116, -27.67, 3.3],
-  ['Alnasl', 'Sagitário', 18.097, -30.42, 2.99],
-  ['Canopus', 'Carina', 6.399, -52.70, -0.74],
-  ['Achernar', 'Erídano', 1.629, -57.24, 0.46],
-  ['Fomalhaut', 'Peixe Austral', 22.961, -29.62, 1.16],
-  ['Aldebaran', 'Touro', 4.599, 16.51, 0.85],
-  ['Pollux', 'Gêmeos', 7.755, 28.03, 1.14],
-  ['Castor', 'Gêmeos', 7.577, 31.89, 1.58],
-  ['Procyon', 'Cão Menor', 7.655, 5.22, 0.34],
-  ['Regulus', 'Leão', 10.140, 11.97, 1.35],
-  ['Spica', 'Virgem', 13.420, -11.16, 0.97],
-  ['Arcturus', 'Boieiro', 14.261, 19.18, -0.05],
-  ['Vega', 'Lira', 18.616, 38.78, 0.03],
-  ['Altair', 'Águia', 19.846, 8.87, 0.76],
-  ['Deneb', 'Cisne', 20.690, 45.28, 1.25],
-];
-
-function createSky(canvas) {
-  if (!canvas || !canvas.getContext) return;
-
-  const ctx  = canvas.getContext('2d');
-  const live = !reducedMotion;
-  const rad  = Math.PI / 180;
-
-  // Estrelas fracas de fundo: posições fixas no céu (semente fixa), giram junto com as reais
-  let seed = 7;
-  const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-  const field = Array.from({ length: 600 }, () => ({
-    ra: rnd() * 24, dec: Math.asin(rnd() * 2 - 1) / rad, mag: 4 + rnd() * 2, ph: rnd() * 6.3,
-  }));
-  const named = STARS.map(([, , ra, dec, mag]) => ({ ra, dec, mag, ph: rnd() * 6.3 }));
-
-  let w = 0, h = 0, R = 0, ink = '236, 232, 225';
-  let rafId = 0, last = 0, onScreen = true, born = 0;
-
-  // Abre no céu de agora e segue girando 12x mais rápido: a rotação real da Terra, só perceptível
-  const SPIN = 12;
-  let skyMs = Date.now();
-
-  function readColor() {
-    ink = getComputedStyle(root).getPropertyValue('--ink-rgb').trim() || ink;
-  }
-
-  function resize() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    w = canvas.clientWidth;
-    h = canvas.clientHeight;
-    canvas.width  = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    R = Math.hypot(w, h) * 0.62;   // recorte do céu em volta do zênite
-    place();
-  }
-
-  // AR/Dec → posição na tela para o instante atual
-  function place() {
-    const jd   = skyMs / 86400000 + 2440587.5;
-    const gmst = 280.46061837 + 360.98564736629 * (jd - 2451545);
-    const lst  = gmst + SKY_LON;
-    const sl = Math.sin(SKY_LAT * rad), cl = Math.cos(SKY_LAT * rad);
-
-    for (const s of named.concat(field)) {
-      const ha = (lst - s.ra * 15) * rad, dec = s.dec * rad;
-      const east  = -Math.cos(dec) * Math.sin(ha);
-      const north = Math.sin(dec) * cl - Math.cos(dec) * Math.cos(ha) * sl;
-      const up    = Math.sin(dec) * sl + Math.cos(dec) * Math.cos(ha) * cl;
-      s.up = up;
-      // Olhando para cima com o norte no topo, o leste fica à esquerda
-      s.x = w / 2 - (R * east) / (1 + up);
-      s.y = h / 2 - (R * north) / (1 + up);
+// ─── BARRAS (stats e timeline) ────────────────────────
+// Células geradas em JS: o markup fica limpo e o valor acessível
+// já está no aria-label do container.
+(function buildBars() {
+  document.querySelectorAll('.stat-bar').forEach(bar => {
+    const level = Number(bar.dataset.level) || 0;
+    bar.innerHTML = '';
+    for (let i = 0; i < 10; i++) {
+      const cell = document.createElement('span');
+      if (i < level) cell.className = 'on';
+      bar.appendChild(cell);
     }
-  }
-
-  const smooth = (a, b, x) => {
-    const k = Math.min(Math.max((x - a) / (b - a), 0), 1);
-    return k * k * (3 - 2 * k);
-  };
-
-  // Mais fraco no centro, onde está o texto
-  const clear = (x, y) => 0.3 + 0.7 * smooth(0.3, 0.85, Math.hypot((x - w / 2) / (w * 0.45), (y - h / 2) / (h * 0.45)));
-  const size  = (mag) => Math.max(0.5, 2.6 - mag * 0.42);
-
-  function draw(now) {
-    ctx.clearRect(0, 0, w, h);
-    const age = live ? (now - born) / 1000 : 9;
-
-    // Entrada: as mais brilhantes acendem primeiro, as fracas vão aparecendo depois
-    const litAt = (mag) => smooth(0, 0.6, age - 0.15 - (mag + 1.5) * 0.12);
-
-    ctx.beginPath();
-    for (const s of field) {
-      if (s.up <= 0) continue;
-      const a = litAt(s.mag) * clear(s.x, s.y) * (0.5 + 0.5 * Math.sin(now / 1400 + s.ph));
-      if (a < 0.05) continue;
-      ctx.moveTo(s.x + 0.7, s.y);
-      ctx.arc(s.x, s.y, 0.7, 0, Math.PI * 2);
-    }
-    ctx.fillStyle = `rgba(${ink}, 0.4)`;
-    ctx.fill();
-
-    for (const s of named) {
-      if (s.up <= 0) continue;
-      const lit = litAt(s.mag);
-      if (!lit) continue;
-      const tw = live ? 0.85 + 0.15 * Math.sin(now / 900 + s.ph) : 1;
-      ctx.fillStyle = `rgba(${ink}, ${(0.85 * lit * tw * clear(s.x, s.y)).toFixed(3)})`;
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, size(s.mag), 0, Math.PI * 2);
-      ctx.fill();
-    }
-  }
-
-  // ~30fps: reposiciona e desenha a cada quadro
-  function loop(now) {
-    rafId = requestAnimationFrame(loop);
-    if (now - last < 33) return;
-    // Pausado (aba oculta, fora da tela) o céu não avança: volta de onde parou, sem salto
-    if (last) skyMs += Math.min(now - last, 100) * SPIN;
-    last = now;
-    place();
-    draw(now);
-  }
-
-  function start() {
-    if (live && !rafId && onScreen && !document.hidden) rafId = requestAnimationFrame(loop);
-  }
-
-  function stop() {
-    cancelAnimationFrame(rafId);
-    rafId = 0;
-    last = 0;
-  }
-
-  born = performance.now();
-  readColor();
-  resize();
-  draw(born);
-
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => { resize(); draw(performance.now()); }, 150);
   });
 
-  // Remede ao trocar de tema: escondido (display: none), o canvas tinha medido 0
-  new MutationObserver(() => { readColor(); resize(); draw(performance.now()); })
-    .observe(root, { attributes: true, attributeFilter: ['data-theme'] });
-
-  if (!live) return;
-
-  new IntersectionObserver(([entry]) => {
-    onScreen = entry.isIntersecting;
-    onScreen ? start() : stop();
-  }).observe(canvas);
-
-  document.addEventListener('visibilitychange', () => {
-    document.hidden ? stop() : start();
-  });
-
-  start();
-}
-
-// ─── TOPOGRAFIA (canvas do contato) ───────────────────
-// Marching squares sobre o ruído. Grade em pixels CSS; o DPR só dá nitidez.
-function createTopo(canvas, { animated = true, opacity = 1 } = {}) {
-  if (!canvas || !canvas.getContext) return;
-
-  const ctx    = canvas.getContext('2d');
-  const CELL   = 14;
-  const LEVELS = 8;
-  const FREQ   = 0.0032;
-  const live   = animated && !reducedMotion;
-  const noise  = makeNoise();
-
-  // Oitavas deslizando em direções diferentes: o relevo muda de forma, não só anda
-  function field(x, y, z) {
-    return noise(x + z, y) * 0.6
-         + noise(x * 2.1 - z * 1.3, y * 2.1 + z) * 0.28
-         + noise(x * 4.3 + z, y * 4.3 - z * 0.7) * 0.12;
-  }
-
-  // Segmentos por caso (bits: tl=8 tr=4 br=2 bl=1; arestas: 0 topo, 1 dir, 2 base, 3 esq)
-  const SEGS = [
-    [], [[3, 2]], [[2, 1]], [[3, 1]], [[0, 1]], [[0, 1], [2, 3]], [[0, 2]], [[0, 3]],
-    [[0, 3]], [[0, 2]], [[0, 3], [1, 2]], [[0, 1]], [[3, 1]], [[2, 1]], [[3, 2]], [],
-  ];
-
-  let w = 0, h = 0, cols = 0, rows = 0, grid = null;
-  let rgb = '201, 160, 111';
-  let z = Math.random() * 100;
-  let rafId = 0, last = 0, onScreen = true;
-  const mouse = { x: 0, y: 0 }, off = { x: 0, y: 0 };
-
-  function readColor() {
-    const v = getComputedStyle(root).getPropertyValue('--accent-rgb').trim();
-    if (v) rgb = v;
-  }
-
-  function resize() {
-    const dpr  = Math.min(window.devicePixelRatio || 1, 2);
-    w = canvas.clientWidth;
-    h = canvas.clientHeight;
-    canvas.width  = Math.round(w * dpr);
-    canvas.height = Math.round(h * dpr);
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    cols = Math.ceil(w / CELL) + 1;
-    rows = Math.ceil(h / CELL) + 1;
-    grid = new Float32Array(cols * rows);
-  }
-
-  function draw() {
-    if (!grid) return;
-
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        grid[r * cols + c] = field((c * CELL + off.x) * FREQ, (r * CELL + off.y) * FREQ, z);
-      }
+  document.querySelectorAll('.track-bar').forEach(bar => {
+    const fill = Number(bar.dataset.fill) || 0;
+    const total = Number(bar.dataset.total) || 16;
+    bar.innerHTML = '';
+    for (let i = 0; i < total; i++) {
+      const cell = document.createElement('span');
+      if (i < fill) cell.className = 'on';
+      bar.appendChild(cell);
     }
-
-    ctx.clearRect(0, 0, w, h);
-
-    for (let l = 0; l < LEVELS; l++) {
-      const t   = l / (LEVELS - 1);
-      const iso = 0.26 + t * 0.48;
-      // A cada 4 linhas, uma "curva mestra" mais grossa, como em carta topográfica
-      ctx.lineWidth   = l % 4 === 3 ? 1.2 : 0.7;
-      ctx.strokeStyle = `rgba(${rgb}, ${((0.12 + t * 0.23) * opacity).toFixed(3)})`;
-      ctx.beginPath();
-
-      for (let r = 0; r < rows - 1; r++) {
-        for (let c = 0; c < cols - 1; c++) {
-          const tl = grid[r * cols + c],       tr = grid[r * cols + c + 1];
-          const bl = grid[(r + 1) * cols + c], br = grid[(r + 1) * cols + c + 1];
-          const idx = (tl > iso ? 8 : 0) | (tr > iso ? 4 : 0) | (br > iso ? 2 : 0) | (bl > iso ? 1 : 0);
-          if (idx === 0 || idx === 15) continue;
-
-          const x0 = c * CELL, y0 = r * CELL;
-          const edge = (e) => {
-            switch (e) {
-              case 0: return [x0 + CELL * (iso - tl) / (tr - tl), y0];
-              case 1: return [x0 + CELL, y0 + CELL * (iso - tr) / (br - tr)];
-              case 2: return [x0 + CELL * (iso - bl) / (br - bl), y0 + CELL];
-              default: return [x0, y0 + CELL * (iso - tl) / (bl - tl)];
-            }
-          };
-
-          for (const [e1, e2] of SEGS[idx]) {
-            const p = edge(e1), q = edge(e2);
-            ctx.moveTo(p[0], p[1]);
-            ctx.lineTo(q[0], q[1]);
-          }
-        }
-      }
-      ctx.stroke();
-    }
-  }
-
-  // ~30fps é suficiente para um relevo lento
-  function loop(time) {
-    rafId = requestAnimationFrame(loop);
-    if (time - last < 33) return;
-    last = time;
-    z += 0.0006 * 33 / 16.7;
-    off.x += (mouse.x - off.x) * 0.06;
-    off.y += (mouse.y - off.y) * 0.06;
-    draw();
-  }
-
-  function start() {
-    if (live && !rafId && onScreen && !document.hidden) rafId = requestAnimationFrame(loop);
-  }
-
-  function stop() {
-    cancelAnimationFrame(rafId);
-    rafId = 0;
-  }
-
-  readColor();
-  resize();
-  draw();
-
-  let resizeTimer;
-  window.addEventListener('resize', () => {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(() => { resize(); draw(); }, 150);
   });
+})();
 
-  new MutationObserver(() => { readColor(); resize(); draw(); })
-    .observe(root, { attributes: true, attributeFilter: ['data-theme'] });
-
-  if (!live) return;
-
-  // Parallax: o relevo desliza até 16px seguindo o cursor
-  window.addEventListener('mousemove', (e) => {
-    mouse.x = (e.clientX / window.innerWidth - 0.5) * 32;
-    mouse.y = (e.clientY / window.innerHeight - 0.5) * 32;
-  }, { passive: true });
-
-  new IntersectionObserver(([entry]) => {
-    onScreen = entry.isIntersecting;
-    onScreen ? start() : stop();
-  }).observe(canvas);
-
-  document.addEventListener('visibilitychange', () => {
-    document.hidden ? stop() : start();
-  });
-
-  start();
-}
-
-createSky(document.getElementById('stars'));
-createTopo(document.getElementById('topo'), { animated: true, opacity: 0.5 });
-createTopo(document.getElementById('topoContact'), { animated: false, opacity: 0.35 });
-
-// ─── VOLTAR AO TOPO ───────────────────────────────────
-// Visível só depois que o hero sai da tela
-(function () {
-  const btn  = document.getElementById('toTop');
+// ─── HERO: INTRO "BUILD" ──────────────────────────────
+// Fases: loading → celebrate → idle. Cada letra recebe --i e entra atrasada.
+// Sem .motion a seção já nasce em idle (o CSS cuida), então aqui só marcamos.
+(function heroIntro() {
   const hero = document.getElementById('inicio');
-  if (!btn || !hero || !('IntersectionObserver' in window)) return;
-  new IntersectionObserver(([entry]) => {
-    btn.classList.toggle('is-visible', !entry.isIntersecting);
-  }).observe(hero);
+  const header = document.getElementById('siteHeader');
+  const skip = document.getElementById('skipIntro');
+  if (!hero) return;
+
+  const host = hero.querySelector('[data-letters]');
+  if (host) {
+    const text = host.textContent;
+    host.textContent = '';
+    // Cada palavra vira um bloco que nao se parte; as letras dentro dela
+    // continuam individuais pra animacao de entrada. Assim o titulo quebra
+    // entre palavras, nunca no meio do nome.
+    let i = 0;
+    text.split(' ').forEach((word, w, all) => {
+      const group = document.createElement('span');
+      group.className = 'word';
+      [...word].forEach(ch => {
+        const span = document.createElement('span');
+        span.className = 'letter';
+        span.style.setProperty('--i', String(i++));
+        span.textContent = ch;
+        group.appendChild(span);
+      });
+      host.appendChild(group);
+      if (w < all.length - 1) {
+        const gap = document.createElement('span');
+        gap.className = 'letter is-space';
+        gap.style.setProperty('--i', String(i++));
+        gap.textContent = ' ';
+        host.appendChild(gap);
+      }
+    });
+  }
+
+  function finish() {
+    hero.dataset.phase = 'idle';
+    if (header) header.classList.add('is-ready');
+  }
+
+  if (reducedMotion) { finish(); return; }
+
+  const letters = host ? host.children.length : 0;
+  // Espera a fonte, senão as letras entram no tamanho errado. Timeout evita
+  // travar a intro se a Google Fonts demorar.
+  const fontReady = document.fonts
+    ? Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 1500))])
+    : Promise.resolve();
+
+  let done = false;
+  function skipIntro() {
+    if (done) return;
+    done = true;
+    finish();
+  }
+
+  fontReady.then(() => {
+    if (done) return;
+    hero.dataset.phase = 'celebrate';
+    // 30ms por letra (igual ao delay no CSS) + folga pra animação settle
+    setTimeout(skipIntro, letters * 30 + 500);
+  });
+
+  // Rede de segurança: a intro esconde o hero inteiro, então em nenhuma
+  // circunstância ela pode ficar presa. Se algo falhar, vai pra idle.
+  setTimeout(skipIntro, 4000);
+
+  if (skip) skip.addEventListener('click', skipIntro);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && hero.dataset.phase !== 'idle') skipIntro();
+  });
 })();
 
-// ─── CONTATO: vídeo de fundo sob demanda ──────────────
-// Carrega só quando a seção entra na tela; pausa fora dela. Sem vídeo com dados limitados.
-(function () {
-  const video = document.querySelector('.contact-bg');
-  if (!video) return;
+// ─── REVEAL AO ROLAR ──────────────────────────────────
+// O reveal é enfeite: nunca pode deixar conteúdo escondido. Por isso
+// existe uma rede de segurança que revela tudo se o observer não agir.
+(function reveal() {
+  const items = [...document.querySelectorAll('[data-reveal]')];
+  const showAll = () => items.forEach(el => el.classList.add('is-in'));
 
-  const saveData = navigator.connection && navigator.connection.saveData === true;
-  const narrow = window.matchMedia('(max-width: 720px)').matches;
-  if (reducedMotion || saveData || narrow) { video.remove(); return; }
-
-  new IntersectionObserver(([entry]) => {
-    if (entry.isIntersecting) {
-      if (!video.getAttribute('src') && video.dataset.src) video.src = video.dataset.src;
-      const p = video.play();
-      if (p) p.catch(() => {});
-    } else {
-      video.pause();
-    }
-  }, { threshold: 0.15 }).observe(video.closest('.contact'));
-})();
-
-// ─── REVEAL ───────────────────────────────────────────
-(function () {
-  const items = document.querySelectorAll('[data-reveal]');
-  if (!root.classList.contains('motion') || !('IntersectionObserver' in window)) {
-    items.forEach((el) => el.classList.add('is-in'));
+  if (reducedMotion || !('IntersectionObserver' in window)) {
+    showAll();
     return;
   }
 
   const io = new IntersectionObserver((entries) => {
-    entries.forEach(({ target, isIntersecting }) => {
-      if (!isIntersecting) return;
-      target.classList.add('is-in');
-      io.unobserve(target);
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-in');
+      io.unobserve(entry.target);
     });
-  }, { rootMargin: '0px 0px -12% 0px' });
+  }, { rootMargin: '0px 0px -10% 0px' });
 
-  items.forEach((el) => io.observe(el));
+  items.forEach(el => io.observe(el));
+
+  // Se depois de 3s algo continuar escondido (observer travado, aba em
+  // segundo plano, print do navegador), mostra assim mesmo.
+  setTimeout(showAll, 3000);
+  addEventListener('beforeprint', showAll);
 })();
 
-// ─── HEADER: transparente no topo, sólido ao rolar ────
-// Sólido cedo: o título do hero passa por baixo do header enquanto some
-(function () {
+// ─── HEADER SÓLIDO AO ROLAR ───────────────────────────
+(function headerSolid() {
   const header = document.getElementById('siteHeader');
   if (!header) return;
-  const update = () => header.classList.toggle('is-solid', window.scrollY > 24);
-  window.addEventListener('scroll', update, { passive: true });
-  update();
+  const onScroll = () => header.classList.toggle('is-solid', window.scrollY > 24);
+  onScroll();
+  addEventListener('scroll', onScroll, { passive: true });
 })();
 
-// ─── SEÇÃO ATIVA NO MENU ──────────────────────────────
-(function () {
-  const links = document.querySelectorAll('[data-nav]');
-  const byId  = new Map([...links].map((a) => [a.getAttribute('href').slice(1), a]));
+// ─── NAV: SEÇÃO ATIVA ─────────────────────────────────
+(function activeNav() {
+  const links = [...document.querySelectorAll('[data-nav]')];
+  if (!links.length || !('IntersectionObserver' in window)) return;
+
+  const byId = new Map();
+  links.forEach(a => {
+    const id = a.getAttribute('href').slice(1);
+    const sec = document.getElementById(id);
+    if (sec) byId.set(sec, a);
+  });
 
   const io = new IntersectionObserver((entries) => {
-    entries.forEach(({ target, isIntersecting }) => {
-      if (!isIntersecting) return;
-      links.forEach((a) => {
-        const on = a === byId.get(target.id);
-        a.classList.toggle('is-active', on);
-        on ? a.setAttribute('aria-current', 'true') : a.removeAttribute('aria-current');
-      });
+    entries.forEach(entry => {
+      const link = byId.get(entry.target);
+      if (!link) return;
+      link.classList.toggle('is-active', entry.isIntersecting);
+      if (entry.isIntersecting) link.setAttribute('aria-current', 'true');
+      else link.removeAttribute('aria-current');
     });
   }, { rootMargin: '-45% 0px -50% 0px' });
 
-  document.querySelectorAll('main > section[id]').forEach((s) => io.observe(s));
+  byId.forEach((_, sec) => io.observe(sec));
+})();
+
+// ─── VOLTAR AO TOPO ───────────────────────────────────
+(function toTop() {
+  const btn = document.getElementById('toTop');
+  const hero = document.getElementById('inicio');
+  if (!btn || !hero || !('IntersectionObserver' in window)) return;
+  const io = new IntersectionObserver(([entry]) => {
+    btn.classList.toggle('is-visible', !entry.isIntersecting);
+  });
+  io.observe(hero);
 })();
 
 // ─── MENU MOBILE ──────────────────────────────────────
-(function () {
-  const btn  = document.getElementById('menuBtn');
+(function mobileMenu() {
+  const btn = document.getElementById('menuBtn');
   const menu = document.getElementById('mobileMenu');
   if (!btn || !menu) return;
 
-  const behind = document.querySelectorAll('main, .site-footer, .brand, .theme-btn');
+  // inert tira o fundo da ordem de tab e dos leitores de tela
+  const background = () => document.querySelectorAll('main, .site-footer, .brand, .nav-tools > :not(#menuBtn)');
 
-  function setOpen(open) {
-    btn.setAttribute('aria-expanded', String(open));
-    menu.hidden = !open;
-    behind.forEach((el) => { el.inert = open; });
-    document.body.style.overflow = open ? 'hidden' : '';
-    if (open) menu.querySelector('a').focus();
+  function open() {
+    menu.hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    background().forEach(el => el.setAttribute('inert', ''));
+    const first = menu.querySelector('a');
+    if (first) first.focus();
   }
 
-  btn.addEventListener('click', () => setOpen(menu.hidden));
+  function close() {
+    menu.hidden = true;
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    background().forEach(el => el.removeAttribute('inert'));
+    btn.focus();
+  }
 
-  menu.addEventListener('click', (e) => {
-    if (e.target.closest('a')) setOpen(false);
+  btn.addEventListener('click', () => (menu.hidden ? open() : close()));
+  menu.addEventListener('click', e => { if (e.target.closest('a')) close(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !menu.hidden) close();
   });
-
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !menu.hidden) {
-      setOpen(false);
-      btn.focus();
-    }
-  });
-
-  // Voltou ao desktop com o menu aberto
-  window.matchMedia('(min-width: 861px)').addEventListener('change', (e) => {
-    if (e.matches && !menu.hidden) setOpen(false);
+  matchMedia('(min-width: 861px)').addEventListener('change', e => {
+    if (e.matches && !menu.hidden) close();
   });
 })();
 
 // ─── TEMA ─────────────────────────────────────────────
-(function () {
+// Segue o sistema até o visitante escolher; depois a escolha manda.
+(function theme() {
   const btn = document.getElementById('themeToggle');
-  const stored = () => { try { return localStorage.getItem('theme'); } catch (e) { return null; } };
+  if (!btn) return;
 
   function label() {
-    if (!btn) return;
-    const dark = root.getAttribute('data-theme') !== 'light';
-    btn.setAttribute('aria-label', t(dark ? 'theme.toLight' : 'theme.toDark'));
+    const isDark = root.getAttribute('data-theme') === 'dark';
+    btn.setAttribute('aria-label', t(isDark ? 'theme.toLight' : 'theme.toDark'));
   }
 
-  // Só grava quando a pessoa escolhe; sem escolha, segue o sistema
-  btn && btn.addEventListener('click', () => {
-    const next = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  btn.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     root.setAttribute('data-theme', next);
-    try { localStorage.setItem('theme', next); } catch (e) {}
+    try { localStorage.setItem('theme', next); } catch (e) { }
     label();
   });
 
-  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
-    if (stored()) return;
+  matchMedia('(prefers-color-scheme: light)').addEventListener('change', e => {
+    let stored = null;
+    try { stored = localStorage.getItem('theme'); } catch (err) { }
+    if (stored) return;
     root.setAttribute('data-theme', e.matches ? 'light' : 'dark');
     label();
   });
@@ -584,113 +298,192 @@ createTopo(document.getElementById('topoContact'), { animated: false, opacity: 0
   label();
 })();
 
-// ─── HERO: entrada + scroll ───────────────────────────
-(function () {
-  const hero = document.getElementById('inicio');
-  if (!hero || !root.classList.contains('motion')) return;
+// ─── SEGREDOS ─────────────────────────────────────────
+// Contador no footer. Nenhum conteúdo real depende de achar um segredo.
+const secrets = (function () {
+  const TOTAL = 4;
+  const out = document.getElementById('secretsFound');
+  let found = new Set();
 
-  // Cada palavra vira um span com atraso próprio (entra também no <em>), linha a linha
-  hero.querySelectorAll('[data-split]').forEach((line, li) => {
-    let wi = 0;
-    const walker = document.createTreeWalker(line, NodeFilter.SHOW_TEXT);
-    const nodes = [];
-    while (walker.nextNode()) nodes.push(walker.currentNode);
-    nodes.forEach((node) => {
-      const frag = document.createDocumentFragment();
-      node.textContent.split(/(\s+)/).forEach((part) => {
-        if (!part.trim()) { if (part) frag.append(part); return; }
-        const span = document.createElement('span');
-        span.className = 'w';
-        span.textContent = part;
-        span.style.setProperty('--d', `${(0.35 + li * 0.14 + wi++ * 0.07).toFixed(3)}s`);
-        frag.append(span);
-      });
-      node.replaceWith(frag);
-    });
-  });
+  try {
+    const raw = localStorage.getItem('secrets');
+    if (raw) found = new Set(JSON.parse(raw));
+  } catch (e) { }
 
-  // Espera a fonte: animar antes faria as letras trocarem de forma no meio do movimento
-  const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
-  Promise.race([fontsReady, new Promise((r) => setTimeout(r, 1500))])
-    .then(() => requestAnimationFrame(() => hero.classList.add('is-ready')));
-
-  // Scroll interpolado no rAF: o movimento continua suave mesmo com a roda do mouse "aos saltos"
-  let target = 0, cur = -1, raf = 0, last = 0;
-
-  function measure() {
-    target = Math.min(Math.max(window.scrollY / (hero.offsetHeight * 0.85), 0), 1);
+  function render() {
+    if (out) out.textContent = String(found.size);
   }
 
-  function frame(time) {
-    const dt = last ? Math.min(time - last, 64) : 16.7;
-    last = time;
-    const k = 1 - Math.pow(0.86, dt / 16.7);
-
-    cur = cur < 0 ? target : cur + (target - cur) * k;
-    if (Math.abs(target - cur) < 0.0005) cur = target;
-    hero.style.setProperty('--p', cur.toFixed(4));
-
-    raf = cur !== target ? requestAnimationFrame(frame) : 0;
-    if (!raf) last = 0;
+  function unlock(id) {
+    if (found.has(id)) return false;
+    found.add(id);
+    try { localStorage.setItem('secrets', JSON.stringify([...found])); } catch (e) { }
+    render();
+    return true;
   }
 
-  function kick() {
-    if (!raf) raf = requestAnimationFrame(frame);
-  }
-
-  window.addEventListener('scroll', () => { measure(); kick(); }, { passive: true });
-  window.addEventListener('resize', () => { measure(); kick(); });
-
-  measure();
-  kick();
+  render();
+  return { unlock, total: TOTAL, has: id => found.has(id) };
 })();
 
-// ─── E-MAIL: copiar ───────────────────────────────────
-(function () {
-  const btn    = document.getElementById('copyMail');
-  const status = document.getElementById('copyStatus');
-  if (!btn || !navigator.clipboard) {
-    if (btn) btn.hidden = true;
-    return;
+// Konami: inverte o tema por 3s
+(function konami() {
+  const SEQ = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+  let at = 0;
+  let busy = false;
+
+  document.addEventListener('keydown', e => {
+    const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    at = key === SEQ[at] ? at + 1 : (key === SEQ[0] ? 1 : 0);
+    if (at < SEQ.length) return;
+    at = 0;
+    if (busy) return;
+    busy = true;
+    secrets.unlock('konami');
+
+    const before = root.getAttribute('data-theme');
+    root.setAttribute('data-theme', before === 'dark' ? 'light' : 'dark');
+    setTimeout(() => { root.setAttribute('data-theme', before); busy = false; }, 3000);
+  });
+})();
+
+// 5 cliques no monograma: o GC pula
+(function brandHop() {
+  const mark = document.getElementById('brandMark');
+  if (!mark) return;
+  let hits = 0;
+  let timer = null;
+
+  mark.closest('a').addEventListener('click', () => {
+    hits++;
+    clearTimeout(timer);
+    timer = setTimeout(() => { hits = 0; }, 1200);
+    if (hits < 5) return;
+    hits = 0;
+    secrets.unlock('hop');
+    if (reducedMotion) return;
+    mark.classList.add('is-jumping');
+    setTimeout(() => mark.classList.remove('is-jumping'), 900);
+  });
+})();
+
+// ─── TERMINAL ─────────────────────────────────────────
+(function terminal() {
+  const out = document.getElementById('termOut');
+  const input = document.getElementById('termInput');
+  const mirror = document.getElementById('termMirror');
+  if (!out || !input || !mirror) return;
+
+  const MAIL = input.dataset.mail;
+  const WPP = 'https://wa.me/5524974051952';
+  const LINKS = {
+    github: 'https://github.com/gustavodecamposs',
+    linkedin: 'https://www.linkedin.com/in/gustavodecamposs/',
+    instagram: 'https://www.instagram.com/gustavoo.dcs/'
+  };
+
+  function print(text, cls) {
+    const p = document.createElement('p');
+    if (cls) p.className = cls;
+    p.textContent = text;
+    out.appendChild(p);
+    out.scrollTop = out.scrollHeight;
   }
 
-  btn.addEventListener('click', async () => {
-    try {
-      await navigator.clipboard.writeText(btn.dataset.copy);
-      btn.textContent = t('contact.copied');
-      if (status) status.textContent = t('contact.copyStatus');
-    } catch (e) {
-      btn.textContent = t('contact.copyFailed');
+  function echo(cmd) {
+    print('guest@gustavodecampos:~$ ' + cmd, 'cmd');
+  }
+
+  function boot() {
+    out.innerHTML = '';
+    print(t('term.boot'), 'dim');
+    print(t('term.hint'), 'ok');
+  }
+
+  const commands = {
+    help() {
+      print(t('term.help'));
+    },
+    wpp() {
+      print(t('term.openWpp'), 'ok');
+      open(WPP + '?text=' + encodeURIComponent(t('term.wppText')), '_blank', 'noopener');
+    },
+    async mail() {
+      if (!navigator.clipboard) {
+        print(MAIL, 'ok');
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(MAIL);
+        print(t('term.copied') + ' ' + MAIL, 'ok');
+      } catch (e) {
+        print(MAIL, 'ok');
+      }
+    },
+    github() {
+      print(t('term.opening') + ' GitHub', 'ok');
+      open(LINKS.github, '_blank', 'noopener');
+    },
+    linkedin() {
+      print(t('term.opening') + ' LinkedIn', 'ok');
+      open(LINKS.linkedin, '_blank', 'noopener');
+    },
+    instagram() {
+      print(t('term.opening') + ' Instagram', 'ok');
+      open(LINKS.instagram, '_blank', 'noopener');
+    },
+    send(rest) {
+      if (!rest) {
+        print(t('term.sendUsage'), 'warn');
+        return;
+      }
+      print(t('term.sendOpening'), 'ok');
+      const url = 'mailto:' + MAIL
+        + '?subject=' + encodeURIComponent(t('term.sendSubject'))
+        + '&body=' + encodeURIComponent(rest);
+      location.href = url;
+    },
+    clear() {
+      out.innerHTML = '';
+    },
+    coffee() {
+      print(t('term.coffee'), 'warn');
+      print('   ( (\n    ) )\n  ........\n  |      |]\n  \\      /\n   `----\'', 'dim');
+      secrets.unlock('coffee');
+    },
+    sudo() {
+      print(t('term.sudo'), 'warn');
+      secrets.unlock('sudo');
     }
-    setTimeout(() => {
-      btn.textContent = t('contact.copy');
-      if (status) status.textContent = '';
-    }, 2200);
+  };
+
+  function run(raw) {
+    const line = raw.trim();
+    if (!line) return;
+    echo(line);
+
+    const space = line.indexOf(' ');
+    const name = (space === -1 ? line : line.slice(0, space)).toLowerCase();
+    const rest = space === -1 ? '' : line.slice(space + 1).trim();
+
+    const fn = commands[name];
+    if (fn) fn(rest);
+    else print(t('term.unknown').replace('{cmd}', name), 'warn');
+  }
+
+  input.addEventListener('input', () => { mirror.textContent = input.value; });
+  input.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    run(input.value);
+    input.value = '';
+    mirror.textContent = '';
   });
-})();
 
-// ─── FORMULÁRIO → mailto ──────────────────────────────
-(function () {
-  const form = document.getElementById('contactForm');
-  const btn  = document.getElementById('sendBtn');
-  if (!form || !btn) return;
-
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    if (!form.reportValidity()) return;
-
-    const v = (id) => document.getElementById(id).value.trim();
-    const url = 'mailto:gustavoo.dcsilva@gmail.com'
-      + `?subject=${encodeURIComponent(v('assunto') || t('contact.mailSubject'))}`
-      + `&body=${encodeURIComponent(`${t('contact.mailName')}: ${v('nome')}\n${t('contact.mailEmail')}: ${v('email')}\n\n${v('mensagem')}`)}`;
-
-    btn.textContent = t('contact.sending');
-    btn.disabled = true;
-    window.location.href = url;
-
-    setTimeout(() => {
-      btn.innerHTML = t('contact.send');
-      btn.disabled = false;
-    }, 2500);
+  // Clicar em qualquer canto do terminal foca o campo
+  input.closest('.term').addEventListener('click', e => {
+    if (!e.target.closest('a')) input.focus();
   });
+
+  boot();
+  document.addEventListener('langchange', boot);
 })();
