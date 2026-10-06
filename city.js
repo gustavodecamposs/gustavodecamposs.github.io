@@ -65,6 +65,8 @@
     ctx.imageSmoothingEnabled = false;
 
     ground = Math.round(H * (1 - SKYLINE * 0.42));
+    // Publicado para o game.js: e sobre esta linha que os bonecos andam.
+    window.__cityGround = ground;
     water = Math.round(H - 6 * P);
     build();
   }

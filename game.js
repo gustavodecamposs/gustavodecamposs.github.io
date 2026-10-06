@@ -159,6 +159,14 @@
     w.frame = (w.step % 240 < 120) ? 'walk' : 'idle';
   }
 
+  // Linha onde os bonecos pisam. Segue o chao da cidade quando ela
+  // existe; sem ela, uma faixa perto do rodape da janela.
+  function groundY() {
+    const g = window.__cityGround;
+    const base = (typeof g === 'number' && g > 0) ? g : innerHeight - 90;
+    return base - 8 * PIXEL;
+  }
+
   // ─── MASCOTE ────────────────────────────────────────
   // Segue o scroll num canto e comenta a seção atual.
   const mascot = {
@@ -282,9 +290,9 @@
     setTimeout(() => {
       mascot.visible = true;
       mascot.x = innerWidth + 40;
-      mascot.y = innerHeight - 170;
+      mascot.y = groundY();
       mascot.tx = Math.max(innerWidth - 220, innerWidth * 0.62);
-      mascot.ty = innerHeight - 170;
+      mascot.ty = groundY();
       if (!skipped) setTimeout(() => say(t('game.welcome')), 900);
     }, skipped ? 0 : 400);
 
@@ -306,7 +314,7 @@
     hero.dataset.phase = 'building';
 
     // Três operários entram pela esquerda, em alturas diferentes
-    const baseY = innerHeight * 0.75;
+    const baseY = groundY();
     for (let i = 0; i < 3; i++) {
       workers.push(makeWorker(-40 - i * 50, baseY + i * 14));
     }
@@ -451,7 +459,7 @@
     // Mascote volta pro canto a cada troca de seção
     if (mascot.visible) {
       mascot.tx = Math.max(innerWidth - 220, innerWidth * 0.62);
-      mascot.ty = innerHeight - 170;
+      mascot.ty = groundY();
     }
 
     if (quiet) return;
@@ -526,7 +534,7 @@
       const spots = visibleSpots();
       if (!spots.length) {
         // Nada à vista: desce pro rodapé da janela e espera
-        sendWorker(w, 20 + Math.random() * (W - 80), innerHeight - 80);
+        sendWorker(w, 20 + Math.random() * (W - 80), groundY());
         w.pause = 600 + Math.random() * 900;
         return;
       }
@@ -534,7 +542,7 @@
       const r = spot.getBoundingClientRect();
       // Pousa na borda de baixo do alvo, em ponto aleatório da largura
       const x = r.left + Math.random() * Math.max(r.width - 32, 8);
-      const y = Math.min(r.bottom - 32, innerHeight - 40);
+      const y = Math.min(r.bottom - 32, groundY());
       sendWorker(w, Math.max(4, Math.min(x, W - 36)), Math.max(4, y));
       // Fica trabalhando um tempo antes de seguir
       w.pause = 900 + Math.random() * 1800;
