@@ -130,7 +130,12 @@ function applyLang(next) {
 
   // game.js assume a intro quando carrega. Este caminho continua existindo
   // como fallback: se game.js falhar, o hero ainda aparece.
-  if (window.__gameIntro) return;
+  if (window.__gameIntro) {
+    // Rede de segurança independente: se game.js travar antes de soltar
+    // sua própria fase idle, força a liberação do hero mesmo assim.
+    setTimeout(() => { if (hero.dataset.phase !== 'idle') finish(); }, 12000);
+    return;
+  }
 
   const letters = host ? host.children.length : 0;
   // Espera a fonte, senão as letras entram no tamanho errado. Timeout evita
