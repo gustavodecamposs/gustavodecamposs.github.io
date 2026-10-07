@@ -163,49 +163,21 @@ function applyLang(next) {
 })();
 
 // ─── REVEAL AO ROLAR ──────────────────────────────────
-// O reveal é enfeite: nunca pode deixar conteúdo escondido. Por isso
-// existe uma rede de segurança que revela tudo se o observer não agir.
+// Três gatilhos, todos marcados com .is-in quando entram na tela:
+//   [data-reveal]   bloco desliza 8px pra dentro
+//   [data-lay]      varredura com clip-path em 12 degraus
+//   [data-cascade]  filhos aparecem um a um, 18ms entre cada
+//
+// Isto é enfeite: nunca pode deixar conteúdo escondido. Daí a rede de
+// segurança que revela tudo se o observer não agir.
 (function reveal() {
-  // Títulos de seção viram letras individuais, como o hero. O texto
-  // original fica no aria-label pra não ser soletrado por leitor de tela.
-  document.querySelectorAll('.sec-title').forEach(title => {
-    const text = title.textContent.trim();
-    if (!text || title.querySelector('.letter')) return;
-    title.setAttribute('aria-label', text);
-    title.textContent = '';
-    let i = 0;
-    text.split(' ').forEach((word, w, all) => {
-      const group = document.createElement('span');
-      group.className = 'word';
-      group.setAttribute('aria-hidden', 'true');
-      [...word].forEach(ch => {
-        const span = document.createElement('span');
-        span.className = 'letter';
-        span.style.setProperty('--i', String(i++));
-        span.textContent = ch;
-        group.appendChild(span);
-      });
-      title.appendChild(group);
-      if (w < all.length - 1) {
-        const gap = document.createElement('span');
-        gap.className = 'letter is-space';
-        gap.setAttribute('aria-hidden', 'true');
-        gap.style.setProperty('--i', String(i++));
-        gap.textContent = ' ';
-        title.appendChild(gap);
-      }
-    });
-    title.setAttribute('data-reveal', '');
-  });
+  const items = [...document.querySelectorAll('[data-reveal], [data-lay], [data-cascade]')];
+  const showAll = () => items.forEach(el => el.classList.add('is-in'));
 
-  // Numera os filhos da cascata: o CSS lê --i pra escalonar o atraso.
+  // Numera os filhos pra cascata: o CSS lê --i pra escalonar o atraso.
   document.querySelectorAll('[data-cascade]').forEach(list => {
     [...list.children].forEach((child, i) => child.style.setProperty('--i', String(i)));
   });
-
-  // Coletado só agora: a divisão acima marca os títulos com data-reveal.
-  const items = [...document.querySelectorAll('[data-reveal], [data-lay], [data-cascade]')];
-  const showAll = () => items.forEach(el => el.classList.add('is-in'));
 
   if (reducedMotion || !('IntersectionObserver' in window)) {
     showAll();

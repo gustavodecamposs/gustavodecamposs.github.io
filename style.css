@@ -382,9 +382,16 @@ main,
   transition: opacity 0.16s ease-out, transform 0.22s var(--ease);
 }
 
+/* round-in: o bloco inteiro entra deslizando */
 .motion [data-reveal].is-in {
-  opacity: 1;
-  transform: none;
+  animation: round-in 0.22s cubic-bezier(0.23, 1, 0.32, 1) both;
+}
+
+@keyframes round-in {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 }
 
 /* lay: varredura da esquerda pra direita em 12 degraus. A imagem é
