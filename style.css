@@ -384,7 +384,9 @@ main,
 
 /* round-in: o bloco inteiro entra deslizando */
 .motion [data-reveal].is-in {
-  animation: round-in 0.22s cubic-bezier(0.23, 1, 0.32, 1) both;
+  opacity: 1;
+  transform: none;
+  animation: round-in 0.22s cubic-bezier(0.23, 1, 0.32, 1) backwards;
 }
 
 @keyframes round-in {
